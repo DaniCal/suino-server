@@ -23,17 +23,13 @@ exports.login = function (req, res) {
             res.status(400)
                 .send('Received data undefined or incomplete');
         }
-
-
     })
 };
 
 function validateUserData(data, callback){
     if(data == null || data == undefined){
         callback(tag + "data received is null or undefined");
-    }else if(data.device == undefined || data.fb_name == undefined || data.plattform == undefined || data.fb_id == undefined){
+    }else if(data.deviceToken == undefined || data.fbName == undefined || data.platform == undefined || data.fbId == undefined){
         callback(tag + "data received is incomplete");
     }
-
-
 }
