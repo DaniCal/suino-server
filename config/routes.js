@@ -5,6 +5,4 @@ module.exports = function (app) {
 
     app.get('/login', user.login);
 
-
-
 }
