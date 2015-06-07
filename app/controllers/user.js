@@ -13,5 +13,5 @@ exports.create = function (req, res) {
 };
 
 exports.login = function (req, res) {
-
+    var userData = req.body;
 };

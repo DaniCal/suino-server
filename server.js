@@ -22,12 +22,17 @@ mongoose.connection.on('disconnected', connect);
 
 
 // Bootstrap application settings
-require('./config/express')(app);
-require('./config/routes')(app);
+require('./config/express.js')(app);
+
+require('./config/routes.js')(app);
 
 
 
 app.listen(port);
 
 
+
 console.log("Suino server started on port: " + port);
+
+
+module.exports = app;
