@@ -28,11 +28,17 @@ describe ('Users', function (){
         }
     ];
 
+    var completeUserData = {
+        fbId : '123456',
+        fbName: 'Daniel Lohse',
+        platform: 'android',
+        deviceToken: '123456'
+    }
+
     it('should return that received data is undefined',
         function(done){
-
             request(app)
-                .post('/login')
+                .get('/login')
                 .type('json')
                 .expect(400)
                 .end(function(err, res){
@@ -42,18 +48,29 @@ describe ('Users', function (){
                 })
         });
 
-    for(var i = 0; i < incompleteUserData.length ; i++){
-        dataIsIncompleteTest(incompleteUserData[i], i);
-    }
+    it('should return that received data was processed',
+        function(done){
 
-    function dataIsIncompleteTest(jsonData, i){
+            request(app)
+                .get('/login')
+                .type('json')
+                .send(completeUserData)
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+//                    res.text.should.equal('Received data undefined or incomplete');
+                    done();
+                })
+        });
+
+    for(var i = 0; i < incompleteUserData.length ; i++){
         it('should return that received data is incomplete case ' + i,
             function(done){
 
                 request(app)
-                    .post('/login')
+                    .get('/login')
                     .type('json')
-                    .send(jsonData)
+                    .send(incompleteUserData[i])
                     .expect(400)
                     .end(function(err, res){
                         res.status.should.equal(400);
@@ -61,9 +78,10 @@ describe ('Users', function (){
                         done();
                     })
             });
-    }
 
+    }
 });
+
 
 
 
