@@ -9,3 +9,7 @@ exports.load = function (req, res, next, id) {
 exports.create = function (req, res) {
 
 };
+
+exports.login = function (req, res) {
+
+};
