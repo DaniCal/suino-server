@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DaniCal/suino-server/issues"
   },
-  "homepage": "https://github.com/DaniCal/suino-server"
+  "homepage": "https://github.com/DaniCal/suino-server",
+  "dependencies": {
+    "express": "^4.12.4"
+  }
 }
