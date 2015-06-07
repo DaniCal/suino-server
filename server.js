@@ -6,7 +6,7 @@ var config = require('config');
 var app = express();
 var port = 3000;
 
-var dbConfig = config.get('Server.dbConfig');
+var dbConfig = config.get('Server.dbConfigTest');
 
 // Connect to mongodb
 var connect = function () {

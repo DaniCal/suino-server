@@ -21,41 +21,27 @@ exports.login = function (req, res) {
     validateUserData(userData, function(err){
         if(err) {
             res.status(400)
-                .send('Received data undefined or incomplete');
-            return;
+                .send('Received data is undefined or incomplete');
+        }else{
+            User.findOne({ fbId: userData.fbId}, function(err, user){
+
+                if(err){
+                    res.status(500).send();
+                    return;
+                }else if(user == undefined){
+                    res.status(204).send();
+                    return;
+                }
+
+                if(!doesUserHasSameDevice(userData, user)){
+                    user.device.push({token: userData.deviceToken, platform: userData.platform});
+                    user.save();
+                    res.status(200).send();
+                }else{
+                    res.status(200).send();
+                }
+            });
         }
-    })
-
-
-    doesUserExist(userData, function(err, user){
-        if(err){
-            res.status(204)
-                .send();
-            return;
-        }
-
-        doesUserHasSameDevice(userData, user, function(err){
-            if(err){
-                res.status(200)
-                    .send();
-            }else{
-                updateUserDeviceList(userData, user, function(err){
-                    if(err){
-                        res.status(500)
-                            .send();
-                        return;
-                    }else{
-                        res.status(200)
-                            .send();
-                        return;
-                    }
-                });
-            }
-
-        });
-
-        res.status(200)
-            .send();
     });
 };
 
@@ -69,18 +55,18 @@ validateUserData = function (data, callback){
     }
 }
 
-doesUserExist = function (data, callback){
-    User.findOne({ fbId: 5}, function (err, user){
-        callback(err, user);
-    });
+findUser = function (data, callback){
 
 }
 
-doesUserHasSameDevice = function(data, user, callback){
-
+doesUserHasSameDevice = function(data, user){
+    for(var i = 0; i < user.device.length; i++){
+        if(data.deviceToken == user.device[i].token){
+            return true;
+        }
+    }
+    return false;
 }
 
-updateUserDeviceList = function(data, user, callback){
 
-}
 

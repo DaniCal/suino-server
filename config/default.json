@@ -1,9 +1,14 @@
 {
     "Server": {
-        "dbConfig": {
+        "dbConfigDev": {
             "host": "localhost",
             "port": 27017,
             "dbName": "suinodb"
+        },
+        "dbConfigTest": {
+            "host": "localhost",
+            "port": 27017,
+            "dbName": "suinodb_test"
         }
     }
 }

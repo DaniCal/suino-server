@@ -7,11 +7,15 @@ var Schema = mongoose.Schema;
  */
 
 var UserSchema = new Schema({
-    name: { type: String, default: '' },
+    uuid: { type: String, default: '' },
+    fbName: { type: String, default: '' },
+    fbId: {type: String, default: ''},
     email: { type: String, default: '' },
-    username: { type: String, default: '' }
+    date: { type: Number, default: '' },
+    device: { type: [{token: String, platform: String}]},
+    cards: { type: [String]},
+    stickers: { type: [String]}
 });
-
 
 /**
  * Methods
