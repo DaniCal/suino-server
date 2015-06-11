@@ -18,34 +18,29 @@ var UserSchema = new Schema({
 
 var UserModel = mongoose.model('User', UserSchema);
 
-var userData = {
-    fbId : '',
-    fbName : '',
-    token : '',
-    platform: '',
-    email: ''
-}
 
 
 var User = function (data) {
 
-    userData.fbId = data.fbId;
-    userData.fbName = data.fbName;
-    userData.token = data.deviceToken;
-    userData.platform = data.platform;
+    this._fbId = data.fbId;
+    this._fbName = data.fbName;
+    this._token = data.deviceToken;
+    this._platform = data.platform;
     if(data.email != undefined){
-        userData.email = data.email;
+        this._email = data.email;
     }
 };
 
 User.prototype.loadFromDb = function(callback){
-    UserModel.findOne({ fbId: userData.fbId}, function(err, user){
+    var token = this._token;
+    var platform = this._platform;
+    UserModel.findOne({ fbId: this._fbId}, function(err, user){
         if(err || user == undefined){
             callback(err, false);
             return;
         }
-        if(!doesUserHasSameDevice(user)){
-            user.device.push({token: userData.token, platform: userData.platform});
+        if(!doesUserHasSameDevice(user, token)){
+            user.device.push({token: token, platform: platform});
             user.save();
             callback(err, user);
         }else{
@@ -58,11 +53,11 @@ User.prototype.loadFromDb = function(callback){
 
 User.prototype.createUser = function(callback){
     var newUser = new UserModel({
-        fbName: userData.fbName,
-        fbId: userData.fbId,
-        email: userData.email,
+        fbName: this._fbName,
+        fbId: this._fbId,
+        email: this._email,
         date: getDate(),
-        device: [{token: userData.token, platform: userData.platform}],
+        device: [{token: this._token, platform: this._platform}],
         cards: [],
         stickers: []
     });
@@ -72,9 +67,9 @@ User.prototype.createUser = function(callback){
 
 };
 
-var doesUserHasSameDevice = function(user){
+var doesUserHasSameDevice = function(user, token){
     for(var i = 0; i < user.device.length; i++){
-        if(userData.token == user.device[i].token){
+        if(token == user.device[i].token){
             return true;
         }
     }
