@@ -61,3 +61,5 @@ Card.prototype.updateParticipating = function(user, participating,callback){
 Card.prototype.addUser = function(user, callback){
 
 };
+
+module.exports = Card;
