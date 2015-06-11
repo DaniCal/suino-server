@@ -33,9 +33,6 @@ var User = function (data) {
     userData.fbName = data.fbName;
     userData.token = data.deviceToken;
     userData.platform = data.platform;
-
-
-
 };
 
 User.prototype.loadFromDb = function(callback){

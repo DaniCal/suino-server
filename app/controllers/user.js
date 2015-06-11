@@ -7,7 +7,7 @@ exports.load = function (req, res, next, id) {
 
 
 exports.create = function (req, res) {
-
+    res.status(501).send();
 };
 
 exports.login = function (req, res) {
@@ -31,8 +31,6 @@ exports.login = function (req, res) {
         }
     });
 };
-
-
 
 isDataValid = function (data){
     if(data == null || data == undefined){

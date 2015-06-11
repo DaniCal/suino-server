@@ -1,6 +1,6 @@
 var should = require('should');
 var request = require('supertest');
-var app = require('./helpers/app.js');
+var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var UserModel = mongoose.model('User');
 
@@ -19,7 +19,7 @@ var clearTestDatabase = function(){
 };
 
 
-describe ('Users', function (){
+describe ('Users GET', function (){
 
     var incompleteUserData = [
 
@@ -45,21 +45,21 @@ describe ('Users', function (){
         }
     ];
 
-    var userNotInDb = {
+    var testUserNotInDb = {
         fbId : '654321',
         fbName: 'Daniel Lohse',
         platform: 'android',
         deviceToken: '123456'
     };
 
-    var userInDbSameDevice = {
+    var testUserInDbSameDevice = {
         fbId : '123456',
         fbName: 'Daniel Lohse',
         platform: 'android',
         deviceToken: '123456'
     };
 
-    var userInDbNewDevice = {
+    var testUserInDbNewDevice = {
         fbId : '123456',
         fbName: 'Daniel Lohse',
         platform: 'apple',
@@ -121,7 +121,7 @@ describe ('Users', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(userNotInDb)
+                .send(testUserNotInDb)
                 .expect(204)
                 .end(function(err, res){
                     res.status.should.equal(204);
@@ -134,18 +134,18 @@ describe ('Users', function (){
         function(done){
 
             var previousLength;
-            UserModel.findOne({fbId: userInDbSameDevice.fbId},function(err, user) {
+            UserModel.findOne({fbId: testUserInDbSameDevice.fbId},function(err, user) {
                 previousLength = user.device.length;
             });
 
             request(app)
                 .get('/login')
                 .type('json')
-                .send(userInDbSameDevice)
+                .send(testUserInDbSameDevice)
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    UserModel.findOne({fbId: userInDbSameDevice.fbId},function(err, user) {
+                    UserModel.findOne({fbId: testUserInDbSameDevice.fbId},function(err, user) {
                         should.not.exist(err)
                         user.should.be.an.instanceOf(UserModel);
                         var length = user.device.length;
@@ -162,11 +162,11 @@ describe ('Users', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(userInDbNewDevice)
+                .send(testUserInDbNewDevice)
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    UserModel.findOne({fbId: userInDbNewDevice.fbId},function(err, user) {
+                    UserModel.findOne({fbId: testUserInDbNewDevice.fbId},function(err, user) {
                         should.not.exist(err)
                         should.exist(user);
                         should.exist(user.device);
@@ -179,7 +179,7 @@ describe ('Users', function (){
                         var newDevicePlatform = newDevice.platform;
                         should.exist(newDevicePlatform);
                         should.exist(newDeviceToken);
-                        var deviceToken = userInDbNewDevice.deviceToken;
+                        var deviceToken = testUserInDbNewDevice.deviceToken;
                         newDeviceToken.should.equal(deviceToken);
                         done();
                     });
