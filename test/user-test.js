@@ -4,21 +4,19 @@ var app = require('./helpers/app.js');
 var mongoose = require("mongoose");
 var UserModel = mongoose.model('User');
 
-var createTestUser = function(user){
+var createUser = function(user){
     UserModel.create(user, function (err, user) {
         if (err){
             throw 'Test user was not created';
         }
     });
-}
+};
 
 var clearTestDatabase = function(){
     UserModel.remove({}, function(err){
         if(err) throw 'Database was not cleared';
     });
-
-
-}
+};
 
 
 describe ('Users', function (){
@@ -47,29 +45,29 @@ describe ('Users', function (){
         }
     ];
 
-    var completeUserData = {
+    var userNotInDb = {
         fbId : '654321',
         fbName: 'Daniel Lohse',
         platform: 'android',
         deviceToken: '123456'
-    }
+    };
 
-    var completeUserData2 = {
+    var userInDbSameDevice = {
         fbId : '123456',
         fbName: 'Daniel Lohse',
         platform: 'android',
         deviceToken: '123456'
-    }
+    };
 
-    var completeUserData3 = {
+    var userInDbNewDevice = {
         fbId : '123456',
         fbName: 'Daniel Lohse',
         platform: 'apple',
         deviceToken: '123455'
-    }
+    };
 
 
-    var testUser = {
+    var userInDb = {
         uuid: '1111222233334444',
         fbName: 'Dani Lo',
         fbId: '123456',
@@ -78,13 +76,11 @@ describe ('Users', function (){
         device: [{token:'123456', platform: 'android'}]
     };
 
-
-
-
     before(function(done){
-        createTestUser(testUser);
+        createUser(userInDb);
         done();
     });
+
     after(function(done){
         clearTestDatabase();
         done();
@@ -103,6 +99,21 @@ describe ('Users', function (){
                 });
         });
 
+    for(var i = 0; i < incompleteUserData.length ; i++){
+        it('should return that received data is incomplete case ' + i,
+            function(done){
+                request(app)
+                    .get('/login')
+                    .type('json')
+                    .send(incompleteUserData[i])
+                    .expect(400)
+                    .end(function(err, res){
+                        res.status.should.equal(400);
+                        res.text.should.equal('Received data is incomplete or undefined');
+                        done();
+                    })
+            });
+    }
 
     it('should return that received data was processed but user not found',
         function(done){
@@ -110,7 +121,7 @@ describe ('Users', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(completeUserData)
+                .send(userNotInDb)
                 .expect(204)
                 .end(function(err, res){
                     res.status.should.equal(204);
@@ -123,18 +134,18 @@ describe ('Users', function (){
         function(done){
 
             var previousLength;
-            UserModel.findOne({fbId: completeUserData2.fbId},function(err, user) {
+            UserModel.findOne({fbId: userInDbSameDevice.fbId},function(err, user) {
                 previousLength = user.device.length;
             });
 
             request(app)
                 .get('/login')
                 .type('json')
-                .send(completeUserData2)
+                .send(userInDbSameDevice)
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    UserModel.findOne({fbId: completeUserData2.fbId},function(err, user) {
+                    UserModel.findOne({fbId: userInDbSameDevice.fbId},function(err, user) {
                         should.not.exist(err)
                         user.should.be.an.instanceOf(UserModel);
                         var length = user.device.length;
@@ -151,17 +162,14 @@ describe ('Users', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(completeUserData3)
+                .send(userInDbNewDevice)
                 .expect(200)
                 .end(function(err, res){
-
                     res.status.should.equal(200);
-
-                    UserModel.findOne({fbId: completeUserData3.fbId},function(err, user) {
+                    UserModel.findOne({fbId: userInDbNewDevice.fbId},function(err, user) {
                         should.not.exist(err)
                         should.exist(user);
                         should.exist(user.device);
-
                         user.should.be.an.instanceOf(UserModel);
                         var length = user.device.length;
                         length.should.be.equal(2);
@@ -170,33 +178,13 @@ describe ('Users', function (){
                         var newDeviceToken = newDevice.token;
                         var newDevicePlatform = newDevice.platform;
                         should.exist(newDevicePlatform);
-
                         should.exist(newDeviceToken);
-                        console.log(newDeviceToken);
-                        var deviceToken = completeUserData3.deviceToken;
+                        var deviceToken = userInDbNewDevice.deviceToken;
                         newDeviceToken.should.equal(deviceToken);
                         done();
                     });
                 });
         });
-
-    for(var i = 0; i < incompleteUserData.length ; i++){
-        it('should return that received data is incomplete case ' + i,
-            function(done){
-
-                request(app)
-                    .get('/login')
-                    .type('json')
-                    .send(incompleteUserData[i])
-                    .expect(400)
-                    .end(function(err, res){
-                        res.status.should.equal(400);
-                        res.text.should.equal('Received data is incomplete or undefined');
-                        done();
-                    })
-            });
-
-    }
 });
 
 
