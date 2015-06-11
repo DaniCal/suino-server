@@ -18,18 +18,16 @@ exports.create = function (req, res) {
 
     user.loadFromDb(function(err, exist){
         if (err){
-            res.status(500).send();
+            res.status(500).send('Error while loading model from database');
         }
         else if (!exist){
-            user.createUser(function(err){
-                res.status(201).send();
+            user.createUser(function(){
+                res.status(201).send('User created');
             });
         }else{
-            res.status(409).send();
+            res.status(409).send('User already exists');
         }
     });
-
-
 };
 
 exports.login = function (req, res) {
@@ -44,12 +42,12 @@ exports.login = function (req, res) {
 
     user.loadFromDb(function(err, exist) {
         if (err){
-            res.status(500).send();
+            res.status(500).send('Error while loading model from database');
         }
         else if (!exist){
-            res.status(204).send();
+            res.status(204).send('User does not exist');
         }else{
-            res.status(200).send();
+            res.status(200).send('User found');
         }
     });
 };
