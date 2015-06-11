@@ -2,10 +2,10 @@ var should = require('should');
 var request = require('supertest');
 var app = require('./helpers/app.js');
 var mongoose = require("mongoose");
-var User = mongoose.model('User');
+var UserModel = mongoose.model('User');
 
 var createTestUser = function(user){
-    User.create(user, function (err, user) {
+    UserModel.create(user, function (err, user) {
         if (err){
             throw 'Test user was not created';
         }
@@ -13,7 +13,7 @@ var createTestUser = function(user){
 }
 
 var clearTestDatabase = function(){
-    User.remove({}, function(err){
+    UserModel.remove({}, function(err){
         if(err) throw 'Database was not cleared';
     });
 
@@ -98,7 +98,7 @@ describe ('Users', function (){
                 .expect(400)
                 .end(function(err, res){
                     res.status.should.equal(400);
-                    res.text.should.equal('Received data is undefined or incomplete');
+                    res.text.should.equal('Received data is incomplete or undefined');
                     done();
                 });
         });
@@ -119,8 +119,13 @@ describe ('Users', function (){
         });
 
 
-    it('should return that received data was processed and user was found',
+    it('should return that received data was processed and user was found, no device update',
         function(done){
+
+            var previousLength;
+            UserModel.findOne({fbId: completeUserData2.fbId},function(err, user) {
+                previousLength = user.device.length;
+            });
 
             request(app)
                 .get('/login')
@@ -129,12 +134,20 @@ describe ('Users', function (){
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    done();
+                    UserModel.findOne({fbId: completeUserData2.fbId},function(err, user) {
+                        should.not.exist(err)
+                        user.should.be.an.instanceOf(UserModel);
+                        var length = user.device.length;
+                        length.should.be.equal(previousLength);
+                        done();
+                    });
+
                 });
         });
 
     it('should return that received data was processed, user was found and device was updated',
         function(done){
+
             request(app)
                 .get('/login')
                 .type('json')
@@ -144,11 +157,24 @@ describe ('Users', function (){
 
                     res.status.should.equal(200);
 
-                    User.findOne({fbId: completeUserData3.fbId},function(err, user) {
+                    UserModel.findOne({fbId: completeUserData3.fbId},function(err, user) {
                         should.not.exist(err)
-                        user.should.be.an.instanceOf(User);
-                        var newDevice = user.device[user.device.length - 1].token;
-                        newDevice.should.equal(completeUserData3.deviceToken);
+                        should.exist(user);
+                        should.exist(user.device);
+
+                        user.should.be.an.instanceOf(UserModel);
+                        var length = user.device.length;
+                        length.should.be.equal(2);
+                        var newDevice = user.device[length - 1];
+                        should.exist(newDevice);
+                        var newDeviceToken = newDevice.token;
+                        var newDevicePlatform = newDevice.platform;
+                        should.exist(newDevicePlatform);
+
+                        should.exist(newDeviceToken);
+                        console.log(newDeviceToken);
+                        var deviceToken = completeUserData3.deviceToken;
+                        newDeviceToken.should.equal(deviceToken);
                         done();
                     });
                 });
@@ -165,7 +191,7 @@ describe ('Users', function (){
                     .expect(400)
                     .end(function(err, res){
                         res.status.should.equal(400);
-                        res.text.should.equal('Received data is undefined or incomplete');
+                        res.text.should.equal('Received data is incomplete or undefined');
                         done();
                     })
             });

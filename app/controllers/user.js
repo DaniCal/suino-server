@@ -1,9 +1,4 @@
-var mongoose = require('mongoose');
-var user = require('../models/user.js');
-
-var User = mongoose.model('User');
-
-var tag = "user controller - ";
+var User = require('../models/user.js');
 
 
 exports.load = function (req, res, next, id) {
@@ -16,57 +11,38 @@ exports.create = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    var userData = req.body;
+    var data = req.body;
 
-    validateUserData(userData, function(err){
-        if(err) {
-            res.status(400)
-                .send('Received data is undefined or incomplete');
+    if(!isDataValid(data)){
+        res.status(400).send('Received data is incomplete or undefined');
+        return;
+    }
+
+    var user = new User(data);
+
+    user.loadFromDb(function(err, exist) {
+        if (err){
+            res.status(500).send();
+        }
+        else if (!exist){
+            res.status(204).send();
         }else{
-            User.findOne({ fbId: userData.fbId}, function(err, user){
-
-                if(err){
-                    res.status(500).send();
-                    return;
-                }else if(user == undefined){
-                    res.status(204).send();
-                    return;
-                }
-
-                if(!doesUserHasSameDevice(userData, user)){
-                    user.device.push({token: userData.deviceToken, platform: userData.platform});
-                    user.save();
-                    res.status(200).send();
-                }else{
-                    res.status(200).send();
-                }
-            });
+            res.status(200).send();
         }
     });
 };
 
-validateUserData = function (data, callback){
+
+
+isDataValid = function (data){
     if(data == null || data == undefined){
-        callback(tag + "data received is null or undefined");
-    }else if(data.deviceToken == undefined || data.fbName == undefined || data.platform == undefined || data.fbId == undefined){
-        callback(tag + "data received is incomplete");
-    }else{
-        callback();
+        return false;
+    }else if(data.deviceToken == undefined || data.fbName == undefined
+        || data.platform == undefined || data.fbId == undefined){
+        return false;
     }
-}
-
-findUser = function (data, callback){
-
-}
-
-doesUserHasSameDevice = function(data, user){
-    for(var i = 0; i < user.device.length; i++){
-        if(data.deviceToken == user.device[i].token){
-            return true;
-        }
-    }
-    return false;
-}
+    return true;
+};
 
 
 
