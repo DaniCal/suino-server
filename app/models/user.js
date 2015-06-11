@@ -7,7 +7,6 @@ var tag = "user model - ";
  */
 
 var UserSchema = new Schema({
-    uuid: { type: String, default: '' },
     fbName: { type: String, default: '' },
     fbId: {type: String, default: ''},
     email: { type: String, default: '' },
@@ -23,7 +22,8 @@ var userData = {
     fbId : '',
     fbName : '',
     token : '',
-    platform: ''
+    platform: '',
+    email: ''
 }
 
 
@@ -33,6 +33,9 @@ var User = function (data) {
     userData.fbName = data.fbName;
     userData.token = data.deviceToken;
     userData.platform = data.platform;
+    if(data.email != undefined){
+        userData.email = data.email;
+    }
 };
 
 User.prototype.loadFromDb = function(callback){
@@ -53,6 +56,22 @@ User.prototype.loadFromDb = function(callback){
     });
 };
 
+User.prototype.createUser = function(callback){
+    var newUser = new UserModel({
+        fbName: userData.fbName,
+        fbId: userData.fbId,
+        email: userData.email,
+        date: getDate(),
+        device: [{token: userData.token, platform: userData.platform}],
+        cards: [],
+        stickers: []
+    });
+
+    newUser.save();
+    callback();
+
+};
+
 var doesUserHasSameDevice = function(user){
     for(var i = 0; i < user.device.length; i++){
         if(userData.token == user.device[i].token){
@@ -60,6 +79,11 @@ var doesUserHasSameDevice = function(user){
         }
     }
     return false;
+};
+
+var getDate = function(){
+
+    return Math.floor((new Date().getTime()/1000));
 };
 
 module.exports = User;

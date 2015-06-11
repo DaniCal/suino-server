@@ -18,6 +18,44 @@ var clearTestDatabase = function(){
     });
 };
 
+var incompleteUserData = [
+
+    {
+        fbId : '123456',
+        fbName: 'Daniel Lohse',
+        platform: 'android',
+        email: 'daniel.lohse@suinoapp.com'
+
+    },
+    {
+        fbId : '123456',
+        fbName: 'Daniel Lohse',
+        deviceToken: '123456',
+        email: 'daniel.lohse@suinoapp.com'
+
+    },
+    {
+        fbId : '123456',
+        platform: 'android',
+        deviceToken: '123456',
+        email: 'daniel.lohse@suinoapp.com'
+
+    },
+    {
+        fbName: 'Daniel Lohse',
+        platform: 'android',
+        deviceToken: '123456',
+        email: 'daniel.lohse@suinoapp.com'
+
+    },
+    {
+        fbId : '123456',
+        fbName: 'Daniel Lohse',
+        platform: 'android',
+        deviceToken: '123456'
+    }
+];
+
 
 describe ('Users POST', function (){
 
@@ -25,14 +63,16 @@ describe ('Users POST', function (){
         fbId : '654321',
         fbName: 'Daniel Lohse',
         platform: 'android',
-        deviceToken: '123456'
+        deviceToken: '123456',
+        email: 'daniel.lohse@suinoapp.com'
     };
 
     var testUserInDb = {
         fbId : '123456',
         fbName: 'Daniel Lohse',
         platform: 'apple',
-        deviceToken: '123455'
+        deviceToken: '123455',
+        email: 'daniel.lohse@suinoapp.com'
     };
 
 
@@ -55,6 +95,35 @@ describe ('Users POST', function (){
         done();
     });
 
+    it('should return that received data is undefined',
+        function(done){
+            request(app)
+                .post('/register')
+                .type('json')
+                .expect(400)
+                .end(function(err, res){
+                    res.status.should.equal(400);
+                    res.text.should.equal('Received data is incomplete or undefined');
+                    done();
+                });
+        });
+
+    for(var i = 0; i < incompleteUserData.length ; i++){
+        it('should return that received data is incomplete case ' + i,
+            function(done){
+                request(app)
+                    .post('/register')
+                    .type('json')
+                    .send(incompleteUserData[i])
+                    .expect(400)
+                    .end(function(err, res){
+                        res.status.should.equal(400);
+                        res.text.should.equal('Received data is incomplete or undefined');
+                        done();
+                    })
+            });
+    }
+
     it('should return that user was created',
         function(done){
             request(app)
@@ -65,11 +134,11 @@ describe ('Users POST', function (){
                 .end(function(err, res){
                     res.status.should.equal(201);
                     UserModel.findOne({fbId: testUserNotInDb.fbId}, function(err, user){
+
                         should.not.exist(err)
                         should.exist(user);
                         user.should.be.an.instanceOf(UserModel);
 
-                        should.exist(user.uuid);
                         should.exist(user.fbId);
                         should.exist(user.fbName);
                         should.exist(user.email);
@@ -78,6 +147,26 @@ describe ('Users POST', function (){
                         should.exist(user.device[0]);
                         should.exist(user.device[0].token);
                         should.exist(user.device[0].platform);
+                        done();
+
+                    });
+
+                });
+        });
+
+    it('should return that user is already in database',
+        function(done){
+            request(app)
+                .post('/register')
+                .type('json')
+                .send(testUserInDb)
+                .expect(409)
+                .end(function(err, res){
+                    res.status.should.equal(409);
+                    UserModel.find({fbId: testUserNotInDb.fbId}, function(err, users){
+                        should.not.exist(err)
+                        should.exist(users);
+                        users.length.should.be.equal(1);
                         done();
 
                     });
