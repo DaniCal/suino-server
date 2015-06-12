@@ -19,7 +19,7 @@ var clearTestDatabase = function(){
 };
 
 var testCard = {
-    uuid: '1111222233334444',
+    hash: '1111222233334444',
     title: 'LetsBeach',
     mode: 'instant',
     stickerUuid: '1111222233334444',
@@ -52,10 +52,10 @@ describe ('Card Unit', function (){
 
     it('should create a card instance and load data from database',
         function(done){
-            var data = {uuid: 1111222233334444};
+            var data = {hash: 1111222233334444};
             var card = new Card(data);
             card.loadFromDb();
-            should.exist(card.uuid, 'uuid should exist');
+            should.exist(card.hash, 'hash should exist');
             should.exist(card.title, 'title should exist');
             should.exist(card.mode, 'mode should exist');
             should.exist(card.stickerUuid, 'stickerUuid should exist');

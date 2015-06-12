@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var crypto = require('crypto');
 
 var CardSchema =  new mongoose.Schema({
-    uuid: {type: String, default: ''},
+    hash: {type: String, default: ''},
     title: {type: String, default: ''},
     mode: {type: String, default: ''},
     stickerUuid: {type: String, default: ''},
