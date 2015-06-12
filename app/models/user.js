@@ -31,7 +31,7 @@ var User = function (data) {
     }
 };
 
-User.prototype.loadFromDb = function(callback){
+User.prototype.load = function(callback){
     var token = this._token;
     var platform = this._platform;
     UserModel.findOne({ fbId: this._fbId}, function(err, user){

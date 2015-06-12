@@ -16,7 +16,7 @@ exports.create = function (req, res) {
 
     var user  = new User(data);
 
-    user.loadFromDb(function(err, exist){
+    user.load(function(err, exist){
         if (err){
             res.status(500).send('Error while loading model from database');
         }
@@ -40,7 +40,7 @@ exports.login = function (req, res) {
 
     var user = new User(data);
 
-    user.loadFromDb(function(err, exist) {
+    user.load(function(err, exist) {
         if (err){
             res.status(500).send('Error while loading model from database');
         }

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var crypto = require('crypto');
 
 var CardSchema =  new mongoose.Schema({
     hash: {type: String, default: ''},
@@ -9,8 +8,8 @@ var CardSchema =  new mongoose.Schema({
     stickerUuid: {type: String, default: ''},
     creatorFbId: {type: String, default: ''},
     creatorFbName: {type: String, default: ''},
-    date: {type: String, default: ''},
-    finalDate: {type: String, default: ''},
+    date: {type: Number, default: ''},
+    finalDate: {type: Number, default: ''},
     location: {
         altitude: {type: String, default: ''},
         longitude: {type: String, default: ''}
@@ -19,7 +18,7 @@ var CardSchema =  new mongoose.Schema({
         fbId: {type: String, default: ''},
         fbName: {type: String, default: ''},
         participating: {type: String, default: ''},
-        read: {type: String, default: ''}
+        read: {type: Boolean, default: ''}
     }]
 });
 
@@ -27,16 +26,26 @@ var CardModel = mongoose.model('Card', CardSchema);
 
 
 
-var Card = function(data){
-
+var Card = function(hash){
+    this._hash = hash;
 };
 
-Card.prototype.loadFromDb = function(callback){
 
+Card.prototype.load = function (callback){
+    CardModel.findOne({hash: this._hash}, function(err, card){
+        if(card == null){
+            callback(err, false);
+        }
+        callback(err, card);
+    });
 };
 
-Card.prototype.createCard = function(callback){
 
+
+Card.prototype.create = function(data, callback){
+    CardModel.create(data, function(err){
+        callback(err);
+    });
 };
 
 Card.prototype.updateTitle = function(title, callback){
