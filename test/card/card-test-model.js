@@ -31,7 +31,8 @@ var testCard = {
     finalDate: 123457,
     location: {
         altitude: '',
-        longitude: ''
+        longitude: '',
+        description: 'Room 2.222'
     },
     invited: [{
         fbId: '123455',
@@ -52,7 +53,8 @@ var testCardInsert = {
     finalDate: 123457,
     location: {
         altitude: '',
-        longitude: ''
+        longitude: '',
+        description: 'Room 2.222'
     },
     invited: [{
         fbId: '123455',
@@ -123,6 +125,8 @@ describe ('Card Unit', function (){
                     card.finalDate.should.be.equal(testCardInsert.finalDate);
                     card.location.altitude.should.be.equal(testCardInsert.location.altitude);
                     card.location.longitude.should.be.equal(testCardInsert.location.longitude);
+                    card.location.description.should.be.equal(testCardInsert.location.description);
+
                     should.exist(card.invited, 'invited array should exist');
                     checkInvited(card.invited);
                     done();

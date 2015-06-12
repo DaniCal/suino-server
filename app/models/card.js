@@ -12,7 +12,9 @@ var CardSchema =  new mongoose.Schema({
     finalDate: {type: Number, default: ''},
     location: {
         altitude: {type: String, default: ''},
-        longitude: {type: String, default: ''}
+        longitude: {type: String, default: ''},
+        description: {type: String, default: ''}
+
     },
     invited: [{
         fbId: {type: String, default: ''},
@@ -69,6 +71,10 @@ Card.prototype.updateParticipating = function(user, participating,callback){
 };
 
 Card.prototype.addUser = function(user, callback){
+
+};
+
+Card.prototype.loadUserCards = function(fbId, callback){
 
 };
 
