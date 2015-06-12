@@ -54,6 +54,10 @@ Card.prototype.updateTitle = function(title, callback){
 
 };
 
+Card.prototype.updateSticker = function(title, callback){
+
+};
+
 Card.prototype.updateFinalDate = function(date, callback){
 
 };
@@ -74,7 +78,11 @@ Card.prototype.addUser = function(user, callback){
 
 };
 
-Card.prototype.loadUserCards = function(fbId, callback){
+Card.prototype.removeUser = function(user, callback){
+
+};
+
+loadUserCards = function(fbId, callback){
 
 };
 
