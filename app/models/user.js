@@ -81,5 +81,29 @@ var getDate = function(){
     return Math.floor((new Date().getTime()/1000));
 };
 
+User.isLoginDataValid = function (data){
+    if(data == null || data == undefined){
+        return false;
+    }else if(data.deviceToken == undefined || data.fbName == undefined
+        || data.platform == undefined || data.fbId == undefined){
+        return false;
+    }
+    return true;
+};
+
+
+User.isRegistrationDataValid = function (data){
+    if(data == null || data == undefined){
+        return false;
+    }else if(data.deviceToken == undefined || data.fbName == undefined
+        || data.platform == undefined || data.fbId == undefined || data.email == undefined){
+        return false;
+    }
+    return true;
+};
+
+//module.exports = {
+//    User: User
+//};
 module.exports = User;
 

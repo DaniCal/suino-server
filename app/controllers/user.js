@@ -9,7 +9,7 @@ exports.load = function (req, res, next, id) {
 exports.create = function (req, res) {
     var data = req.body;
 
-    if(!isRegistrationDataValid(data)){
+    if(!User.isRegistrationDataValid(data)){
         res.status(400).send('Received data is incomplete or undefined');
         return;
     }
@@ -33,7 +33,7 @@ exports.create = function (req, res) {
 exports.login = function (req, res) {
     var data = req.body;
 
-    if(!isLoginDataValid(data)){
+    if(!User.isLoginDataValid(data)){
         res.status(400).send('Received data is incomplete or undefined');
         return;
     }
@@ -50,26 +50,6 @@ exports.login = function (req, res) {
             res.status(200).send('User found');
         }
     });
-};
-
-isLoginDataValid = function (data){
-    if(data == null || data == undefined){
-        return false;
-    }else if(data.deviceToken == undefined || data.fbName == undefined
-        || data.platform == undefined || data.fbId == undefined){
-        return false;
-    }
-    return true;
-};
-
-isRegistrationDataValid = function (data){
-    if(data == null || data == undefined){
-        return false;
-    }else if(data.deviceToken == undefined || data.fbName == undefined
-        || data.platform == undefined || data.fbId == undefined || data.email == undefined){
-        return false;
-    }
-    return true;
 };
 
 
