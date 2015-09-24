@@ -2,9 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var tag = "user model - ";
 
-/**
- * User Schema
- */
 
 var UserSchema = new Schema({
     fbName: { type: String, default: '' },

@@ -28,6 +28,7 @@ var CardModel = mongoose.model('Card', CardSchema);
 
 
 
+
 var Card = function(hash){
     this._hash = hash;
 };
@@ -42,15 +43,14 @@ Card.prototype.load = function (callback){
     });
 };
 
-
-
-Card.prototype.create = function(data, callback){
-    CardModel.create(data, function(err){
-        callback(err);
+Card.create = function(data, callback){
+    CardModel.create(data, function(err, card){
+        callback(err, card);
     });
 };
 
 Card.prototype.updateTitle = function(title, callback){
+
 
 };
 
@@ -82,7 +82,15 @@ Card.prototype.removeUser = function(user, callback){
 
 };
 
-loadUserCards = function(fbId, callback){
+Card.loadUserCards = function(fbId, callback){
+
+};
+
+Card.isDataValid = function(data){
+
+};
+
+doesUserExist = function(){
 
 };
 

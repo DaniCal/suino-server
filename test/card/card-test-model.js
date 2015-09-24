@@ -64,7 +64,7 @@ var testCardInsert = {
     }]
 };
 
-describe ('Card Unit', function (){
+describe ('Card Unit - Load & Create', function (){
     before(function(done){
         createCard(testCard);
         done();
@@ -110,9 +110,9 @@ describe ('Card Unit', function (){
 
     it('should create a card instance and create an item in the database',
         function(done){
-            var card = new Card();
-            card.create(testCardInsert, function(err){
+            Card.create(testCardInsert, function(err, card){
                 should.not.exist(err, 'error while writing in database');
+                should.exist(card, 'new card does not exist');
                 CardModel.findOne({hash: testCardInsert.hash}, function(err, card){
                     should.exist(card, 'card should be saved in database');
                     card.hash.should.be.equal(testCardInsert.hash, 'hash should exist');
@@ -143,5 +143,98 @@ describe ('Card Unit', function (){
                 }
 
             }
+        });
+
+    it('should return that this hash is already in use to create a card',
+        function(done){
+            done();
+        });
+
+    it('should return that data received is undefined or incomplete',
+        function(done){
+            done();
+        });
+
+    it('should load all cards from this specific user',
+        function(done){
+            done();
+        });
+});
+
+
+describe ('Card Unit Update', function () {
+    before(function (done) {
+        createCard(testCard);
+        done();
+    });
+
+    after(function (done) {
+        clearTestDatabase();
+        done();
+    });
+
+    it('should return that card to update does not exist',
+        function(done){
+            done();
+        });
+
+    it('should update title',
+        function(done){
+            done();
+        });
+
+    it('should update sticker',
+        function(done){
+            done();
+        });
+
+    it('should update final date',
+        function(done){
+            done();
+        });
+
+    it('should update location',
+        function(done){
+            done();
+        });
+
+    it('should update location description',
+        function(done){
+            done();
+        });
+
+    it('should try to update read and return that the user is not invited',
+        function(done){
+            done();
+        });
+
+    it('should update read',
+        function(done){
+            done();
+        });
+
+    it('should try to update participating and return that the user is not invited',
+        function(done){
+            done();
+        });
+
+    it('should update participating',
+        function(done){
+            done();
+        });
+
+    it('should try to add a new user and return that user is already invited',
+        function(done){
+            done();
+        });
+
+    it('should add a new user to the invited list',
+        function(done){
+            done();
+        });
+
+    it('should remove a user from the invited list',
+        function(done){
+            done();
         });
 });
