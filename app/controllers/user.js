@@ -40,7 +40,7 @@ exports.create = function (req, res) {
 };
 
 exports.login = function (req, res) {
-    var data = req.body;
+    var data = req.query;
 
     if(!User.isLoginDataValid(data)){
         res.status(400).send(statusMessage.dataIncomplete);

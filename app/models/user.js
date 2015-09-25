@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var tag = "user model - ";
 
 
 var UserSchema = new Schema({
@@ -74,7 +73,6 @@ var doesUserHasSameDevice = function(user, token){
 };
 
 var getDate = function(){
-
     return Math.floor((new Date().getTime()/1000));
 };
 
@@ -94,6 +92,7 @@ User.isRegistrationDataValid = function (data){
         return false;
     }else if(data.deviceToken == undefined || data.fbName == undefined
         || data.platform == undefined || data.fbId == undefined || data.email == undefined){
+
         return false;
     }
     return true;
