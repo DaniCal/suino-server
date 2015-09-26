@@ -13,14 +13,14 @@ var statusMessage = {
 exports.load = function(req, res){
     var data = req.query;
     var course = new Course(data);
-    course.load(function(err, exist){
+    course.load(function(err, course){
         if (err){
             res.status(500).send(statusMessage.dbError);
         }
-        else if (!exist){
-            res.status(204).send(statusMessage.dataNotFound);
-        }else{
-            res.status(200).send(statusMessage.dataFound);
+//        else if (!course){
+//            res.status(204).send(statusMessage.dataNotFound);
+        else{
+            res.status(200).send(course);
         }
     });
 };
