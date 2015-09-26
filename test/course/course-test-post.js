@@ -34,7 +34,7 @@ describe ('Course POST', function (){
             city: 'nuremberg',
             zip: '90408',
             street: 'friedrichstrasse',
-            number: 43
+            number: '43'
         },
         category: 'fitness',
         tags: ['yoga'],
@@ -89,11 +89,10 @@ describe ('Course POST', function (){
                     res.status.should.equal(400);
                     courseInDb.title = 'some title';
                     done();
-
                 });
         });
 
-    it('should return that data type is not valid',
+    it('should return that data type is not valid (price)',
         function(done){
             courseInDb.price = '2s';
             request(app)
@@ -108,7 +107,22 @@ describe ('Course POST', function (){
                 });
         });
 
-    it('should return that the course was created and data is complete in the database',
+    it('should return that data type is not valid (location)',
+        function(done){
+            courseInDb.location.longitude = '2s';
+            request(app)
+                .post('/course')
+                .type('json')
+                .send(courseInDb)
+                .expect(400)
+                .end(function(err, res){
+                    res.status.should.equal(400);
+                    courseInDb.location.longitude = 20;
+                    done();
+                });
+        });
+
+    it('should return that the course was created and data in the database',
         function(done){
             request(app)
                 .post('/course')
@@ -116,7 +130,6 @@ describe ('Course POST', function (){
                 .send(courseInDb)
                 .expect(201)
                 .end(function(err, res){
-                    console.log(res.error.text);
                     res.status.should.equal(201);
                     CourseModel.find({title: courseInDb.title}, function(err, courses){
                         should.not.exist(err);

@@ -8,5 +8,7 @@ module.exports = function (app) {
     app.get('/login', user.login);
     app.post('/register', user.create);
     app.post('/course', course.create);
+    app.get('/course', course.load);
+
 
 };

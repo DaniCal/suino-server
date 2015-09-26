@@ -42,6 +42,11 @@ var CourseModel = mongoose.model('Course', CourseSchema);
 
 
 var Course = function(data){
+    if(data.id != undefined){
+        this._id = data.id;
+        return;
+    }
+
     this._title = data.title;
     this._description = data.description;
     this._teacherFbId = data.teacherFbId;
@@ -84,6 +89,17 @@ Course.prototype.createCourse = function(callback){
     callback();
 };
 
+
+Course.prototype.load = function(callback){
+    CourseModel.findOne({id: this._id}, function(err, course){
+        if(err || course == undefined){
+            callback(err, false);
+            return;
+        }
+        callback(err, course)
+    });
+};
+
 Course.isCourseDataValid = function(data, callback){
     if(data == null || data == undefined){
         callback('data null or undefined');
@@ -99,6 +115,8 @@ Course.isCourseDataValid = function(data, callback){
         callback();
     }
 };
+
+
 
 var isAvailabilityValid = function(availability) {
     return !(availability.days == undefined ||
@@ -139,6 +157,8 @@ var isDataTypeValid = function(data){
     if(isNaN(data.price)){
         return false;
     }else if(isNaN(data.level)){
+        return false;
+    }else if(isNaN(data.location.longitude) || isNaN(data.location.altitude)){
         return false;
     }
     return true;
