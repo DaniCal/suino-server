@@ -15,7 +15,7 @@ var statusMessage = {
     'dataFound': 'Item found'
 };
 
-exports.create = function (req, res) {
+exports.create = function(req, res) {
     var data = req.body;
 
     if(!User.isRegistrationDataValid(data)){

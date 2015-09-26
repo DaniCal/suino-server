@@ -97,6 +97,7 @@ describe ('Users GET', function (){
                     res.text.should.equal('Received data is incomplete or undefined');
                     done();
                 });
+
         });
 
     for(var i = 0; i < incompleteUserData.length ; i++){
@@ -105,7 +106,7 @@ describe ('Users GET', function (){
                 request(app)
                     .get('/login')
                     .type('json')
-                    .send(incompleteUserData[i])
+                    .query(incompleteUserData[i])
                     .expect(400)
                     .end(function(err, res){
                         res.status.should.equal(400);
@@ -120,8 +121,8 @@ describe ('Users GET', function (){
 
             request(app)
                 .get('/login')
-                .type('json')
-                .send(testUserNotInDb)
+                //.type('json')
+                .query(testUserNotInDb)
                 .expect(204)
                 .end(function(err, res){
                     res.status.should.equal(204);
@@ -141,7 +142,7 @@ describe ('Users GET', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(testUserInDbSameDevice)
+                .query(testUserInDbSameDevice)
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
@@ -162,7 +163,7 @@ describe ('Users GET', function (){
             request(app)
                 .get('/login')
                 .type('json')
-                .send(testUserInDbNewDevice)
+                .query(testUserInDbNewDevice)
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
