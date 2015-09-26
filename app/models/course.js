@@ -76,21 +76,27 @@ Course.prototype.createCourse = function(callback){
         availability: this._availability
     });
 
-    newCourse.save();
+    newCourse.save(function(err){
+        if(err){
+            console.log(err);
+        }
+    });
     callback();
 };
 
 Course.isCourseDataValid = function(data, callback){
-    if(data = null || data == undefined){
-        callback(false, "data null or undefined");
+    if(data == null || data == undefined){
+        callback('data null or undefined');
     }else if(!isDataComplete(data)){
-        callback(false, "data is incomplete");
+        callback('data is incomplete');
+    }else if(!isDataTypeValid(data)){
+        callback('data type is not valid');
     }else if(!isAvailabilityValid(data.availability)){
-        callback(false, "data 'availability' is not valid");
+        callback("data 'availability' is not valid");
     }else if(!isAddressValid(data.address)){
-        callback(false, "data 'address' is not valid");
+        callback("data 'address' is not valid");
     }else{
-        callback(true);
+        callback();
     }
 };
 
@@ -112,7 +118,8 @@ var isAddressValid = function(address){
 };
 
 var isDataComplete = function(data){
-    return !(data.title == undefined ||
+
+    return !(data.title == undefined||
         data.description == undefined ||
         data.teacherFbId == undefined ||
         data.teacherFirstName == undefined ||
@@ -126,6 +133,16 @@ var isDataComplete = function(data){
         data.tags == undefined ||
         data.price == undefined ||
         data.availability == undefined);
+};
+
+var isDataTypeValid = function(data){
+    if(isNaN(data.price)){
+        return false;
+    }else if(isNaN(data.level)){
+        return false;
+    }
+    return true;
+
 };
 
 

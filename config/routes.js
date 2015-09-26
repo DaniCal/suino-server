@@ -9,5 +9,4 @@ module.exports = function (app) {
     app.post('/register', user.create);
     app.post('/course', course.create);
 
-
 };

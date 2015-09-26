@@ -14,8 +14,6 @@ var UserSchema = new Schema({
 
 var UserModel = mongoose.model('User', UserSchema);
 
-
-
 var User = function (data) {
 
     this._fbId = data.fbId;
