@@ -86,6 +86,7 @@ describe ('Course GET', function () {
                         course.id.should.be.equal(courseInDb.id);
                         course.description.should.be.equal(courseInDb.description);
                         course.teacherFbId.should.be.equal(courseInDb.teacherFbId);
+
                         done();
                     });
 
