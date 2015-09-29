@@ -12,27 +12,25 @@ var CourseSchema = new Schema({
         teacherFirstName: {type: String},
         teacherFbPictureLink: {type:String},
         level: {type: Number},
-        location: {type: {longitude: {type: Number}, altitude: {type: Number}}},
-        address: {type: {
-            country: {type: String},
-            city: {type: String},
-            zip: {type: String},
-            street: {type: String},
-            number: {type: String}
-        }},
+        location: {type: {longitude: {type: Number}, latitude: {type: Number}}},
         category: {type: String},
         tags: {type: [String]},
         material: {type: [String]},
         price: {type: Number},
+        groupSize: {type: Number},
         availability: {
             days: [{
+                dayOfTheWeek: {type: Number},
+                start: {type: Number},
+                end: {type: Number}
+            }],
+            dates: [{
                 date: {type: Number},
-                segments: [{
-                    start: {type: Number},
-                    end: {type: Number},
-                    places: {type: Number},
-                    students: {type: [String]}
-                }]
+                start: {type: Number},
+                end: {type: Number},
+                participants: [
+                    {type: String}
+                ]
             }]
         }
     }
@@ -54,11 +52,11 @@ var Course = function(data){
     this._teacherFbPictureLink = data.teacherFbPictureLink;
     this._level = data.level;
     this._location = data.location;
-    this._address = data.address;
     this._category = data.category;
     this._tags = data.tags;
     this._material = data.material;
     this._price = data.price;
+    this._groupSize = data.groupSize;
     this._availability = data.availability;
 };
 
@@ -73,11 +71,11 @@ Course.prototype.createCourse = function(callback){
         teacherFbPictureLink: this._teacherFbPictureLink,
         level: this._level,
         location: this._location,
-        address: this._address,
         category: this._category,
         tags: this._tags,
         material: this._material,
         price: this._price,
+        groupSize: this._groupSize,
         availability: this._availability
     });
 
@@ -100,6 +98,22 @@ Course.prototype.load = function(callback){
     });
 };
 
+Course.prototype.update = function(id, data, callback){
+
+};
+
+Course.prototype.addParticipant = function(){
+
+};
+
+Course.prototype.addCourseDay = function(){
+
+};
+
+Course.prototype.addCourseDate = function(){
+
+};
+
 Course.isCourseDataValid = function(data, callback){
     if(data == null || data == undefined){
         callback('data null or undefined');
@@ -109,30 +123,59 @@ Course.isCourseDataValid = function(data, callback){
         callback('data type is not valid');
     }else if(!isAvailabilityValid(data.availability)){
         callback("data 'availability' is not valid");
-    }else if(!isAddressValid(data.address)){
-        callback("data 'address' is not valid");
     }else{
         callback();
     }
 };
 
-
-
 var isAvailabilityValid = function(availability) {
-    return !(availability.days == undefined ||
-        availability.days.length <= 0 ||
-        availability.days[0].date == undefined ||
-        availability.days[0].segments == undefined ||
-        availability.days[0].segments.length <= 0
-        );
+    return (
+        (availability.days != undefined || availability.dates != undefined) &&
+        (isDaysDataValid(availability) && isDateDataValid(availability)))
 };
 
-var isAddressValid = function(address){
-    return !(address.country == undefined ||
-        address.city == undefined ||
-        address.zip == undefined ||
-        address.street == undefined ||
-        address.number == undefined);
+var isDaysDataValid = function(availability){
+    if(!(availability.days == undefined || availability.days.length <= 0)) {
+        for (var i = 0; i < availability.days.length; i++) {
+            if (!isDaysItemDataValid(availability.days[i])) {
+                return false;
+            }
+        }
+        return true;
+    }else{
+        return true;
+    }
+};
+
+var isDateDataValid = function(availability){
+    if(!(availability.dates == undefined || availability.dates.length <= 0)) {
+        for (var j = 0; j < availability.dates.length; j++) {
+            if (!isDateItemDataValid(availability.dates[j])) {
+                return false;
+            }
+        }
+        return true;
+    }else{
+        return true;
+    }
+};
+
+var isDaysItemDataValid = function(days){
+    return !(days.dayOfTheWeek == undefined ||
+        days.start == undefined ||
+        days.end == undefined ||
+        isNaN(days.dayOfTheWeek) ||
+        isNaN(days.start) ||
+        isNaN(days.end));
+};
+
+var isDateItemDataValid = function(date){
+    return !(date.date == undefined ||
+        date.start == undefined ||
+        date.end == undefined ||
+        isNaN(date.date) ||
+        isNaN(date.start) ||
+        isNaN(date.end));
 };
 
 var isDataComplete = function(data){
@@ -144,27 +187,28 @@ var isDataComplete = function(data){
         data.teacherFbPictureLink == undefined ||
         data.level == undefined ||
         data.location == undefined ||
-        data.address == undefined ||
+        data.location.longitude == undefined ||
+        data.location.latitude == undefined ||
         data.category == undefined ||
         data.tags == undefined ||
         data.material == undefined ||
         data.tags == undefined ||
         data.price == undefined ||
+        data.groupSize == undefined ||
         data.availability == undefined);
 };
 
 var isDataTypeValid = function(data){
     if(isNaN(data.price)){
         return false;
-    }else if(isNaN(data.level)){
+    }else if(isNaN(data.level) || isNaN(data.groupSize)){
         return false;
-    }else if(isNaN(data.location.longitude) || isNaN(data.location.altitude)){
+    }else if(isNaN(data.location.longitude) || isNaN(data.location.latitude)){
         return false;
     }
     return true;
 
 };
-
 
 var getDate = function(){
     return Math.floor((new Date().getTime()/1000));

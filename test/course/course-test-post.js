@@ -28,28 +28,27 @@ describe ('Course POST', function (){
         teacherFirstName: 'Dani',
         teacherFbPictureLink: 'somelink.com/link',
         level: 1,
-        location: {longitude: 20, altitude: 20},
-        address: {
-            country: 'germany',
-            city: 'nuremberg',
-            zip: '90408',
-            street: 'friedrichstrasse',
-            number: '43'
-        },
+        location: {longitude: 20, latitude: 20},
         category: 'fitness',
         tags: ['yoga'],
         material: ['matt', 'drink'],
         price: 5,
+        groupSize: 3,
         availability: {
-            days: [{
-                date: 1,
-                segments: [{
-                    start: 2,
-                    end: 3,
-                    places: 8,
-                    students: []
-                }]
-            }]
+            days: [
+                {
+                    dayOfTheWeek: 2,
+                    start: 3,
+                    end: 4
+                }
+            ],
+            dates: [
+                {
+                    date: 2134,
+                    start: 123,
+                    end: 123
+                }
+            ]
         }
     };
 
