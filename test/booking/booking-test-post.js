@@ -37,7 +37,7 @@ describe ('Booking POST', function (){
     var testBooking = {
         courseId: '123123123',
         participantId: '123123',
-        start: 123123
+        eventId: '234234'
     };
 
     var courseInDb = {
@@ -72,7 +72,7 @@ describe ('Booking POST', function (){
 
     before(function(done){
         createCourse(courseInDb);
-        createBooking(testBooking);
+        //createBooking(testBooking);
         done();
     });
 

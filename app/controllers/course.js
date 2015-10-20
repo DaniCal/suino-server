@@ -25,6 +25,10 @@ exports.load = function(req, res){
     });
 };
 
+exports.loadAll = function(req, res){
+
+};
+
 
 exports.create = function(req, res){
     var data = req.body;

@@ -6,8 +6,8 @@ var Course = require('../models/course.js');
 var BookingSchema = new Schema({
     courseId: {type: String},
     participantId: {type: String},
-    state: {type: Number},
-    start: {type: Number}
+    eventId: {type: String},
+    state: {type: Number}
 });
 
 var BookingModel = mongoose.model('Booking', BookingSchema);
@@ -22,9 +22,14 @@ var BookingStates = {
 
 
 var Booking = function(data){
-    this._courseId = data.courseId;
     this._participantId = data.participantId;
-    this._start = data.start;
+    this._eventId = data.eventId;
+    this._courseId = data.courseId;
+
+
+    if(!isDataComplete(data)){
+        return;
+    }
     this._state = BookingStates.request;
 
 };
@@ -37,6 +42,8 @@ Booking.prototype.createBooking = function(callback){
         start: this._start
     });
 
+
+    //Check if course really exists
     var course = new Course({id: newBooking.courseId});
     course.load(function(err, course){
         if (err || !course){
@@ -50,10 +57,23 @@ Booking.prototype.createBooking = function(callback){
             callback();
         }
     });
+
+    //TODO: check if event really exists
 };
 
 Booking.prototype.load = function(callback){
-
+    BookingModel.findOne(
+        {
+            courseId: this._courseId,
+            participantId: this._participantId,
+            eventId: this._eventId
+        }, function(err, booking) {
+        if (err || booking == undefined) {
+            callback(err, false);
+            return;
+        }
+        callback(false, booking)
+    });
 };
 
 Booking.prototype.update = function(callback){
@@ -68,13 +88,19 @@ Booking.prototype.confirm = function(callback){
 
 };
 
+Booking.loadAll = function(data, callback){
+
+};
+
+Booking.loadNext = function(data, callback){
+
+};
+
 Booking.isBookingDataValid = function(data, callback) {
     if(data == null || data == undefined){
         callback('data is null or undefined');
     }else if(!isDataComplete(data)){
         callback('data is incomplete');
-    }else if(!isDataTypeValid(data)){
-        callback('data type is not valid');
     }else{
         callback();
     }
@@ -83,11 +109,8 @@ Booking.isBookingDataValid = function(data, callback) {
 var isDataComplete = function(data){
     return !(data.courseId == undefined ||
     data.participantId == undefined ||
-    data.start == undefined);
+    data.eventId == undefined);
 };
 
-var isDataTypeValid = function(data){
-    return !isNaN(data.start);
-};
 
 module.exports = Booking;
