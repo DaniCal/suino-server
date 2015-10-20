@@ -23,7 +23,6 @@ describe ('Course GET', function () {
 
     var courseInDb = {
         id: '123123123',
-        title: 'some title',
         date: 12,
         description: 'some description',
         teacherFbId: '123123123123',
@@ -31,29 +30,16 @@ describe ('Course GET', function () {
         teacherFbPictureLink: 'somelink.com/link',
         level: 1,
         location: {longitude: 20, altitude: 20},
-        address: {
-            country: 'germany',
-            city: 'nuremberg',
-            zip: '90408',
-            street: 'friedrichstrasse',
-            number: 43
-        },
+        groupSize: 4,
         category: 'fitness',
         tags: ['yoga'],
-        material: ['matt', 'drink'],
         price: 5,
         availability: {
             days: [
                 {
-                    date: 1,
-                    segments: [
-                        {
-                            start: 2,
-                            end: 3,
-                            places: 8,
-                            students: []
-                        }
-                    ]
+                    dayOfTheWeek: 3,
+                    start: 123123,
+                    end: 123123
                 }
             ]
         }
@@ -82,7 +68,6 @@ describe ('Course GET', function () {
                     CourseModel.findOne({id: courseInDb.id},function(err, course) {
                         should.not.exist(err)
                         course.should.be.an.instanceOf(CourseModel);
-                        course.title.should.be.equal(courseInDb.title);
                         course.id.should.be.equal(courseInDb.id);
                         course.description.should.be.equal(courseInDb.description);
                         course.teacherFbId.should.be.equal(courseInDb.teacherFbId);

@@ -5,7 +5,6 @@ var uuid = require('node-uuid');
 
 var CourseSchema = new Schema({
         id: {type: String},
-        title: {type: String},
         date : {type: Number},
         description: {type: String},
         teacherFbId: {type: String},
@@ -15,7 +14,6 @@ var CourseSchema = new Schema({
         location: {type: {longitude: {type: Number}, latitude: {type: Number}}},
         category: {type: String},
         tags: {type: [String]},
-        material: {type: [String]},
         price: {type: Number},
         groupSize: {type: Number},
         availability: {
@@ -25,7 +23,6 @@ var CourseSchema = new Schema({
                 end: {type: Number}
             }],
             dates: [{
-                date: {type: Number},
                 start: {type: Number},
                 end: {type: Number},
                 participants: [
@@ -38,14 +35,12 @@ var CourseSchema = new Schema({
 
 var CourseModel = mongoose.model('Course', CourseSchema);
 
-
 var Course = function(data){
     if(data.id != undefined){
         this._id = data.id;
         return;
     }
 
-    this._title = data.title;
     this._description = data.description;
     this._teacherFbId = data.teacherFbId;
     this._teacherFirstName = data.teacherFirstName;
@@ -54,7 +49,6 @@ var Course = function(data){
     this._location = data.location;
     this._category = data.category;
     this._tags = data.tags;
-    this._material = data.material;
     this._price = data.price;
     this._groupSize = data.groupSize;
     this._availability = data.availability;
@@ -63,7 +57,6 @@ var Course = function(data){
 Course.prototype.createCourse = function(callback){
     var newCourse = new CourseModel({
         id: uuid.v4(),
-        title: this._title,
         date: getDate(),
         description: this._description,
         teacherFbId: this._teacherFbId,
@@ -73,7 +66,6 @@ Course.prototype.createCourse = function(callback){
         location: this._location,
         category: this._category,
         tags: this._tags,
-        material: this._material,
         price: this._price,
         groupSize: this._groupSize,
         availability: this._availability
@@ -170,17 +162,16 @@ var isDaysItemDataValid = function(days){
 };
 
 var isDateItemDataValid = function(date){
-    return !(date.date == undefined ||
+    return !(
         date.start == undefined ||
         date.end == undefined ||
-        isNaN(date.date) ||
         isNaN(date.start) ||
         isNaN(date.end));
 };
 
 var isDataComplete = function(data){
 
-    return !(data.title == undefined||
+    return !(
         data.description == undefined ||
         data.teacherFbId == undefined ||
         data.teacherFirstName == undefined ||
@@ -191,7 +182,6 @@ var isDataComplete = function(data){
         data.location.latitude == undefined ||
         data.category == undefined ||
         data.tags == undefined ||
-        data.material == undefined ||
         data.tags == undefined ||
         data.price == undefined ||
         data.groupSize == undefined ||

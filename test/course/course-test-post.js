@@ -22,7 +22,6 @@ var clearTestDatabase = function(){
 describe ('Course POST', function (){
 
     var courseInDb = {
-        title: 'some title',
         description: 'some description',
         teacherFbId: '123123123123',
         teacherFirstName: 'Dani',
@@ -31,7 +30,6 @@ describe ('Course POST', function (){
         location: {longitude: 20, latitude: 20},
         category: 'fitness',
         tags: ['yoga'],
-        material: ['matt', 'drink'],
         price: 5,
         groupSize: 3,
         availability: {
@@ -44,9 +42,9 @@ describe ('Course POST', function (){
             ],
             dates: [
                 {
-                    date: 2134,
                     start: 123,
-                    end: 123
+                    end: 123,
+                    participants: []
                 }
             ]
         }
@@ -78,7 +76,7 @@ describe ('Course POST', function (){
 
     it('should return that data is incomplete',
         function(done){
-            courseInDb.title = undefined;
+            courseInDb.category = undefined;
             request(app)
                 .post('/course')
                 .type('json')
@@ -86,7 +84,7 @@ describe ('Course POST', function (){
                 .expect(400)
                 .end(function(err, res){
                     res.status.should.equal(400);
-                    courseInDb.title = 'some title';
+                    courseInDb.category = 'some title';
                     done();
                 });
         });
@@ -130,7 +128,7 @@ describe ('Course POST', function (){
                 .expect(201)
                 .end(function(err, res){
                     res.status.should.equal(201);
-                    CourseModel.find({title: courseInDb.title}, function(err, courses){
+                    CourseModel.find({description: courseInDb.description}, function(err, courses){
                         should.not.exist(err);
                         should.exist(courses);
                         courses.length.should.be.equal(1);
