@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Course = require('../models/course.js');
 
 
 var BookingSchema = new Schema({
@@ -35,6 +36,20 @@ Booking.prototype.createBooking = function(callback){
         state: this._state,
         start: this._start
     });
+
+    var course = new Course({id: newBooking.courseId});
+    course.load(function(err, course){
+        if (err || !course){
+            callback('course id is invalid');
+        }else{
+            newBooking.save(function(err){
+                if(err){
+                    console.log(err);
+                }
+            });
+            callback();
+        }
+    });
 };
 
 Booking.prototype.load = function(callback){
@@ -53,8 +68,10 @@ Booking.prototype.confirm = function(callback){
 
 };
 
-Booking.isBookingDataValid = function(data, callback){
-    if(!isDataComplete(data)){
+Booking.isBookingDataValid = function(data, callback) {
+    if(data == null || data == undefined){
+        callback('data is null or undefined');
+    }else if(!isDataComplete(data)){
         callback('data is incomplete');
     }else if(!isDataTypeValid(data)){
         callback('data type is not valid');
