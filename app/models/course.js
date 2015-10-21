@@ -115,14 +115,17 @@ Course.search = function(data, callback){
 
     maxDistance /= 6371;
 
-
     var keywords = [];
 
-    if(!(data.keywords instanceof Array)){
-        keywords[0] = data.keywords;
-    }else{
-        keywords = data.keywords;
+    if(data.keywords != null){
+        if(!(data.keywords instanceof Array)){
+            keywords[0] = data.keywords;
+        }else{
+            keywords = data.keywords;
+        }
     }
+
+
 
     var coordinates = [];
     coordinates[0] = data.longitude;
@@ -141,9 +144,8 @@ Course.search = function(data, callback){
         }
 
     });
-
-
 };
+
 
 Course.isCourseDataValid = function(data, callback){
     if(data == null || data == undefined){

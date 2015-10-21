@@ -28,9 +28,6 @@ describe ('Course GET', function () {
         createCourse(CourseTestData.mySet3);
         createCourse(CourseTestData.notMySet1);
         createCourse(CourseTestData.notMySet2);
-
-
-
         done();
     });
 
@@ -62,6 +59,26 @@ describe ('Course GET', function () {
                 });
         });
 
+
+    it('should return list of courseIds sorted by proximity',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+
+                    var courses = res.body;
+                    courses.length.should.be.equal(5);
+                    done();
+                });
+        });
 
     it('should return list of courseIds sorted by proximity including a certain tag',
         function(done){
@@ -106,7 +123,7 @@ describe ('Course GET', function () {
 
                     var courses = res.body;
                     courses.length.should.be.equal(0);
-                    
+
                     done();
                 });
         });

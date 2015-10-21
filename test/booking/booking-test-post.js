@@ -47,7 +47,7 @@ describe ('Booking POST', function (){
         teacherFirstName: 'Dani',
         teacherFbPictureLink: 'somelink.com/link',
         level: 1,
-        location: {longitude: 20, latitude: 20},
+        location: [20, 20],
         category: 'fitness',
         tags: ['yoga'],
         price: 5,
