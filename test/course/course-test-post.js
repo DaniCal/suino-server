@@ -22,34 +22,34 @@ var clearTestDatabase = function(){
 
 describe ('Course POST', function (){
 
-    var courseInDb = {
-        description: 'some description',
-        teacherFbId: '123123123123',
-        teacherFirstName: 'Dani',
-        teacherFbPictureLink: 'somelink.com/link',
-        level: 1,
-        location: {longitude: 20, latitude: 20},
-        category: 'fitness',
-        tags: ['yoga'],
-        price: 5,
-        groupSize: 3,
-        availability: {
-            days: [
-                {
-                    dayOfTheWeek: 2,
-                    start: 3,
-                    end: 4
-                }
-            ],
-            dates: [
-                {
-                    start: 123,
-                    end: 123,
-                    participants: []
-                }
-            ]
-        }
-    };
+    //var courseInDb = {
+    //    description: 'some description',
+    //    teacherFbId: '123123123123',
+    //    teacherFirstName: 'Dani',
+    //    teacherFbPictureLink: 'somelink.com/link',
+    //    level: 1,
+    //    location: [20,20],
+    //    category: 'fitness',
+    //    tags: ['yoga'],
+    //    price: 5,
+    //    groupSize: 3,
+    //    availability: {
+    //        days: [
+    //            {
+    //                dayOfTheWeek: 2,
+    //                start: 3,
+    //                end: 4
+    //            }
+    //        ],
+    //        dates: [
+    //            {
+    //                start: 123,
+    //                end: 123,
+    //                participants: []
+    //            }
+    //        ]
+    //    }
+    //};
 
     before(function(done){
         createCourse(CourseTestData.mySpecificSet1);
@@ -77,59 +77,54 @@ describe ('Course POST', function (){
 
     it('should return that data is incomplete',
         function(done){
-            courseInDb.category = undefined;
             request(app)
                 .post('/course')
                 .type('json')
-                .send(courseInDb)
+                .send(CourseTestData.setIncomplete)
                 .expect(400)
                 .end(function(err, res){
                     res.status.should.equal(400);
-                    courseInDb.category = 'some title';
                     done();
                 });
         });
 
     it('should return that data type is not valid (price)',
         function(done){
-            courseInDb.price = '2s';
             request(app)
                 .post('/course')
                 .type('json')
-                .send(courseInDb)
+                .send(CourseTestData.setInvalidDataType1)
                 .expect(400)
                 .end(function(err, res){
                     res.status.should.equal(400);
-                    courseInDb.price = 5;
                     done();
                 });
         });
 
     it('should return that data type is not valid (location)',
         function(done){
-            courseInDb.location.longitude = '2s';
             request(app)
                 .post('/course')
                 .type('json')
-                .send(courseInDb)
+                .send(CourseTestData.setInvalidDataType2)
                 .expect(400)
                 .end(function(err, res){
                     res.status.should.equal(400);
-                    courseInDb.location.longitude = 20;
                     done();
                 });
         });
 
     it('should return that the course was created and data in the database',
         function(done){
+            var course = CourseTestData.mySpecificSet1;
             request(app)
                 .post('/course')
                 .type('json')
-                .send(courseInDb)
+                .send(course)
                 .expect(201)
                 .end(function(err, res){
                     res.status.should.equal(201);
-                    CourseModel.find({description: courseInDb.description}, function(err, courses){
+                    CourseModel.find({description: course.description}, function(err, courses){
                         should.not.exist(err);
                         should.exist(courses);
                         courses.length.should.be.equal(1);

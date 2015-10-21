@@ -26,6 +26,10 @@ describe ('Course GET', function () {
         createCourse(CourseTestData.mySpecificSet1);
         createCourse(CourseTestData.mySet2);
         createCourse(CourseTestData.mySet3);
+        createCourse(CourseTestData.notMySet1);
+        createCourse(CourseTestData.notMySet2);
+
+
 
         done();
     });
@@ -69,22 +73,41 @@ describe ('Course GET', function () {
                     longitude: 20,
                     latitude: 20,
                     maxDistance: 10,
-                    keywords: ['yoga']
+                    keywords: ['yoga', 'meditation']
                 })
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    console.log(res.body);
-                    //CourseModel.findOne({id: CourseTestData.mySpecificSet1.id},function(err, course) {
-                    //    should.not.exist(err)
-                    //    course.should.be.an.instanceOf(CourseModel);
-                    //    course.id.should.be.equal(CourseTestData.mySpecificSet1.id);
-                    //    course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
-                    //    course.teacherFbId.should.be.equal(CourseTestData.mySpecificSet1.teacherFbId);
 
-                        done();
-                    //});
+                    var courses = res.body;
+                    courses.length.should.be.equal(3);
+                    courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
+                    courses[1].id.should.be.equal(CourseTestData.mySet3.id);
+                    courses[2].id.should.be.equal(CourseTestData.mySet2.id);
+                    done();
+                });
+        });
 
+    it('should return an empty list of courses (keywords dont match)',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['123', '123']
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+
+                    var courses = res.body;
+                    courses.length.should.be.equal(0);
+                    
+                    done();
                 });
         });
 });

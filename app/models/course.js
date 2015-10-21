@@ -133,11 +133,11 @@ Course.search = function(data, callback){
             $near: coordinates
         },
         tags: {$in: keywords}
-    }, function(err, locations){
+    }, function(err, courses){
         if(err){
             callback(err);
         }else{
-            callback(false, locations)
+            callback(false, courses)
         }
 
     });
@@ -217,8 +217,6 @@ var isDataComplete = function(data){
         data.teacherFbPictureLink == undefined ||
         data.level == undefined ||
         data.location == undefined ||
-        data.location.longitude == undefined ||
-        data.location.latitude == undefined ||
         data.category == undefined ||
         data.tags == undefined ||
         data.tags == undefined ||
@@ -232,7 +230,7 @@ var isDataTypeValid = function(data){
         return false;
     }else if(isNaN(data.level) || isNaN(data.groupSize)){
         return false;
-    }else if(isNaN(data.location.longitude) || isNaN(data.location.latitude)){
+    }else if(!(data.location instanceof Array)){
         return false;
     }
     return true;
