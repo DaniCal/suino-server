@@ -26,7 +26,15 @@ exports.load = function(req, res){
 
 //loads and returns all bookings of a specific user
 exports.loadAll = function(req, res) {
-    var data = req.query;
+    Booking.loadAll(req.query, function(err, bookings){
+        if(err){
+            res.status(500).send(statusMessage.dbError);
+        }
+        else{
+            res.status(200).send(bookings);
+        }
+    });
+
 };
 
 //loads and returns all bookings of a specific user after a specific date

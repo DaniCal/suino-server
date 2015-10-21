@@ -90,6 +90,21 @@ Booking.prototype.confirm = function(callback){
 
 Booking.loadAll = function(data, callback){
 
+    if(data == null || data == undefined || data.participantId == undefined){
+        callback('data incomplete');
+        return;
+    }
+
+    BookingModel.find(
+        {
+            participantId: data.participantId
+        }, function(err, bookings) {
+            if (err || !bookings || bookings == undefined) {
+                callback(err, false);
+                return;
+            }
+            callback(false, bookings)
+        });
 };
 
 Booking.loadNext = function(data, callback){

@@ -32,5 +32,4 @@ describe ('Course Unit', function () {
                 }
             });
         });
-
 });
