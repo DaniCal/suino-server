@@ -3,6 +3,7 @@ var request = require('supertest');
 var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
+var CourseTestData = require('./course-test-data.js');
 
 
 var createCourse = function(course){
@@ -51,7 +52,7 @@ describe ('Course POST', function (){
     };
 
     before(function(done){
-        createCourse(courseInDb);
+        createCourse(CourseTestData.mySpecificSet1);
         done();
     });
 

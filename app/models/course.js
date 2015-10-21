@@ -11,7 +11,10 @@ var CourseSchema = new Schema({
         teacherFirstName: {type: String},
         teacherFbPictureLink: {type:String},
         level: {type: Number},
-        location: {type: {longitude: {type: Number}, latitude: {type: Number}}},
+        location: {
+                type: [Number],
+                index: '2d'
+        },
         category: {type: String},
         tags: {type: [String]},
         price: {type: Number},
@@ -103,6 +106,42 @@ Course.prototype.addCourseDay = function(){
 };
 
 Course.prototype.addCourseDate = function(){
+
+};
+
+Course.search = function(data, callback){
+
+    var maxDistance = data.maxDistance;
+
+    maxDistance /= 6371;
+
+
+    var keywords = [];
+
+    if(!(data.keywords instanceof Array)){
+        keywords[0] = data.keywords;
+    }else{
+        keywords = data.keywords;
+    }
+
+    var coordinates = [];
+    coordinates[0] = data.longitude;
+    coordinates[1] = data.latitude;
+
+    CourseModel.find({
+        location: {
+            $near: coordinates
+        },
+        tags: {$in: keywords}
+    }, function(err, locations){
+        if(err){
+            callback(err);
+        }else{
+            callback(false, locations)
+        }
+
+    });
+
 
 };
 

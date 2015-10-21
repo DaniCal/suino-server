@@ -3,11 +3,12 @@ var request = require('supertest');
 var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
+var CourseTestData = require('./course-test-data.js');
 
 var createCourse = function(course){
     CourseModel.create(course, function (err, course) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
         }
     });
 };
@@ -21,32 +22,11 @@ var clearTestDatabase = function(){
 
 describe ('Course GET', function () {
 
-    var courseInDb = {
-        id: '123123123',
-        date: 12,
-        description: 'some description',
-        teacherFbId: '123123123123',
-        teacherFirstName: 'Dani',
-        teacherFbPictureLink: 'somelink.com/link',
-        level: 1,
-        location: {longitude: 20, altitude: 20},
-        groupSize: 4,
-        category: 'fitness',
-        tags: ['yoga'],
-        price: 5,
-        availability: {
-            days: [
-                {
-                    dayOfTheWeek: 3,
-                    start: 123123,
-                    end: 123123
-                }
-            ]
-        }
-    };
-
     before(function(done){
-        createCourse(courseInDb);
+        createCourse(CourseTestData.mySpecificSet1);
+        createCourse(CourseTestData.mySet2);
+        createCourse(CourseTestData.mySet3);
+
         done();
     });
 
@@ -65,15 +45,45 @@ describe ('Course GET', function () {
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    CourseModel.findOne({id: courseInDb.id},function(err, course) {
+                    CourseModel.findOne({id: CourseTestData.mySpecificSet1.id},function(err, course) {
                         should.not.exist(err)
                         course.should.be.an.instanceOf(CourseModel);
-                        course.id.should.be.equal(courseInDb.id);
-                        course.description.should.be.equal(courseInDb.description);
-                        course.teacherFbId.should.be.equal(courseInDb.teacherFbId);
+                        course.id.should.be.equal(CourseTestData.mySpecificSet1.id);
+                        course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
+                        course.teacherFbId.should.be.equal(CourseTestData.mySpecificSet1.teacherFbId);
 
                         done();
                     });
+
+                });
+        });
+
+
+    it('should return list of courseIds sorted by proximity including a certain tag',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['yoga']
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+                    console.log(res.body);
+                    //CourseModel.findOne({id: CourseTestData.mySpecificSet1.id},function(err, course) {
+                    //    should.not.exist(err)
+                    //    course.should.be.an.instanceOf(CourseModel);
+                    //    course.id.should.be.equal(CourseTestData.mySpecificSet1.id);
+                    //    course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
+                    //    course.teacherFbId.should.be.equal(CourseTestData.mySpecificSet1.teacherFbId);
+
+                        done();
+                    //});
 
                 });
         });
