@@ -1,5 +1,3 @@
-//addParticipant event does not exist
-
 var should = require('should');
 var request = require('supertest');
 var app = require('./../helpers/app.js');
@@ -23,7 +21,7 @@ var clearTestDatabase = function(){
     });
 };
 
-describe ('Event PUT', function () {
+describe ('Event ADD PARTICIPANT', function () {
 
     before(function (done) {
         createEvent(EventTestData.set1Empty);

@@ -20,5 +20,6 @@ module.exports = function (app) {
 
     app.post('/event', event.create);
     app.put('/event/addParticipant', event.addParticipant);
+    app.put('/event/removeParticipant', event.removeParticipant);
 
 };

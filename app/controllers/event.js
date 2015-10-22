@@ -9,9 +9,15 @@ exports.create = function(req, res){
 };
 
 exports.addParticipant = function(req, res){
-
     var data = req.body;
     Event.addParticipant(data, function(msg, statusCode){
+        res.status(statusCode).send();
+    });
+};
+
+exports.removeParticipant = function(req, res){
+    var data = req.body;
+    Event.removeParticipant(data, function(msg, statusCode){
         res.status(statusCode).send();
     });
 };

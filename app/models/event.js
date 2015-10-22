@@ -132,15 +132,49 @@ Event.addParticipant = function(data, callback){
     );
 };
 
-Event.prototype.removeParticipant = function(data, callback){
+Event.removeParticipant = function(data, callback){
+    if(!isAddParticipantDataValid(data)){
+        callback('data not valid', 400);
+        return;
+    }
+
+    EventModel.findOne(
+        {eventId: data.eventId},
+        function(err, event){
+            if(err){
+                callback(err, 500);
+            }else if(!event || event == undefined){
+                callback('Not found', 404);
+            }else{
+                if(!(event.participants.indexOf(data.participantId) > -1)){
+                    callback('User not participating', 400);
+                }else{
+
+                    EventModel.findByIdAndUpdate(
+                        event._id,
+                        {
+                            $pull: {participants: data.participantId},
+                            spotsLeft: event.spotsLeft + 1
+                        },
+                        function(err, event){
+                            if(err){
+                                callback(err, 500);
+                            }else{
+                                callback(false, 200);
+                            }
+                        }
+                    );
+                }
+            }
+        }
+    );
+};
+
+Event.cancelEvent = function(data, callback){
 
 };
 
-Event.prototype.cancelEvent = function(data, callback){
-
-};
-
-Event.prototype.updateDate = function(callback){
+Event.updateDate = function(callback){
 
 };
 
