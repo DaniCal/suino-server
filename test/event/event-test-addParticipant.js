@@ -94,6 +94,8 @@ describe ('Event ADD PARTICIPANT', function () {
                 .expect(400)
                 .end(function (err, res) {
                     res.status.should.equal(400);
+                    res.text.should.equal('No spots left');
+
                     done();
 
                 });
@@ -111,6 +113,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .expect(400)
                 .end(function (err, res) {
                     res.status.should.equal(400);
+                    res.text.should.equal('Already participating');
                     done();
 
                 });
@@ -128,6 +131,8 @@ describe ('Event ADD PARTICIPANT', function () {
                 .expect(400)
                 .end(function (err, res) {
                     res.status.should.equal(400);
+                    res.text.should.equal('Event canceled');
+
                     done();
 
                 });
@@ -145,6 +150,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .expect(404)
                 .end(function (err, res) {
                     res.status.should.equal(404);
+                    res.text.should.equal('Not found');
                     done();
 
                 });

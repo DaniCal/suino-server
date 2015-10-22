@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
 var EventTestData = require('./event-test-data.js');
 
-
+//user not participating
 
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
@@ -56,6 +56,40 @@ describe ('Event REMOVE PARTICIPANT', function () {
                             done();
                         });
 
+                });
+        });
+
+    it('should return that event does not exist',
+        function (done) {
+            request(app)
+                .put('/event/removeParticipant')
+                .type('json')
+                .send({
+                    eventId: '1233333',
+                    participantId: EventTestData.set2PlacesLeft.participants[0]
+                })
+                .expect(404)
+                .end(function (err, res) {
+                    res.text.should.equal('Not found');
+                    res.status.should.equal(404);
+                    done();
+                });
+        });
+
+    it('should return that user is not participating',
+        function (done) {
+            request(app)
+                .put('/event/removeParticipant')
+                .type('json')
+                .send({
+                    eventId: EventTestData.set2PlacesLeft.eventId,
+                    participantId: 'abcd'
+                })
+                .expect(400)
+                .end(function (err, res) {
+                    res.status.should.equal(400);
+                    res.text.should.equal('User not participating');
+                    done();
                 });
         });
 });
