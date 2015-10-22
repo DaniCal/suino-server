@@ -111,39 +111,71 @@ Course.prototype.addCourseDate = function(){
 
 Course.search = function(data, callback){
 
-    var maxDistance = data.maxDistance;
+
+
+    var query = buildCourseQuery(data);
+
+
+
+
+    query.exec(callback);
+
+};
+
+var buildCourseQuery = function(data){
+    var maxDistance = data.maxDistance | 100;
 
     maxDistance /= 6371;
 
     var keywords = [];
-
-    if(data.keywords != null){
-        if(!(data.keywords instanceof Array)){
-            keywords[0] = data.keywords;
-        }else{
-            keywords = data.keywords;
-        }
-    }
-
 
 
     var coordinates = [];
     coordinates[0] = data.longitude;
     coordinates[1] = data.latitude;
 
-    CourseModel.find({
-        location: {
-            $near: coordinates
-        },
-        tags: {$in: keywords}
-    }, function(err, courses){
-        if(err){
-            callback(err);
+    //PROXIMITY
+    var query = CourseModel.find({location: {
+        $near: coordinates
+    }});
+
+    //KEYWORDS
+    if(data.keywords != undefined){
+        if(!(data.keywords instanceof Array)){
+            keywords[0] = data.keywords;
         }else{
-            callback(false, courses)
+            keywords = data.keywords;
+        }
+        query.where('tags').in(keywords);
+    }
+
+    //LEVEL
+    if(data.level != undefined){
+        if(data.level instanceof Array){
+            query.where('level').in(data.level);
+        }else{
+            query.where('level').equals(data.level);
         }
 
-    });
+    }
+
+    //CATEGORY
+    if(data.category != undefined){
+        query.where('category').equals(data.category);
+    }
+
+    //SIZE
+    if(data.groupSize != undefined){
+        if(data.groupSize == 1){
+            query.where('groupSize').equals(data.groupSize);
+        }else{
+            query.where('groupSize').ne(1);
+        }
+
+    }
+
+    return query;
+
 };
 
 

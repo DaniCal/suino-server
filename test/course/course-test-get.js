@@ -127,4 +127,107 @@ describe ('Course GET', function () {
                     done();
                 });
         });
+
+    it('should return list of courseIds sorted by proximity including a certain tag & level',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['yoga', 'meditation'],
+                    level: 1
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+
+                    var courses = res.body;
+                    courses.length.should.be.equal(2);
+                    courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
+                    courses[1].id.should.be.equal(CourseTestData.mySet2.id);
+                    done();
+                });
+        });
+
+    it('should return list of courseIds sorted by proximity including a certain tag & several levels',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['yoga', 'meditation'],
+                    level: [1, 2]
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+
+                    var courses = res.body;
+                    courses.length.should.be.equal(3);
+                    courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
+                    courses[1].id.should.be.equal(CourseTestData.mySet3.id);
+                    courses[2].id.should.be.equal(CourseTestData.mySet2.id);
+
+                    done();
+                });
+        });
+
+    it('should return list of courseIds sorted by proximity including a certain tag & several levels & single',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['yoga', 'meditation'],
+                    level: [1, 2],
+                    groupSize: 1
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+
+                    var courses = res.body;
+                    courses.length.should.be.equal(1);
+                    courses[0].id.should.be.equal(CourseTestData.mySet2.id);
+                    done();
+                });
+        });
+
+    it('should return list of courseIds sorted by proximity including a certain tag & several levels & group',
+        function(done){
+
+            request(app)
+                .get('/course/search')
+                .type('json')
+                .query({
+                    longitude: 20,
+                    latitude: 20,
+                    maxDistance: 10,
+                    keywords: ['yoga', 'meditation'],
+                    level: [1, 2],
+                    groupSize: 2
+                })
+                .expect(200)
+                .end(function(err, res){
+                    res.status.should.equal(200);
+                    var courses = res.body;
+                    courses.length.should.be.equal(2);
+                    courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id, 'wrong set (specificSet expected) or bad sorting');
+                    courses[1].id.should.be.equal(CourseTestData.mySet3.id, 'wrong set (set3 expected) or bad sorting');
+
+                    done();
+                });
+        });
 });
