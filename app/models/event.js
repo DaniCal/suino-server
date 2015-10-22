@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var uuid = require('node-uuid');
 
 
 var EventSchema = new Schema({
@@ -17,7 +18,7 @@ var EventModel = mongoose.model('Event', EventSchema);
 var Event = function(data){
     if(data.eventId == undefined){
         this._courseId = data.courseId;
-        this._spotsLeft = data.groupSize;
+        this._spotsLeft = data.spotsLeft;
         this._start = data.start;
         this._end = data.end;
     }else{
@@ -31,7 +32,13 @@ var EventStates = {
     canceled: 3
 };
 
-Event.prototype.createEvent = function(callback){
+Event.createEvent = function(data, callback){
+
+    if(!isCreateDataValid(data)){
+        callback('data not valid', 400);
+        return;
+    }
+
     var newEvent = new EventModel({
         eventId: uuid.v4(),
         courseId: this._courseId,
@@ -42,14 +49,52 @@ Event.prototype.createEvent = function(callback){
         state: EventStates.active
     });
 
-    newEvent.save(callback);
+    newEvent.save(function(err){
+        if(err){
+            callback('server error', 500);
+        }else{
+            callback('event created', 200);
+        }
+    });
 };
 
-Event.prototype.addParticipant = function(data, callback){
-    if(data.participantId == undefined || data.eventId == undefined){
-        callback('bad request (participantId or eventId missing)', 400);
+var isCreateDataValid = function(data){
+    if(data == null || data == undefined){
+        return false;
+    }else if(
+        data.courseId == undefined ||
+        data.spotsLeft == undefined ||
+        data.start == undefined ||
+        data.end == undefined
+    ){
+        return false;
+    }else if(isNaN(data.start) || isNaN(data.end)){
+        return false;
+    }else{
+        return true;
+    }
+};
+
+var isAddParticipantDataValid = function(data){
+    if(data == null || data == undefined){
+        return false;
+    }else if(
+        data.eventId == undefined ||
+        data.participantId == undefined
+    ){
+        return false;
+    }else{
+        return true;
+    }
+};
+
+Event.addParticipant = function(data, callback){
+
+    if(!isAddParticipantDataValid(data)){
+        callback('data not valid', 400);
         return;
     }
+
     EventModel.findOne(
         {eventId: data.eventId},
         function(err, event){
@@ -60,7 +105,13 @@ Event.prototype.addParticipant = function(data, callback){
             }else{
                 if(event.spotsLeft == 0){
                     callback('No spots left', 400);
+                }else if(event.participants.indexOf(data.participantId) > -1){
+                    callback('Already participating', 400);
+                }else if(event.state == EventStates.canceled){
+                    callback('Event canceled', 400);
+
                 }else{
+
                     EventModel.findByIdAndUpdate(
                       event._id,
                         {

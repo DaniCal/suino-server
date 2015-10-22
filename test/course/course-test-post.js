@@ -22,35 +22,6 @@ var clearTestDatabase = function(){
 
 describe ('Course POST', function (){
 
-    //var courseInDb = {
-    //    description: 'some description',
-    //    teacherFbId: '123123123123',
-    //    teacherFirstName: 'Dani',
-    //    teacherFbPictureLink: 'somelink.com/link',
-    //    level: 1,
-    //    location: [20,20],
-    //    category: 'fitness',
-    //    tags: ['yoga'],
-    //    price: 5,
-    //    groupSize: 3,
-    //    availability: {
-    //        days: [
-    //            {
-    //                dayOfTheWeek: 2,
-    //                start: 3,
-    //                end: 4
-    //            }
-    //        ],
-    //        dates: [
-    //            {
-    //                start: 123,
-    //                end: 123,
-    //                participants: []
-    //            }
-    //        ]
-    //    }
-    //};
-
     before(function(done){
         createCourse(CourseTestData.mySpecificSet1);
         done();
