@@ -111,13 +111,7 @@ Course.prototype.addCourseDate = function(){
 
 Course.search = function(data, callback){
 
-
-
     var query = buildCourseQuery(data);
-
-
-
-
     query.exec(callback);
 
 };

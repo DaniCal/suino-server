@@ -19,7 +19,6 @@ var clearTestDatabase = function(){
     });
 };
 
-
 describe ('Course GET', function () {
 
     before(function(done){

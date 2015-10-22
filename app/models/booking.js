@@ -52,6 +52,8 @@ Booking.prototype.createBooking = function(callback){
             newBooking.save(function(err){
                 if(err){
                     console.log(err);
+                    callback(err);
+                    return;
                 }
             });
             callback();

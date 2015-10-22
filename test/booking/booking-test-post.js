@@ -134,4 +134,7 @@ describe ('Booking POST', function (){
                     testBooking.courseId = '123123123'
                 });
         });
+
+    //return that event is fully booked
+
 });
