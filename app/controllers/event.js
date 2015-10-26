@@ -21,3 +21,11 @@ exports.removeParticipant = function(req, res){
         res.status(statusCode).send(msg);
     });
 };
+
+exports.getEventsByCourseId = function(req, res){
+    var data = req.query;
+    Event.queryEventsByCourseId(data, function (statusCode, data){
+        res.status(statusCode).send(data);
+    });
+
+};

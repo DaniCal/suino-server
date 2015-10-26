@@ -19,6 +19,7 @@ module.exports = function (app) {
     app.get('/booking/next', booking.loadNext);
 
     app.post('/event', event.create);
+    app.get('/event/courseId', event.getEventsByCourseId);
     app.put('/event/addParticipant', event.addParticipant);
     app.put('/event/removeParticipant', event.removeParticipant);
 

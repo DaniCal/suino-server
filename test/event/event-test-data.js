@@ -57,7 +57,7 @@ EventTestData.set6DataTypeNotValid = {
 };
 
 EventTestData.set7Complete = {
-    courseId: '2',
+    courseId: '1',
     spotsLeft: 4,
     start: 123123,
     end: 123123
