@@ -184,6 +184,17 @@ Event.queryEventsByCourseId = function(data,callback){
         }
     });
 
+};
+
+Event.queryEventsByParticipantId = function(data,callback){
+    if(data == null || data == undefined || data.participantId == undefined){
+        callback(400, 'data not valid');
+        return;
+    }
+
+    EventModel.find({participants:  data.participantId}, function(err, events){
+        callback(err, events);
+    });
 
 };
 

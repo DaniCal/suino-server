@@ -39,7 +39,7 @@ describe ('Event GET EVENT', function () {
     it('should return all event with a certain courseId',
         function (done) {
             request(app)
-                .get('/event/courseId')
+                .get('/event/course')
                 .type('json')
                 .query({
                    courseId: EventTestData.set1Empty.courseId
@@ -54,4 +54,25 @@ describe ('Event GET EVENT', function () {
 
                 });
         });
+
+    it('should return all event with a certain participantId',
+        function (done) {
+            request(app)
+                .get('/event/participant')
+                .type('json')
+                .query({
+                    participantId: EventTestData.set2PlacesLeft.participants[0]
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    res.body.length.should.be.equal(3);
+                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[1].eventId.should.be.equal(EventTestData.set3Full.eventId);
+                    res.body[2].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
+                    done();
+
+                });
+        });
+
 });
