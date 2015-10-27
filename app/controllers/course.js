@@ -31,15 +31,13 @@ exports.loadAll = function(req, res){
 
 exports.search = function(req, res){
     var data = req.query;
-    Course.search(data, function(err, locations){
+    Course.search(data, function(err, courseIds){
         if(err){
             res.status(400).send(err);
         }else{
-            res.status(200).send(locations);
+            res.status(200).send(courseIds);
         }
     })
-
-
 };
 
 

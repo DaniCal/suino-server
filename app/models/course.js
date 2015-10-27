@@ -97,21 +97,9 @@ Course.prototype.update = function(id, data, callback){
 
 };
 
-Course.prototype.addParticipant = function(){
-
-};
-
-Course.prototype.addCourseDay = function(){
-
-};
-
-Course.prototype.addCourseDate = function(){
-
-};
-
 Course.search = function(data, callback){
 
-    var query = buildCourseQuery(data);
+    var query = buildCourseQuery(data).select('id');;
     query.exec(callback);
 
 };

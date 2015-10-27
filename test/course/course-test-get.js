@@ -94,9 +94,11 @@ describe ('Course GET', function () {
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-
                     var courses = res.body;
                     courses.length.should.be.equal(3);
+                    should.not.exist(courses[0].level);
+                    should.not.exist(courses[0].category);
+
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet3.id);
                     courses[2].id.should.be.equal(CourseTestData.mySet2.id);
@@ -146,6 +148,8 @@ describe ('Course GET', function () {
 
                     var courses = res.body;
                     courses.length.should.be.equal(2);
+                    should.not.exist(courses[0].level);
+                    should.not.exist(courses[0].category);
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet2.id);
                     done();
@@ -171,6 +175,8 @@ describe ('Course GET', function () {
 
                     var courses = res.body;
                     courses.length.should.be.equal(3);
+                    should.not.exist(courses[0].level);
+                    should.not.exist(courses[0].category);
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet3.id);
                     courses[2].id.should.be.equal(CourseTestData.mySet2.id);
@@ -198,6 +204,8 @@ describe ('Course GET', function () {
                     res.status.should.equal(200);
 
                     var courses = res.body;
+                    should.not.exist(courses[0].level);
+                    should.not.exist(courses[0].category);
                     courses.length.should.be.equal(1);
                     courses[0].id.should.be.equal(CourseTestData.mySet2.id);
                     done();
