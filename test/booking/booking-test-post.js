@@ -51,23 +51,7 @@ describe ('Booking POST', function (){
         category: 'fitness',
         tags: ['yoga'],
         price: 5,
-        groupSize: 3,
-        availability: {
-            days: [
-                {
-                    dayOfTheWeek: 2,
-                    start: 3,
-                    end: 4
-                }
-            ],
-            dates: [
-                {
-                    start: 123,
-                    end: 123,
-                    participants: []
-                }
-            ]
-        }
+        groupSize: 3
     };
 
     before(function(done){

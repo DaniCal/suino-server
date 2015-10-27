@@ -18,21 +18,7 @@ var CourseSchema = new Schema({
         category: {type: String},
         tags: {type: [String]},
         price: {type: Number},
-        groupSize: {type: Number},
-        availability: {
-            days: [{
-                dayOfTheWeek: {type: Number},
-                start: {type: Number},
-                end: {type: Number}
-            }],
-            dates: [{
-                start: {type: Number},
-                end: {type: Number},
-                participants: [
-                    {type: String}
-                ]
-            }]
-        }
+        groupSize: {type: Number}
     }
 );
 
@@ -53,8 +39,7 @@ var Course = function(data){
     this._category = data.category;
     this._tags = data.tags;
     this._price = data.price;
-    this._groupSize = data.groupSize;
-    this._availability = data.availability;
+    this._groupSize = data.groupSize
 };
 
 Course.prototype.createCourse = function(callback){
@@ -70,8 +55,7 @@ Course.prototype.createCourse = function(callback){
         category: this._category,
         tags: this._tags,
         price: this._price,
-        groupSize: this._groupSize,
-        availability: this._availability
+        groupSize: this._groupSize
     });
 
     newCourse.save(function(err){
@@ -168,61 +152,13 @@ Course.isCourseDataValid = function(data, callback){
         callback('data is incomplete');
     }else if(!isDataTypeValid(data)){
         callback('data type is not valid');
-    }else if(!isAvailabilityValid(data.availability)){
-        callback("data 'availability' is not valid");
     }else{
         callback();
     }
 };
 
-var isAvailabilityValid = function(availability) {
-    return (
-        (availability.days != undefined || availability.dates != undefined) &&
-        (isDaysDataValid(availability) && isDateDataValid(availability)))
-};
 
-var isDaysDataValid = function(availability){
-    if(!(availability.days == undefined || availability.days.length <= 0)) {
-        for (var i = 0; i < availability.days.length; i++) {
-            if (!isDaysItemDataValid(availability.days[i])) {
-                return false;
-            }
-        }
-        return true;
-    }else{
-        return true;
-    }
-};
 
-var isDateDataValid = function(availability){
-    if(!(availability.dates == undefined || availability.dates.length <= 0)) {
-        for (var j = 0; j < availability.dates.length; j++) {
-            if (!isDateItemDataValid(availability.dates[j])) {
-                return false;
-            }
-        }
-        return true;
-    }else{
-        return true;
-    }
-};
-
-var isDaysItemDataValid = function(days){
-    return !(days.dayOfTheWeek == undefined ||
-        days.start == undefined ||
-        days.end == undefined ||
-        isNaN(days.dayOfTheWeek) ||
-        isNaN(days.start) ||
-        isNaN(days.end));
-};
-
-var isDateItemDataValid = function(date){
-    return !(
-        date.start == undefined ||
-        date.end == undefined ||
-        isNaN(date.start) ||
-        isNaN(date.end));
-};
 
 var isDataComplete = function(data){
 
@@ -237,8 +173,7 @@ var isDataComplete = function(data){
         data.tags == undefined ||
         data.tags == undefined ||
         data.price == undefined ||
-        data.groupSize == undefined ||
-        data.availability == undefined);
+        data.groupSize == undefined);
 };
 
 var isDataTypeValid = function(data){

@@ -24,16 +24,7 @@ CourseTestData.mySpecificSet1 = {
     groupSize: 4,
     category: 'fitness',
     tags: myTags,
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 CourseTestData.mySet2 = {
@@ -48,16 +39,7 @@ CourseTestData.mySet2 = {
     groupSize: 1,
     category: 'fitness',
     tags: myTags,
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 CourseTestData.mySet3 = {
@@ -72,16 +54,7 @@ CourseTestData.mySet3 = {
     groupSize: 4,
     category: 'fitness',
     tags: myTags,
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 
@@ -97,16 +70,7 @@ CourseTestData.notMySet1 = {
     groupSize: 4,
     category: 'fitness',
     tags: ['futbol'],
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 CourseTestData.notMySet2 = {
@@ -121,16 +85,7 @@ CourseTestData.notMySet2 = {
     groupSize: 4,
     category: 'fitness',
     tags: ['tennis'],
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 
@@ -145,16 +100,7 @@ CourseTestData.setIncomplete = {
     location:  [25,25],
     groupSize: 4,
     tags: ['tennis'],
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 CourseTestData.setInvalidDataType1 = {
@@ -169,16 +115,7 @@ CourseTestData.setInvalidDataType1 = {
     groupSize: 4,
     category: 'fitness',
     tags: ['tennis'],
-    price: '4s',
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: '4s'
 };
 
 CourseTestData.setInvalidDataType2 = {
@@ -193,16 +130,7 @@ CourseTestData.setInvalidDataType2 = {
     groupSize: 4,
     category: 'fitness',
     tags: ['tennis'],
-    price: 5,
-    availability: {
-        days: [
-            {
-                dayOfTheWeek: 3,
-                start: 123123,
-                end: 123123
-            }
-        ]
-    }
+    price: 5
 };
 
 
