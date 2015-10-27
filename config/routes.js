@@ -9,6 +9,8 @@ module.exports = function (app) {
     app.post('/register', user.create);
 
     app.post('/course', course.create);
+    app.put('/course', course.update);
+
     app.get('/course', course.load);
     app.get('/course/search', course.search);
     app.get('/course/all', course.loadAll);

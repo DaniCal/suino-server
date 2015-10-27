@@ -55,3 +55,13 @@ exports.create = function(req, res){
         }
     });
 };
+
+exports.update = function(req, res){
+    var data = req.body;
+    Course.update(data, function(msg, statusCode){
+        res.status(statusCode).send(msg);
+
+    });
+
+
+};

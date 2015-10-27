@@ -77,13 +77,115 @@ Course.prototype.load = function(callback){
     });
 };
 
-Course.prototype.update = function(id, data, callback){
+Course.update = function(data, callback){
+    if(data == null || data == undefined || data.courseId == undefined){
+        callback('data incomplete', 400);
+        return;
+    }
 
+    CourseModel.findOne({id: data.courseId}, function(err, course){
+        if(err || !course){
+            callback('Not found', 404);
+        }else{
+            if(data.description != undefined){
+                course.description = data.description;
+            }
+            if(isLevelValid(data)){
+                course.level = data.level;
+            }
+            if(isLocationValid(data)){
+                course.location = data.location;
+            }
+
+            if(isGroupSizeValid(data)){
+                course.groupSize = data.groupSize;
+            }
+
+            if(data.category != undefined){
+                course.category = data.category;
+            }
+
+            if(isTagsValid(data)){
+                course.tags = data.tags;
+            }
+
+            if(isPriceValid(data)){
+                course.price = data.price;
+            }
+
+            course.save(function(err){
+                if(err){
+                    callback('Internal Error', 500);
+                }else{
+                    callback('Course updated', 200);
+                }
+            });
+
+        }
+
+    });
+};
+
+
+
+var isLevelValid = function(data){
+    if(data.level == undefined){
+        return false;
+    }else if(isNaN(data.level)){
+        return false;
+    }else if(data.level < 0 || data.level > 3){
+        return false;
+    }else{
+        return true;
+    }
+};
+
+var isLocationValid = function(data){
+  if(data.location == undefined){
+      return false;
+  }else if(!(data.location instanceof Array)){
+      return false;
+  }else if(isNaN(data.location[0]) || isNaN(data.location[1])){
+      return false;
+  }else{
+        return true;
+    }
+
+};
+
+var isGroupSizeValid = function(data){
+    if(data.groupSize == undefined){
+        return false;
+    }else if(isNaN(data.groupSize)){
+        return false;
+    }else{
+        return true;
+    }
+};
+
+var isTagsValid = function(data){
+  if(data.tags == undefined){
+      return false;
+  }else if(!(data.tags instanceof Array)){
+      return false;
+  }else{
+      return true;
+  }
+};
+
+var isPriceValid = function(data){
+  if(data.price == undefined){
+      return false;
+  }else if(isNaN(data.price)){
+      return false;
+  }else{
+      return true;
+  }
 };
 
 Course.search = function(data, callback){
 
-    var query = buildCourseQuery(data).select('id');;
+    var query = buildCourseQuery(data).select('id');
     query.exec(callback);
 
 };
