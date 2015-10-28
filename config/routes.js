@@ -21,6 +21,7 @@ module.exports = function (app) {
     app.get('/booking/next', booking.loadNext);
 
     app.post('/event', event.create);
+    app.get('/event', event.load);
     app.get('/event/query', event.query);
 
 

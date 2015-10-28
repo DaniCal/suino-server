@@ -40,6 +40,56 @@ describe ('Event GET EVENT', function () {
 
 
 
+    it('should return a specific event with a specific ID',
+        function (done) {
+            request(app)
+                .get('/event')
+                .type('json')
+                .query({
+                    eventId: EventTestData.set1Empty.eventId
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    res.body.eventId.should.be.equal(EventTestData.set1Empty.eventId);
+                    done();
+
+                });
+        });
+
+
+    it('should return that event was not found',
+        function (done) {
+            request(app)
+                .get('/event')
+                .type('json')
+                .query({
+                    eventId: 'blabalsdasd'
+                })
+                .expect(404)
+                .end(function (err, res) {
+                    res.status.should.equal(404);
+                    done();
+
+                });
+        });
+
+    it('should return that data was not valid',
+        function (done) {
+            request(app)
+                .get('/event')
+                .type('json')
+                .query({
+                    eventID: 'blabalsdasd'
+                })
+                .expect(400)
+                .end(function (err, res) {
+                    res.status.should.equal(400);
+                    done();
+
+                });
+        });
+
     it('should return all event with a certain participantId after a specific date (sorted earliest first)',
         function (done) {
             request(app)

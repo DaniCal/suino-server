@@ -56,6 +56,22 @@ Event.createEvent = function(data, callback){
     });
 };
 
+Event.load = function(data, callback){
+    if(data == null || data == undefined || data.eventId == undefined){
+        callback('data invalid', 400);
+    }
+
+    EventModel.findOne({eventId: data.eventId}, function(err, event){
+        if(err){
+            callback(err, 500);
+        }else if(!event){
+            callback('Not found', 404);
+        }else{
+            callback(false, 200, event);
+        }
+    });
+};
+
 var isCreateDataValid = function(data){
     if(data == null || data == undefined){
         return false;

@@ -8,6 +8,17 @@ exports.create = function(req, res){
     });
 };
 
+exports.load = function(req, res){
+    var data = req.query;
+    Event.load(data, function(err, statusCode,  event){
+        if(err){
+            res.status(statusCode).send(err);
+        }else{
+            res.status(statusCode).send(event);
+        }
+    })
+};
+
 exports.addParticipant = function(req, res){
     var data = req.body;
     Event.addParticipant(data, function(msg, statusCode){
