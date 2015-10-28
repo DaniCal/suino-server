@@ -9,8 +9,8 @@ EventTestData.set1Empty = {
     eventId: '1',
     courseId: '1',
     participants: [],
-    start: 123123,
-    end: 123123,
+    start: 220000,
+    end: 220000,
     state: 1
 };
 
@@ -38,6 +38,15 @@ EventTestData.set4Canceled = {
     participants: ['234234', me],
     start: 200000,
     end: 200010,
+    state: 3
+};
+
+EventTestData.set5Canceled = {
+    eventId: '4',
+    courseId: '1',
+    participants: ['234234', me],
+    start: 300000,
+    end: 300010,
     state: 3
 };
 

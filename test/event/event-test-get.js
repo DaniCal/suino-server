@@ -27,6 +27,8 @@ describe ('Event GET EVENT', function () {
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
+        createEvent(EventTestData.set5Canceled);
+
         done();
     });
 
@@ -51,9 +53,11 @@ describe ('Event GET EVENT', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.be.equal(2);
+                    res.body.length.should.be.equal(3);
                     res.body[0].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
                     res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[2].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
+
                     done();
 
                 });
@@ -80,7 +84,7 @@ describe ('Event GET EVENT', function () {
                 });
         });
 
-    it('should return all event with a certain courseId',
+    it('should return all event with a certain courseId (sorted)',
         function (done) {
             request(app)
                 .get('/event/query')
@@ -91,9 +95,32 @@ describe ('Event GET EVENT', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
+                    res.body.length.should.be.equal(3);
+                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[1].eventId.should.be.equal(EventTestData.set1Empty.eventId);
+                    res.body[2].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
+
+                    done();
+
+                });
+        });
+
+    it('should return all event with a certain courseId, after a date & active',
+        function (done) {
+            request(app)
+                .get('/event/query')
+                .type('json')
+                .query({
+                    courseId: EventTestData.set1Empty.courseId,
+                    start: 150000,
+                    state: 1
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
                     res.body.length.should.be.equal(2);
-                    res.body[0].eventId.should.be.equal(EventTestData.set1Empty.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[1].eventId.should.be.equal(EventTestData.set1Empty.eventId);
                     done();
 
                 });
@@ -110,10 +137,12 @@ describe ('Event GET EVENT', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.be.equal(3);
+                    res.body.length.should.be.equal(4);
                     res.body[0].eventId.should.be.equal(EventTestData.set3Full.eventId);
                     res.body[1].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
                     res.body[2].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[3].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
+
                     done();
 
                 });
