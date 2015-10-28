@@ -204,9 +204,9 @@ describe ('Course GET', function () {
                     res.status.should.equal(200);
 
                     var courses = res.body;
+                    courses.length.should.be.equal(1);
                     should.not.exist(courses[0].level);
                     should.not.exist(courses[0].category);
-                    courses.length.should.be.equal(1);
                     courses[0].id.should.be.equal(CourseTestData.mySet2.id);
                     done();
                 });

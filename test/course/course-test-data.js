@@ -36,7 +36,7 @@ CourseTestData.mySet2 = {
     teacherFbPictureLink: 'somelink.com/link',
     level: 1,
     location:  [23,23],
-    groupSize: 6,
+    groupSize: 1,
     category: 'fitness',
     tags: myTags,
     price: 5
@@ -52,6 +52,21 @@ CourseTestData.mySet3 = {
     level: 2,
     location:  [22,22],
     groupSize: 2,
+    category: 'fitness',
+    tags: myTags,
+    price: 5
+};
+
+CourseTestData.mySet4 = {
+    id: '4',
+    date: 12,
+    description: 'some description',
+    teacherFbId: myFbId,
+    teacherFirstName: 'Dani',
+    teacherFbPictureLink: 'somelink.com/link',
+    level: 1,
+    location:  [23,23],
+    groupSize: 6,
     category: 'fitness',
     tags: myTags,
     price: 5

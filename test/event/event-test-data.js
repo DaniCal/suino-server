@@ -34,7 +34,7 @@ EventTestData.set3Full = {
 
 EventTestData.set4Canceled = {
     eventId: '4',
-    courseId: '2',
+    courseId: '4',
     participants: ['234234', me],
     start: 200000,
     end: 200010,
