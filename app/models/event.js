@@ -170,21 +170,6 @@ Event.removeParticipant = function(data, callback){
     );
 };
 
-Event.queryEventsByCourseId = function(data,callback){
-    if(data == null || data == undefined || data.courseId == undefined){
-        callback(400, 'data not valid');
-        return;
-    }
-
-    EventModel.find({courseId: data.courseId}, function(err, events){
-        if(err){
-            callback(err, 500);
-        }else{
-            callback(200, events);
-        }
-    });
-
-};
 
 Event.queryEventsByParticipantId = function(data,callback){
     if(data == null || data == undefined || data.participantId == undefined){

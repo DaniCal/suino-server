@@ -34,26 +34,7 @@ describe ('Event GET EVENT', function () {
         clearTestDatabase();
         done();
     });
-
-
-    it('should return all event with a certain courseId',
-        function (done) {
-            request(app)
-                .get('/event/course')
-                .type('json')
-                .query({
-                   courseId: EventTestData.set1Empty.courseId
-                })
-                .expect(200)
-                .end(function (err, res) {
-                    res.status.should.equal(200);
-                    res.body.length.should.be.equal(2);
-                    res.body[0].eventId.should.be.equal(EventTestData.set1Empty.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
-                    done();
-
-                });
-        });
+    
 
     it('should return all event with a certain participantId',
         function (done) {
