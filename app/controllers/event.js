@@ -22,17 +22,6 @@ exports.removeParticipant = function(req, res){
     });
 };
 
-exports.getEventsByParticipantId = function(req, res){
-    var data = req.query;
-    Event.queryEventsByParticipantId(data, function(err, events){
-        if(err){
-            res.status(400).send(err);
-        }else{
-            res.status(200).send(events);
-        }
-    });
-};
-
 exports.cancel = function(req, res){
     var data = req.body;
     Event.cancel(data, function(msg, statusCode){
