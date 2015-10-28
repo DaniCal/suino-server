@@ -3,7 +3,9 @@ var request = require('supertest');
 var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
+var CourseModel = mongoose.model('Course');
 var EventTestData = require('./event-test-data.js');
+var CourseTestData = require('../course/course-test-data.js');
 
 
 
@@ -15,9 +17,21 @@ var createEvent = function(event){
     });
 };
 
+var createCourse = function(course){
+    CourseModel.create(course, function (err, course) {
+        if (err){
+            throw err;
+        }
+    });
+};
+
 var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
-        if(err) throw 'Database was not cleared';
+        if(err) throw 'Database (Events) was not cleared';
+    });
+
+    CourseModel.remove({}, function(err){
+        if(err) throw 'Database (Course) was not cleared';
     });
 };
 
@@ -28,6 +42,13 @@ describe ('Event ADD PARTICIPANT', function () {
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
+
+        createCourse(CourseTestData.mySpecificSet1);
+        createCourse(CourseTestData.mySet2);
+        createCourse(CourseTestData.mySet3);
+        createCourse(CourseTestData.notMySet1);
+        createCourse(CourseTestData.notMySet2);
+
         done();
     });
 
@@ -52,7 +73,6 @@ describe ('Event ADD PARTICIPANT', function () {
                         {eventId: EventTestData.set2PlacesLeft.eventId},
                         function(err, event){
                             event.participants.length.should.equal(3, 'participant not added to list');
-                            event.spotsLeft.should.equal(1, 'spotsLeft number not updated');
                             done();
                         });
 
@@ -75,7 +95,6 @@ describe ('Event ADD PARTICIPANT', function () {
                         {eventId: EventTestData.set1Empty.eventId},
                         function(err, event){
                             event.participants.length.should.equal(1, 'participant not added to list');
-                            event.spotsLeft.should.equal(7, 'spotsLeft number not updated');
                             done();
                         });
 

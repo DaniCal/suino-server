@@ -77,6 +77,16 @@ Course.prototype.load = function(callback){
     });
 };
 
+Course.load = function(data, callback){
+    CourseModel.findOne({id: data.courseId}, function(err, course){
+        if(err || course == undefined){
+            callback(err, false);
+            return;
+        }
+        callback(err, course)
+    });
+};
+
 Course.update = function(data, callback){
     if(data == null || data == undefined || data.courseId == undefined){
         callback('data incomplete', 400);

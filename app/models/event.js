@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var uuid = require('node-uuid');
+var Course = require('./course.js');
 
 
 var EventSchema = new Schema({
     eventId: {type: String},
     courseId: {type: String},
     participants: {type: [String]},
-    spotsLeft: {type: Number},
     start: {type: Number},
     end: {type: Number},
     state: {type: Number}
@@ -18,7 +18,6 @@ var EventModel = mongoose.model('Event', EventSchema);
 var Event = function(data){
     if(data.eventId == undefined){
         this._courseId = data.courseId;
-        this._spotsLeft = data.spotsLeft;
         this._start = data.start;
         this._end = data.end;
     }else{
@@ -43,7 +42,6 @@ Event.createEvent = function(data, callback){
         eventId: uuid.v4(),
         courseId: this._courseId,
         participants: [],
-        spotsLeft: this._spotsLeft,
         start: this._start,
         end: this._end,
         state: EventStates.active
@@ -63,7 +61,6 @@ var isCreateDataValid = function(data){
         return false;
     }else if(
         data.courseId == undefined ||
-        data.spotsLeft == undefined ||
         data.start == undefined ||
         data.end == undefined
     ){
@@ -103,30 +100,34 @@ Event.addParticipant = function(data, callback){
             }else if(!event || event == undefined){
                 callback('Not found', 404);
             }else{
-                if(event.spotsLeft == 0){
-                    callback('No spots left', 400);
-                }else if(event.participants.indexOf(data.participantId) > -1){
-                    callback('Already participating', 400);
-                }else if(event.state == EventStates.canceled){
-                    callback('Event canceled', 400);
 
-                }else{
+                Course.load(event, function(err, course){
+                    if(course.groupSize <= event.participants.length){
+                        callback('No spots left', 400);
+                    } else if(event.participants.indexOf(data.participantId) > -1){
+                        callback('Already participating', 400);
+                    }else if(event.state == EventStates.canceled){
+                        callback('Event canceled', 400);
 
-                    EventModel.findByIdAndUpdate(
-                      event._id,
-                        {
-                            $push: {participants: data.participantId},
-                            spotsLeft: event.spotsLeft - 1
-                        },
-                        function(err, event){
-                            if(err){
-                                callback(err, 500);
-                            }else{
-                                callback(false, 200);
+                    }else{
+
+                        EventModel.findByIdAndUpdate(
+                            event._id,
+                            {
+                                $push: {participants: data.participantId}
+                            },
+                            function(err, event){
+                                if(err){
+                                    callback(err, 500);
+                                }else{
+                                    callback(false, 200);
+                                }
                             }
-                        }
-                    );
-                }
+                        );
+                    }
+                });
+
+
             }
         }
     );
@@ -153,8 +154,7 @@ Event.removeParticipant = function(data, callback){
                     EventModel.findByIdAndUpdate(
                         event._id,
                         {
-                            $pull: {participants: data.participantId},
-                            spotsLeft: event.spotsLeft + 1
+                            $pull: {participants: data.participantId}
                         },
                         function(err, event){
                             if(err){

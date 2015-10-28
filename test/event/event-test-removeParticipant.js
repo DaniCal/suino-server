@@ -52,7 +52,6 @@ describe ('Event REMOVE PARTICIPANT', function () {
                         {eventId: EventTestData.set2PlacesLeft.eventId},
                         function(err, event){
                             event.participants.length.should.equal(1, 'participant not removed from list');
-                            event.spotsLeft.should.equal(3, 'spotsLeft number not updated');
                             done();
                         });
 
