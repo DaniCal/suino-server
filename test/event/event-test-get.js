@@ -75,4 +75,65 @@ describe ('Event GET EVENT', function () {
                 });
         });
 
+    it('should return all event with a certain participantId after a specific date (sorted earliest first)',
+        function (done) {
+            request(app)
+                .get('/event/query')
+                .type('json')
+                .query({
+                    participantId: EventTestData.set2PlacesLeft.participants[0],
+                    start: 150000
+
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    res.body.length.should.be.equal(2);
+                    res.body[0].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
+                    res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    done();
+
+                });
+        });
+
+    it('should return all event with a certain participantId after a specific date (sorted & active)',
+        function (done) {
+            request(app)
+                .get('/event/query')
+                .type('json')
+                .query({
+                    participantId: EventTestData.set2PlacesLeft.participants[0],
+                    start: 150000,
+                    state: 1
+
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    res.body.length.should.be.equal(1);
+                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    done();
+
+                });
+        });
+
+    it('should return all event with a certain courseId',
+        function (done) {
+            request(app)
+                .get('/event/query')
+                .type('json')
+                .query({
+                    courseId: EventTestData.set1Empty.courseId
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    res.body.length.should.be.equal(2);
+                    res.body[0].eventId.should.be.equal(EventTestData.set1Empty.eventId);
+                    res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    done();
+
+                });
+        });
+
 });

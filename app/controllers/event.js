@@ -46,6 +46,15 @@ exports.cancel = function(req, res){
         res.status(statusCode).send(msg);
 
     });
+};
 
-
+exports.query = function(req, res){
+    var data = req.query;
+    Event.query(data, function(err, events){
+        if(err){
+            res.status(400).send(err);
+        }else{
+            res.status(200).send(events);
+        }
+    });
 };

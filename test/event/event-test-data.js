@@ -3,6 +3,8 @@ var EventTestData = function(){
 };
 
 
+var me = '123123';
+
 EventTestData.set1Empty = {
     eventId: '1',
     courseId: '1',
@@ -15,27 +17,27 @@ EventTestData.set1Empty = {
 EventTestData.set2PlacesLeft = {
     eventId: '2',
     courseId: '1',
-    participants: ['123123', '3345345'],
-    start: 123123,
-    end: 123123,
+    participants: [me, '3345345'],
+    start: 210000,
+    end: 210010,
     state: 1
 };
 
 EventTestData.set3Full = {
     eventId: '3',
     courseId: '3',
-    participants: ['123123', '3345345'],
-    start: 123123,
-    end: 123123,
+    participants: [me, '3345345'],
+    start: 100000,
+    end: 100010,
     state: 1
 };
 
 EventTestData.set4Canceled = {
     eventId: '4',
     courseId: '2',
-    participants: ['234234', '123123'],
-    start: 123123,
-    end: 123123,
+    participants: ['234234', me],
+    start: 200000,
+    end: 200010,
     state: 3
 };
 

@@ -243,8 +243,26 @@ Event.updateDate = function(callback){
 
 };
 
-Event.query = function(callback){
+Event.query = function(data, callback){
+    var query = EventModel.find();
 
+    if(data.participantId != undefined){
+        query.where('participants').equals(data.participantId);
+    }
+
+    if(data.start != undefined){
+        query.where('start').gt(data.start);
+    }
+
+    if(data.state != undefined){
+        query.where('state').equals(data.state);
+    }
+
+    if(data.courseId != undefined){
+        query.where('courseId').equals(data.courseId);
+    }
+
+    query.sort({start: 1}).exec(callback);
 };
 
 module.exports = Event;

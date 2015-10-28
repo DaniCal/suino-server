@@ -23,6 +23,8 @@ module.exports = function (app) {
     app.post('/event', event.create);
     app.get('/event/course', event.getEventsByCourseId);
     app.get('/event/participant', event.getEventsByParticipantId);
+    app.get('/event/query', event.query);
+
 
     app.put('/event/addParticipant', event.addParticipant);
     app.put('/event/removeParticipant', event.removeParticipant);
