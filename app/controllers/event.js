@@ -37,6 +37,15 @@ exports.getEventsByParticipantId = function(req, res){
         }else{
             res.status(200).send(events);
         }
+    });
+};
+
+exports.cancel = function(req, res){
+    var data = req.body;
+    Event.cancel(data, function(msg, statusCode){
+        res.status(statusCode).send(msg);
 
     });
+
+
 };

@@ -199,7 +199,43 @@ Event.queryEventsByParticipantId = function(data,callback){
 };
 
 
-Event.cancelEvent = function(data, callback){
+Event.cancel = function(data, callback){
+    if(data == null || data == undefined || data.eventId == undefined){
+        callback(400, 'data not valid');
+        return;
+    }
+
+    EventModel.findOne(
+        {eventId: data.eventId},
+        function(err, event){
+            if(err){
+                callback(err, 500);
+            }else if(!event || event == undefined){
+                callback('Not found', 404);
+            }else{
+                if(event.participants.length > 0){
+                    callback('event can not be canceled', 400);
+                }else{
+
+                    EventModel.findByIdAndUpdate(
+                        event._id,
+                        {
+                            state: EventStates.canceled
+                        },
+                        function(err, event){
+                            if(err){
+                                callback(err, 500);
+                            }else{
+                                callback('event canceled', 200);
+                            }
+                        }
+                    );
+                }
+            }
+        }
+    );
+
+
 
 };
 

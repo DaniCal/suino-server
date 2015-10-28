@@ -26,5 +26,6 @@ module.exports = function (app) {
 
     app.put('/event/addParticipant', event.addParticipant);
     app.put('/event/removeParticipant', event.removeParticipant);
+    app.put('/event/cancel', event.cancel);
 
 };
