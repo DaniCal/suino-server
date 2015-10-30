@@ -86,5 +86,5 @@ exports.queryEventsByCourseIds = function(courseIds, callback){
         });
         callback(false, eventsList);
     });
-    
+
 };

@@ -85,11 +85,11 @@ SearchTestData.courseSet2 = {
     teacherFbId: myFbId,
     teacherFirstName: 'Dani',
     teacherFbPictureLink: 'somelink.com/link',
-    level: 1,
+    level: 2,
     location:  [20,20],
     groupSize: 4,
     category: 'fitness',
-    tags: ['yoga','meditation'],
+    tags: ['yoga','karate'],
     price: 5
 };
 
