@@ -65,7 +65,7 @@ CourseTestData.mySet4 = {
     teacherFirstName: 'Dani',
     teacherFbPictureLink: 'somelink.com/link',
     level: 1,
-    location:  [23,23],
+    location:  [30,30],
     groupSize: 6,
     category: 'fitness',
     tags: myTags,
@@ -74,7 +74,7 @@ CourseTestData.mySet4 = {
 
 
 CourseTestData.notMySet1 = {
-    id: '4',
+    id: '11',
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,

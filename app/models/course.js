@@ -66,6 +66,38 @@ Course.prototype.createCourse = function(callback){
     callback();
 };
 
+Course.createCourse = function(data, callback){
+    if(!isCourseDataValid(data)){
+        callback('data not valid', 400);
+        return;
+    }
+
+    var newCourse = new CourseModel({
+        id: uuid.v4(),
+        date: getDate(),
+        description: data.description,
+        teacherFbId: data.teacherFbId,
+        teacherFirstName: data.teacherFirstName,
+        teacherFbPictureLink: data.teacherFbPictureLink,
+        level: data.level,
+        location: data.location,
+        category: data.category,
+        tags: data.tags,
+        price: data.price,
+        groupSize: data.groupSize
+    });
+
+    newCourse.save(function(err){
+        if(err){
+            callback('internal error', 500)
+        }else{
+            callback('course created', 201);
+        }
+    });
+
+
+};
+
 
 Course.prototype.load = function(callback){
     CourseModel.findOne({id: this._id}, function(err, course){
@@ -269,8 +301,17 @@ Course.isCourseDataValid = function(data, callback){
     }
 };
 
-
-
+var isCourseDataValid = function(data, callback){
+    if(data == null || data == undefined){
+        return false;
+    }else if(!isDataComplete(data)){
+        return false;
+    }else if(!isDataTypeValid(data)){
+        return false;
+    }else{
+        return true;
+    }
+};
 
 var isDataComplete = function(data){
 

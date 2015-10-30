@@ -40,20 +40,37 @@ exports.search = function(req, res){
     })
 };
 
+exports.queryInternal = function (req, callback){
+    var data = req.query;
+    Course.search(data, function(err, courseIds){
+        if(err){
+            callback(err)
+        }else{
+            callback(false, courseIds);
+        }
+    });
+};
+
 
 exports.create = function(req, res){
     var data = req.body;
-    Course.isCourseDataValid(data, function(err){
-        if(err){
-            res.status(400).send(err);
-        }else{
+    //Course.isCourseDataValid(data, function(err){
+    //    if(err){
+    //        res.status(400).send(err);
+    //    }else{
+    //
+    //        var course  = new Course(data);
+    //        course.createCourse(function(){
+    //            res.status(201).send();
+    //        });
+    //    }
+    //});
 
-            var course  = new Course(data);
-            course.createCourse(function(){
-                res.status(201).send();
-            });
-        }
+    Course.createCourse(data, function(msg, statusCode){
+        res.status(statusCode).send(msg);
     });
+
+
 };
 
 exports.update = function(req, res){

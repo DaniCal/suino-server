@@ -25,6 +25,7 @@ describe ('Course GET', function () {
         createCourse(CourseTestData.mySpecificSet1);
         createCourse(CourseTestData.mySet2);
         createCourse(CourseTestData.mySet3);
+        createCourse(CourseTestData.mySet4);
         createCourse(CourseTestData.notMySet1);
         createCourse(CourseTestData.notMySet2);
         done();
@@ -74,7 +75,7 @@ describe ('Course GET', function () {
                     res.status.should.equal(200);
 
                     var courses = res.body;
-                    courses.length.should.be.equal(5);
+                    courses.length.should.be.equal(6);
                     done();
                 });
         });
@@ -95,13 +96,15 @@ describe ('Course GET', function () {
                 .end(function(err, res){
                     res.status.should.equal(200);
                     var courses = res.body;
-                    courses.length.should.be.equal(3);
+                    courses.length.should.be.equal(4);
                     should.not.exist(courses[0].level);
                     should.not.exist(courses[0].category);
 
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet3.id);
                     courses[2].id.should.be.equal(CourseTestData.mySet2.id);
+                    courses[3].id.should.be.equal(CourseTestData.mySet4.id);
+
                     done();
                 });
         });
@@ -147,11 +150,13 @@ describe ('Course GET', function () {
                     res.status.should.equal(200);
 
                     var courses = res.body;
-                    courses.length.should.be.equal(2);
+                    courses.length.should.be.equal(3);
                     should.not.exist(courses[0].level);
                     should.not.exist(courses[0].category);
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet2.id);
+                    courses[2].id.should.be.equal(CourseTestData.mySet4.id);
+
                     done();
                 });
         });
@@ -174,12 +179,14 @@ describe ('Course GET', function () {
                     res.status.should.equal(200);
 
                     var courses = res.body;
-                    courses.length.should.be.equal(3);
+                    courses.length.should.be.equal(4);
                     should.not.exist(courses[0].level);
                     should.not.exist(courses[0].category);
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id);
                     courses[1].id.should.be.equal(CourseTestData.mySet3.id);
                     courses[2].id.should.be.equal(CourseTestData.mySet2.id);
+                    courses[3].id.should.be.equal(CourseTestData.mySet4.id);
+
 
                     done();
                 });
@@ -230,9 +237,11 @@ describe ('Course GET', function () {
                 .end(function(err, res){
                     res.status.should.equal(200);
                     var courses = res.body;
-                    courses.length.should.be.equal(2);
+                    courses.length.should.be.equal(3);
                     courses[0].id.should.be.equal(CourseTestData.mySpecificSet1.id, 'wrong set (specificSet expected) or bad sorting');
                     courses[1].id.should.be.equal(CourseTestData.mySet3.id, 'wrong set (set3 expected) or bad sorting');
+                    courses[2].id.should.be.equal(CourseTestData.mySet4.id, 'wrong set (set4 expected) or bad sorting');
+
 
                     done();
                 });

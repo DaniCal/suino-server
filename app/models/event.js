@@ -248,6 +248,11 @@ Event.query = function(data, callback){
         query.where('courseId').equals(data.courseId);
     }
 
+    if(data.id != undefined){
+        var id = data.id;
+        query.where('courseId').equals('1');
+    }
+
     query.sort({start: 1}).exec(callback);
 };
 

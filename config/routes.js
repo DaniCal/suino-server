@@ -2,6 +2,7 @@ var user = require('../app/controllers/user.js');
 var course = require('../app/controllers/course.js');
 var booking = require('../app/controllers/booking.js');
 var event = require('../app/controllers/event.js');
+var search = require('../app/search.js');
 
 module.exports = function (app) {
 
@@ -28,5 +29,7 @@ module.exports = function (app) {
     app.put('/event/addParticipant', event.addParticipant);
     app.put('/event/removeParticipant', event.removeParticipant);
     app.put('/event/cancel', event.cancel);
+
+    app.get('/search', search.exec);
 
 };
