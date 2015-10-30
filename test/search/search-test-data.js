@@ -87,7 +87,7 @@ SearchTestData.courseSet2 = {
     teacherFbPictureLink: 'somelink.com/link',
     level: 2,
     location:  [20,20],
-    groupSize: 4,
+    groupSize: 1,
     category: 'fitness',
     tags: ['yoga','karate'],
     price: 5
