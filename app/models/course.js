@@ -177,7 +177,7 @@ var isPriceValid = function(data){
 
 Course.search = function(data, callback){
 
-    var query = buildCourseQuery(data).select('id');
+    var query = buildCourseQuery(data);
     query.exec(callback);
 
 };

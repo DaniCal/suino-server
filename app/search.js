@@ -7,7 +7,7 @@ exports.exec = function(req, res){
         if(err){
             res.status(400).send(err);
         }else{
-            var eventsList = [];
+            var result = [];
             var asyncTasks = [];
 
             courseIds.forEach(function(item){
@@ -17,8 +17,15 @@ exports.exec = function(req, res){
                         if (err) {
                             callback();
                         } else {
-                            eventsList.push.apply(eventsList, events);
-                            callback();
+                            async.each(events,
+                                function(eventItem, callback){
+                                result.push({course: item, event: eventItem});
+                                    callback();
+                            },
+                            function(err){
+                                callback();
+                            });
+                            //result.push.apply(result, events);
                         }
                     });
                 });
@@ -33,11 +40,11 @@ exports.exec = function(req, res){
 
             async.parallel(asyncTasks, function(){
 
-                eventsList.sort(function(a, b)
+                result.sort(function(a, b)
                 {
-                    return a.start - b.start;
+                    return a.event.start - b.event.start;
                 });
-                res.status(200).send(eventsList);
+                res.status(200).send(result);
             });
         }
     });

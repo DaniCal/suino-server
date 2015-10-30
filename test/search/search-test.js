@@ -93,16 +93,16 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(10);
-                    res.body[0].eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
-                    res.body[1].eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
-                    res.body[2].eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[3].eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[4].eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[5].eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[6].eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
-                    res.body[7].eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
-                    res.body[8].eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
-                    res.body[9].eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
+                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
+                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
+                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
+                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
+                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
+                    res.body[5].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
+                    res.body[6].event.eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
+                    res.body[7].event.eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
+                    res.body[8].event.eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
+                    res.body[9].event.eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
                     done();
                 });
         });
@@ -123,11 +123,11 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(5);
-                    res.body[0].eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
-                    res.body[1].eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[2].eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[3].eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
-                    res.body[4].eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
+                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
+                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
+                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
+                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
+                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
                     done();
                 });
         });
@@ -147,11 +147,11 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(5);
-                    res.body[0].eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
-                    res.body[1].eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[2].eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[3].eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
-                    res.body[4].eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
+                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
+                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
+                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
+                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
+                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
                     done();
                 });
         });
