@@ -186,8 +186,6 @@ Event.removeParticipant = function(data, callback){
     );
 };
 
-
-
 Event.cancel = function(data, callback){
     if(data == null || data == undefined || data.eventId == undefined){
         callback(400, 'data not valid');
@@ -227,7 +225,6 @@ Event.cancel = function(data, callback){
 
 
 };
-
 
 Event.query = function(data, callback){
     var query = EventModel.find();

@@ -1,5 +1,4 @@
 var Event = require('../models/event.js');
-var async = require('async');
 
 
 exports.create = function(req, res){
@@ -53,38 +52,6 @@ exports.query = function(req, res){
     });
 };
 
-exports.queryEventsByCourseIds = function(courseIds, callback){
-    var eventsList = [];
-    var asyncTasks = [];
-
-    courseIds.forEach(function(item){
-        asyncTasks.push(function(callback){
-
-            Event.query({courseId: item.id, state: 1}, function (err, events) {
-                if (err) {
-                    callback();
-                } else {
-                    eventsList.push.apply(eventsList, events);
-                    callback();
-                }
-            });
-        });
-    });
-
-    asyncTasks.push(function(callback){
-        setTimeout(function(){
-            callback();
-        }, 0);
-    });
-
-
-    async.parallel(asyncTasks, function(){
-
-        eventsList.sort(function(a, b)
-        {
-            return a.start - b.start;
-        });
-        callback(false, eventsList);
-    });
-
+exports.queryInternal = function(data, callback){
+    Event.query(data, callback);
 };

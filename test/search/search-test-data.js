@@ -77,6 +77,7 @@ SearchTestData.eventSet6EmptyC1 = {
     state: 1
 };
 
+//Course 2
 
 SearchTestData.courseSet2 = {
     id: '2',
@@ -146,114 +147,5 @@ SearchTestData.eventSet6EmptyC2 = {
     end: 250011,
     state: 1
 };
-
-
-//
-//SearchTestData.eventSet5CanceledC2 = {
-//    eventId: '5',
-//    courseId: '2',
-//    participants: ['234234', me],
-//    start: 300000,
-//    end: 300010,
-//    state: 3
-//};
-//
-//SearchTestData.eventSet6PlacesLeftC1 = {
-//    eventId: '6',
-//    courseId: '1',
-//    participants: [me, '3345345'],
-//    start: 210000,
-//    end: 210010,
-//    state: 1
-//};
-//
-//SearchTestData.eventSet2PlacesLeftC2 = {
-//    eventId: '2',
-//    courseId: '2',
-//    participants: [me, '3345345'],
-//    start: 210000,
-//    end: 210010,
-//    state: 1
-//};
-//
-//
-//
-//
-//SearchTestData.courseSet2 = {
-//    id: '2',
-//    date: 12,
-//    description: 'some description',
-//    teacherFbId: myFbId,
-//    teacherFirstName: 'Dani',
-//    teacherFbPictureLink: 'somelink.com/link',
-//    level: 1,
-//    location:  [23,23],
-//    groupSize: 1,
-//    category: 'fitness',
-//    tags: myTags,
-//    price: 5
-//};
-//
-//SearchTestData.courseSet3 = {
-//    id: '3',
-//    date: 12,
-//    description: 'some description',
-//    teacherFbId: myFbId,
-//    teacherFirstName: 'Dani',
-//    teacherFbPictureLink: 'somelink.com/link',
-//    level: 2,
-//    location:  [22,22],
-//    groupSize: 2,
-//    category: 'fitness',
-//    tags: myTags,
-//    price: 5
-//};
-//
-//SearchTestData.courseSet4 = {
-//    id: '4',
-//    date: 12,
-//    description: 'some description',
-//    teacherFbId: myFbId,
-//    teacherFirstName: 'Dani',
-//    teacherFbPictureLink: 'somelink.com/link',
-//    level: 1,
-//    location:  [30,30],
-//    groupSize: 6,
-//    category: 'fitness',
-//    tags: myTags,
-//    price: 5
-//};
-//
-//
-//SearchTestData.courseSet5 = {
-//    id: '11',
-//    date: 12,
-//    description: 'some description',
-//    teacherFbId: myFbId,
-//    teacherFirstName: 'Dani',
-//    teacherFbPictureLink: 'somelink.com/link',
-//    level: 3,
-//    location:  [25,25],
-//    groupSize: 4,
-//    category: 'fitness',
-//    tags: ['futbol'],
-//    price: 5
-//};
-//
-//SearchTestData.courseSet6 = {
-//    id: '5',
-//    date: 12,
-//    description: 'some description',
-//    teacherFbId: myFbId,
-//    teacherFirstName: 'Dani',
-//    teacherFbPictureLink: 'somelink.com/link',
-//    level: 2,
-//    location:  [25,25],
-//    groupSize: 4,
-//    category: 'fitness',
-//    tags: ['tennis'],
-//    price: 5
-//};
-
 
 module.exports = SearchTestData;

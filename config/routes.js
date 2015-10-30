@@ -14,7 +14,6 @@ module.exports = function (app) {
 
     app.get('/course', course.load);
     app.get('/course/search', course.search);
-    app.get('/course/all', course.loadAll);
 
     app.post('/booking', booking.create);
     app.get('/booking', booking.load);

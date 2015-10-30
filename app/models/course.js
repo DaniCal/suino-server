@@ -24,46 +24,7 @@ var CourseSchema = new Schema({
 
 var CourseModel = mongoose.model('Course', CourseSchema);
 
-var Course = function(data){
-    if(data.id != undefined){
-        this._id = data.id;
-        return;
-    }
-
-    this._description = data.description;
-    this._teacherFbId = data.teacherFbId;
-    this._teacherFirstName = data.teacherFirstName;
-    this._teacherFbPictureLink = data.teacherFbPictureLink;
-    this._level = data.level;
-    this._location = data.location;
-    this._category = data.category;
-    this._tags = data.tags;
-    this._price = data.price;
-    this._groupSize = data.groupSize
-};
-
-Course.prototype.createCourse = function(callback){
-    var newCourse = new CourseModel({
-        id: uuid.v4(),
-        date: getDate(),
-        description: this._description,
-        teacherFbId: this._teacherFbId,
-        teacherFirstName: this._teacherFirstName,
-        teacherFbPictureLink: this._teacherFbPictureLink,
-        level: this._level,
-        location: this._location,
-        category: this._category,
-        tags: this._tags,
-        price: this._price,
-        groupSize: this._groupSize
-    });
-
-    newCourse.save(function(err){
-        if(err){
-            console.log(err);
-        }
-    });
-    callback();
+var Course = function(){
 };
 
 Course.createCourse = function(data, callback){
@@ -96,17 +57,6 @@ Course.createCourse = function(data, callback){
     });
 
 
-};
-
-
-Course.prototype.load = function(callback){
-    CourseModel.findOne({id: this._id}, function(err, course){
-        if(err || course == undefined){
-            callback(err, false);
-            return;
-        }
-        callback(err, course)
-    });
 };
 
 Course.load = function(data, callback){

@@ -13,7 +13,6 @@ var SearchTestData = require('./search-test-data.js');
 //category
 //1 tag category
 //2 tag category
-//1 tag size
 //2 tag size
 //1 tag, size, level
 //2 tag, size, level
