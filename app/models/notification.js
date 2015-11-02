@@ -22,24 +22,48 @@ var NotificationModel = mongoose.model('Notification', NotificationSchema);
 
 var Notification = function(){};
 
-Notification.createReservationNotification = function(data, callback){
+var createNotification = function(data, type, callback){
+    if(!isNotificationDataValid(data)){
+        callback('data not valid', 400);
+        return;
+    }
 
+    var newNotification = new NotificationModel({
+        userId: data.userId,
+        type: type,
+        message: generateNotificationMessage(type),
+        token: data.token,
+        read: false,
+        date: getDate()
+    });
+
+    newNotification.save(function(err){
+        if(err){
+            callback('server error', 500);
+        }else{
+            callback('notification created', 200);
+        }
+    });
+};
+
+Notification.createReservationNotification = function(data, callback){
+    createNotification(data, notificationType.reservation, callback);
 };
 
 Notification.createCancelingNotification = function(data, callback){
-
+    createNotification(data, notificationType.canceling, callback);
 };
 
 Notification.createFeedbackRequestNotification = function(data, callback){
-
+    createNotification(data, notificationType.feedbackRequest, callback);
 };
 
 Notification.createFeedbackReceivedNotification = function(data, callback){
-
+    createNotification(data, notificationType.feedbackReceived, callback);
 };
 
 Notification.createPublicMessageNotification = function (data, callback){
-
+    createNotification(data, notificationType.publicMessage, callback);
 };
 
 Notification.readNotification = function (data, callback){
@@ -47,24 +71,38 @@ Notification.readNotification = function (data, callback){
 };
 
 Notification.query = function(data, callback){
+
+    if(data == null || data == undefined || data.userId == undefined){
+        callback('data not valid');
+        return;
+    }
+
     var query = NotificationModel.find({userId: data.userId}); //, callback);
+
+    if(data.read != undefined){
+        query.where('read').equals(data.read);
+    }
+
+
     query.sort({date: -1}).exec(callback);
-};
-
-
-var createNotificationMessage = function(){
-
 };
 
 var isNotificationDataValid = function(data){
     if(data == null || data == undefined){
         return false;
-    }else if(data.userId == undefined || data.type == undefined
-    || data.token == undefined ){
+    }else if(data.userId == undefined || data.token == undefined ){
         return false;
     }else{
         return true;
     }
+};
+
+var generateNotificationMessage = function(type){
+    return 'This is my default notification message';
+};
+
+var getDate = function(){
+    return Math.floor((new Date().getTime()/1000));
 };
 
 module.exports = Notification;

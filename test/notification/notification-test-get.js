@@ -64,6 +64,73 @@ describe ('Notification GET', function () {
                 });
         });
 
+    it('should return all unread Notifications from the specific User ID sorted by date',
+        function (done) {
+            request(app)
+                .get('/notification')
+                .type('json')
+                .query({
+                    userId: NotificationTestData.myUserId,
+                    read: false
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    var notifications = res.body;
+                    notifications.length.should.equal(3);
+                    notifications[0].type.should.equal(2);
+                    notifications[1].type.should.equal(4);
+                    notifications[2].type.should.equal(5);
+                    done();
+                });
+        });
+
+    it('should return no Notifications from the specific User ID',
+        function (done) {
+            request(app)
+                .get('/notification')
+                .type('json')
+                .query({
+                    userId: 'xyz'
+                })
+                .expect(200)
+                .end(function (err, res) {
+                    res.status.should.equal(200);
+                    var notifications = res.body;
+                    notifications.length.should.equal(0);                    done();
+                });
+        });
+
+    it('should return data is not valid (no data)',
+        function (done) {
+            request(app)
+                .get('/notification')
+                .type('json')
+                .query()
+                .expect(400)
+                .end(function (err, res) {
+                    res.status.should.equal(400);
+                    res.text.should.equal('data not valid');
+                    done();
+                });
+        });
+
+    it('should return data is not valid (typo)',
+        function (done) {
+            request(app)
+                .get('/notification')
+                .type('json')
+                .query({
+                    userI: 'xyz'
+                })
+                .expect(400)
+                .end(function (err, res) {
+                    res.status.should.equal(400);
+                    res.text.should.equal('data not valid');
+                    done();
+                });
+        });
+
 
 
 });
