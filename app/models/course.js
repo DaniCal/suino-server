@@ -74,7 +74,6 @@ Course.update = function(data, callback){
         callback('data incomplete', 400);
         return;
     }
-
     CourseModel.findOne({id: data.courseId}, function(err, course){
         if(err || !course){
             callback('Not found', 404);
