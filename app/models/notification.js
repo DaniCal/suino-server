@@ -66,8 +66,20 @@ Notification.createPublicMessageNotification = function (data, callback){
     createNotification(data, notificationType.publicMessage, callback);
 };
 
-Notification.readNotification = function (data, callback){
-
+Notification.read = function (data, callback){
+    NotificationModel.findByIdAndUpdate(
+        data._id,
+        {
+            read: true
+        },
+        function(err, notification){
+            if(err){
+                callback(err, 500);
+            }else{
+                callback('read', 200);
+            }
+        }
+    );
 };
 
 Notification.query = function(data, callback){

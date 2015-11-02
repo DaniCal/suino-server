@@ -14,7 +14,10 @@ exports.query = function(req, res){
 };
 
 exports.read = function(req, res){
-
+    data = req.body;
+    Notification.read(data, function(msg, statusCode){
+        res.status(statusCode).send(msg);
+    });
 };
 
 //______________________________INTERNAL FUNCTIONS

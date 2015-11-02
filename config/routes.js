@@ -38,6 +38,7 @@ module.exports = function (app) {
     app.put('/event/cancel', event.cancel);
 
     app.get('/notification', notification.query);
+    app.post('/notification/read', notification.read);
 
 
     //______________________________API CALLS
