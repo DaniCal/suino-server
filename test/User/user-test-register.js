@@ -20,7 +20,7 @@ var clearTestDatabase = function(){
     });
 };
 
-describe ('Users POST', function (){
+describe ('Users POST REGISTER', function (){
 
     before(function(done){
         createUser(UserTestData.userInDb);
@@ -45,13 +45,26 @@ describe ('Users POST', function (){
                 });
         });
 
-    for(var i = 0; i < UserTestData.incompleteUserData.length ; i++){
-        it('should return that received data is incomplete case ' + i,
+    it('should return that received data is incomplete case 0' ,
+        function(done){
+            request(app)
+                .post('/register')
+                .type('json')
+                .send(UserTestData.incompleteUserData[0])
+                .expect(400)
+                .end(function(err, res){
+                    res.status.should.equal(400);
+                    res.text.should.equal('data not valid');
+                    done();
+                })
+        });
+
+        it('should return that received data is incomplete case 1' ,
             function(done){
                 request(app)
                     .post('/register')
                     .type('json')
-                    .send(UserTestData.incompleteUserData[i])
+                    .send(UserTestData.incompleteUserData[1])
                     .expect(400)
                     .end(function(err, res){
                         res.status.should.equal(400);
@@ -59,7 +72,36 @@ describe ('Users POST', function (){
                         done();
                     })
             });
-    }
+
+    it('should return that received data is incomplete case 2' ,
+        function(done){
+            request(app)
+                .post('/register')
+                .type('json')
+                .send(UserTestData.incompleteUserData[2])
+                .expect(400)
+                .end(function(err, res){
+                    res.status.should.equal(400);
+                    res.text.should.equal('data not valid');
+                    done();
+                })
+        });
+
+    it('should return that received data is incomplete case 3' ,
+        function(done){
+            request(app)
+                .post('/register')
+                .type('json')
+                .send(UserTestData.incompleteUserData[3])
+                .expect(400)
+                .end(function(err, res){
+                    res.status.should.equal(400);
+                    res.text.should.equal('data not valid');
+                    done();
+                })
+        });
+
+
 
     it('should return that user was created',
         function(done){
@@ -72,7 +114,7 @@ describe ('Users POST', function (){
                     res.status.should.equal(201);
                     UserModel.findOne({fbId: UserTestData.testUserNotInDb.fbId}, function(err, user){
 
-                        should.not.exist(err)
+                        should.not.exist(err);
                         should.exist(user);
                         user.should.be.an.instanceOf(UserModel);
 

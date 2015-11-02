@@ -7,22 +7,24 @@ var UserTestData = function(){
 UserTestData.incompleteUserData = [
 
     {
-        fbId : '123456',
+        fbId : '0909090',
         fbName: 'Daniel Lohse',
-        platform: 'android',
         deviceToken: '123123123',
         email: 'daniel.lohse@suinoapp.com',
         age: 25
     },
     {
-        fbId : '123456',
+        fbId : '0909090',
         fbName: 'Daniel Lohse',
         deviceToken: '123456',
-        email: 'daniel.lohse@suinoapp.com'
+        email: 'daniel.lohse@suinoapp.com',
+        age: 25,
+        city: 'Barcelona',
+        platform: 'Android'
 
     },
     {
-        fbId : '123456',
+        fbId : '0909090',
         platform: 'android',
         deviceToken: '123456',
         email: 'daniel.lohse@suinoapp.com'
@@ -34,12 +36,6 @@ UserTestData.incompleteUserData = [
         deviceToken: '123456',
         email: 'daniel.lohse@suinoapp.com'
 
-    },
-    {
-        fbId : '123456',
-        fbName: 'Daniel Lohse',
-        platform: 'android',
-        deviceToken: '123456'
     }
 ];
 
@@ -50,6 +46,7 @@ UserTestData.testUserNotInDb = {
     platform: 'android',
     deviceToken: '123456',
     age: 25,
+    gender: 'male',
     city: 'Barcelona',
     email: 'daniel.lohse@suinoapp.com'
 };
@@ -69,9 +66,26 @@ UserTestData.userInDb = {
     uuid: '1111222233334444',
     fbName: 'Dani Lo',
     fbId: '123456',
+    age: 25,
+    city: 'Barcelona',
+    gender: 'male',
     email: 'daniel.lohse@suinoapp.com',
     date: 123456,
     device: [{token:'123456', platform: 'android'}]
+};
+
+UserTestData.testUserInDbSameDevice = {
+    fbId : '123456',
+    fbName: 'Daniel Lohse',
+    platform: 'android',
+    deviceToken: '123456'
+};
+
+UserTestData.testUserInDbNewDevice = {
+    fbId : '123456',
+    fbName: 'Daniel Lohse',
+    platform: 'apple',
+    deviceToken: '123455'
 };
 
 module.exports = UserTestData;
