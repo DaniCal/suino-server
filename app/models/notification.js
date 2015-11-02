@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var NotificationSchema = new Schema({
     userId: {type: String},
-    type: {type: String},
+    type: {type: Number},
     message: {type: String},
     token: {type: String},
     read: {type: Boolean},
@@ -47,7 +47,8 @@ Notification.readNotification = function (data, callback){
 };
 
 Notification.query = function(data, callback){
-
+    var query = NotificationModel.find({userId: data.userId}); //, callback);
+    query.sort({date: -1}).exec(callback);
 };
 
 
@@ -65,6 +66,8 @@ var isNotificationDataValid = function(data){
         return true;
     }
 };
+
+module.exports = Notification;
 
 
 

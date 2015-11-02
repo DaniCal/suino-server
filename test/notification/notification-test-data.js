@@ -3,6 +3,7 @@ var NotificationTestData = function(){
 
 };
 
+NotificationTestData.myUserId = '123456';
 var myUserId = '123456';
 var defaultMessage = 'This is a default notification message';
 var defaultToken = '234567';
