@@ -1,20 +1,26 @@
 var Course = require('../models/course.js');
 
-
 //______________________________HTTP CALLS
 
 exports.load = function(req, res){
     var data = req.query;
     Course.load(data, function(err, statusCode, course){
         if (err){
-            res.status(500).send(err);
+            res.status(statusCode).send(err);
         }else{
-            res.status(200).send(course);
+            res.status(statusCode).send(course);
         }
     });
 };
 
-exports.search = function(req, res){
+exports.create = function(req, res){
+    var data = req.body;
+    Course.createCourse(data, function(msg, statusCode){
+        res.status(statusCode).send(msg);
+    });
+};
+
+exports.query = function(req, res){
     var data = req.query;
     Course.search(data, function(err, courseIds){
         if(err){
@@ -23,13 +29,6 @@ exports.search = function(req, res){
             res.status(200).send(courseIds);
         }
     })
-};
-
-exports.create = function(req, res){
-    var data = req.body;
-    Course.createCourse(data, function(msg, statusCode){
-        res.status(statusCode).send(msg);
-    });
 };
 
 exports.update = function(req, res){
