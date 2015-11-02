@@ -21,3 +21,14 @@ exports.login = function (req, res) {
     });
 };
 
+exports.load = function(req, res){
+    var data = req.query;
+    User.load(data, function(err, statusCode, user){
+        if(err){
+            res.status(statusCode).send(err);
+        }else{
+            res.status(statusCode).send(user);
+        }
+    });
+};
+
