@@ -65,7 +65,7 @@ Event.load = function(data, callback){
         if(err){
             callback(err, 500);
         }else if(!event){
-            callback('Not found', 404);
+            callback('Not found', 204);
         }else{
             callback(false, 200, event);
         }

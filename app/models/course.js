@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var uuid = require('node-uuid');
 
-
 var CourseSchema = new Schema({
         id: {type: String},
         date : {type: Number},
@@ -61,11 +60,13 @@ Course.createCourse = function(data, callback){
 
 Course.load = function(data, callback){
     CourseModel.findOne({id: data.courseId}, function(err, course){
-        if(err || course == undefined){
-            callback(err, false);
-            return;
+        if(err){
+            callback(err, 500, false);
+        }else if(!course){
+            callback('Not found', 204, false);
+        }else{
+            callback(false, 200, course)
         }
-        callback(err, course)
     });
 };
 
@@ -116,8 +117,6 @@ Course.update = function(data, callback){
 
     });
 };
-
-
 
 var isLevelValid = function(data){
     if(data.level == undefined){
@@ -236,7 +235,6 @@ var buildCourseQuery = function(data){
     return query;
 
 };
-
 
 Course.isCourseDataValid = function(data, callback){
     if(data == null || data == undefined){
