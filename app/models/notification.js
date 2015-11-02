@@ -6,7 +6,8 @@ var NotificationSchema = new Schema({
     type: {type: String},
     message: {type: String},
     token: {type: String},
-    read: {type: Boolean}
+    read: {type: Boolean},
+    date: {type: Number}
 });
 
 var notificationType = {
