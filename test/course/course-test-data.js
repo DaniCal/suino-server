@@ -13,7 +13,7 @@ var specificEventId = '567567';
 var myTags = ['yoga','meditation'];
 
 CourseTestData.mySpecificSet1 = {
-    id: '1',
+    id: null,
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,

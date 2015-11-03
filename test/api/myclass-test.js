@@ -50,6 +50,23 @@ var clearTestDatabase = function(){
 
 
 describe ('MyClass', function () {
+    var asyncTasks = [];
+
+    var createCourseAsync = function(data){
+        asyncTasks.push(
+            function(callback){
+                createCourse(data, callback);
+            });
+    };
+
+
+    var createEventAsync = function(data){
+        asyncTasks.push(
+            function(callback){
+                createEvent(data, callback);
+            });
+    };
+
     before(function(done){
         createCourse(ApiTestData.courseSet1);
         createEvent(ApiTestData.eventSet1EmptyC1);
@@ -59,7 +76,6 @@ describe ('MyClass', function () {
         createEvent(ApiTestData.eventSet5PlacesLeftC1);
         createEvent(ApiTestData.eventSet6EmptyC1);
 
-
         createCourse(ApiTestData.courseSet2);
         createEvent(ApiTestData.eventSet1EmptyC2);
         createEvent(ApiTestData.eventSet2PlacesLeftC2);
@@ -67,7 +83,6 @@ describe ('MyClass', function () {
         createEvent(ApiTestData.eventSet4CanceledC2);
         createEvent(ApiTestData.eventSet5PlacesLeftC2);
         createEvent(ApiTestData.eventSet6EmptyC2);
-
 
         createUser(ApiTestData.testUserInDb);
         done();

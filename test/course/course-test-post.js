@@ -6,10 +6,12 @@ var CourseModel = mongoose.model('Course');
 var CourseTestData = require('./course-test-data.js');
 
 
-var createCourse = function(course){
+var createCourse = function(course, callback){
     CourseModel.create(course, function (err, course) {
         if (err){
             throw 'Test course was not created';
+        }else{
+            callback();
         }
     });
 };
@@ -23,8 +25,7 @@ var clearTestDatabase = function(){
 describe ('Course POST', function (){
 
     before(function(done){
-        createCourse(CourseTestData.mySpecificSet1);
-        done();
+        createCourse(CourseTestData.mySpecificSet1, done);
     });
 
     after(function(done){

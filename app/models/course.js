@@ -31,7 +31,7 @@ Course.createCourse = function(data, callback){
     }
 
     var newCourse = new CourseModel({
-        id: uuid.v4(),
+        //id: uuid.v4(),
         date: getDate(),
         description: data.description,
         teacherFbId: data.teacherFbId,
@@ -55,7 +55,7 @@ Course.createCourse = function(data, callback){
 };
 
 Course.load = function(data, callback){
-    CourseModel.findOne({id: data.id}, function(err, course){
+    CourseModel.findById(data._id, function(err, course){
         if(err){
             callback(err, 500, false);
         }else if(!course){
@@ -67,11 +67,11 @@ Course.load = function(data, callback){
 };
 
 Course.update = function(data, callback){
-    if(data == null || data == undefined || data.courseId == undefined){
+    if(data == null || data == undefined || data._id == undefined){
         callback('data incomplete', 400);
         return;
     }
-    CourseModel.findOne({id: data.courseId}, function(err, course){
+    CourseModel.findOne({_id: data._id}, function(err, course){
         if(err || !course){
             callback('Not found', 404);
         }else{

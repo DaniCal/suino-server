@@ -6,6 +6,7 @@ var CourseModel = mongoose.model('Course');
 var EventModel = mongoose.model('Event');
 var SearchTestData = require('./search-test-data.js');
 var UserModel = mongoose.model('User');
+var async = require('async');
 
 
 //empty search
@@ -30,11 +31,12 @@ var createUser = function(user){
 };
 
 
-var createCourse = function(course){
+var createCourse = function(course, callback){
     CourseModel.create(course, function (err, course) {
         if (err){
             throw err;
         }
+        callback(course);
     });
 };
 
@@ -63,29 +65,68 @@ var clearTestDatabase = function(){
 
 
 describe ('SEARCH', function () {
+
+    var asyncTasks = [];
+
+
+    var createCourse1 = function(callback){
+        createCourse(SearchTestData.courseSet1, function(course){
+            SearchTestData.eventSet1EmptyC1.courseId = course._id.toString();
+            SearchTestData.eventSet2PlacesLeftC1.courseId = course._id.toString();
+            SearchTestData.eventSet3FullC1.courseId = course._id.toString();
+            SearchTestData.eventSet4CanceledC1.courseId = course._id.toString();
+            SearchTestData.eventSet5PlacesLeftC1.courseId = course._id.toString();
+            SearchTestData.eventSet6EmptyC1.courseId = course._id.toString();
+
+            createEvent(SearchTestData.eventSet1EmptyC1);
+            createEvent(SearchTestData.eventSet2PlacesLeftC1);
+            createEvent(SearchTestData.eventSet3FullC1);
+            createEvent(SearchTestData.eventSet4CanceledC1);
+            createEvent(SearchTestData.eventSet5PlacesLeftC1);
+            createEvent(SearchTestData.eventSet6EmptyC1);
+
+            callback();
+        });
+    };
+
+    var createCourse2 = function(callback){
+        createCourse(SearchTestData.courseSet2, function(course){
+            SearchTestData.eventSet1EmptyC2.courseId = course._id.toString();
+            SearchTestData.eventSet2PlacesLeftC2.courseId = course._id.toString();
+            SearchTestData.eventSet3FullC2.courseId = course._id.toString();
+            SearchTestData.eventSet4CanceledC2.courseId = course._id.toString();
+            SearchTestData.eventSet5PlacesLeftC2.courseId = course._id.toString();
+            SearchTestData.eventSet6EmptyC2.courseId = course._id.toString();
+
+            createEvent(SearchTestData.eventSet1EmptyC2);
+            createEvent(SearchTestData.eventSet2PlacesLeftC2);
+            createEvent(SearchTestData.eventSet3FullC2);
+            createEvent(SearchTestData.eventSet4CanceledC2);
+            createEvent(SearchTestData.eventSet5PlacesLeftC2);
+            createEvent(SearchTestData.eventSet6EmptyC2);
+
+            callback();
+        });
+    };
+
     before(function(done){
 
-        createCourse(SearchTestData.courseSet1);
-        createEvent(SearchTestData.eventSet1EmptyC1);
-        createEvent(SearchTestData.eventSet2PlacesLeftC1);
-        createEvent(SearchTestData.eventSet3FullC1);
-        createEvent(SearchTestData.eventSet4CanceledC1);
-        createEvent(SearchTestData.eventSet5PlacesLeftC1);
-        createEvent(SegarchTestData.eventSet6EmptyC1);
 
+        asyncTasks.push(
+            function(callback){
+                createCourse1(callback);
+            });
 
-        createCourse(SearchTestData.courseSet2);
-        createEvent(SearchTestData.eventSet1EmptyC2);
-        createEvent(SearchTestData.eventSet2PlacesLeftC2);
-        createEvent(SearchTestData.eventSet3FullC2);
-        createEvent(SearchTestData.eventSet4CanceledC2);
-        createEvent(SearchTestData.eventSet5PlacesLeftC2);
-        createEvent(SearchTestData.eventSet6EmptyC2);
+        asyncTasks.push(
+            function(callback){
+                createCourse2(callback);
+            });
 
+        async.parallel(asyncTasks, function(){
+            createUser(SearchTestData.testUserInDb);
+            done();
+        });
 
-        createUser(SearchTestData.testUserInDb);
-
-        done();
     });
 
     after(function(done){

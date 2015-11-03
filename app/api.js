@@ -83,7 +83,7 @@ var generateMyClassesResultObjectTask = function(course, result, callback){
 var generateSearchResultObjectTask = function(courseItem, result, callback){
     User.get({fbId: courseItem.teacherFbId}, function(err, userItem){
         if(!err){
-            Event.queryInternal({courseId: courseItem.id, state: 1}, function (err, events) {
+            Event.queryInternal({courseId: courseItem._id, state: 1}, function (err, events) {
 
                 if (err) {
                     callback();

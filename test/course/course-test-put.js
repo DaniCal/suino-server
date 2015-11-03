@@ -6,10 +6,13 @@ var CourseModel = mongoose.model('Course');
 var CourseTestData = require('./course-test-data.js');
 
 
-var createCourse = function(course){
-    CourseModel.create(course, function (err, course) {
+var createCourse = function(course, callback){
+    CourseModel.create(course, function (err, courseItem) {
         if (err){
             throw 'Test course was not created';
+        }else{
+            course.id = courseItem._id.toString();
+            callback();
         }
     });
 };
@@ -22,8 +25,7 @@ var clearTestDatabase = function(){
 
 describe ('Course PUT', function (){
     before(function(done){
-        createCourse(CourseTestData.mySpecificSet1);
-        done();
+        createCourse(CourseTestData.mySpecificSet1, done);
     });
 
     after(function(done){
@@ -52,7 +54,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: '999999'
+                    _id: '999999'
                 })
                 .expect(404)
                 .end(function (err, res) {
@@ -71,7 +73,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     description: 'some other description'
                 })
                 .expect(200)
@@ -80,7 +82,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.description.should.equal('some other description', 'description was not updated');
                             done();
@@ -96,7 +98,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     level: 3
                 })
                 .expect(200)
@@ -105,7 +107,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.level.should.equal(3, 'description was not updated');
                             done();
@@ -120,7 +122,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     location: [13,13]
                 })
                 .expect(200)
@@ -129,7 +131,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.location[0].should.equal(13, 'longitude was not updated');
                             course.location[1].should.equal(13, 'latitude was not updated');
@@ -145,7 +147,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     groupSize: 6
                 })
                 .expect(200)
@@ -154,7 +156,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.groupSize.should.equal(6, 'groupSize was not updated');
                             done();
@@ -169,7 +171,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     category: 'sports'
                 })
                 .expect(200)
@@ -178,7 +180,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.category.should.equal('sports', 'category was not updated');
                             done();
@@ -193,7 +195,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     tags: ['beach', 'volleyball']
                 })
                 .expect(200)
@@ -202,7 +204,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.tags[0].should.equal('beach', 'tags was not updated');
                             course.tags[1].should.equal('volleyball', 'tags was not updated');
@@ -219,7 +221,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     price: 25
                 })
                 .expect(200)
@@ -228,7 +230,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.price.should.equal(25, 'price was not updated');
 
@@ -244,7 +246,7 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    courseId: CourseTestData.mySpecificSet1.id,
+                    _id: CourseTestData.mySpecificSet1.id,
                     price: 25,
                     tags: ['beach', 'volleyball'],
                     description: 'some other description',
@@ -261,7 +263,7 @@ describe ('Course PUT', function (){
                     res.text.should.equal('Course updated');
 
                     CourseModel.findOne(
-                        {id: CourseTestData.mySpecificSet1.id},
+                        {_id: CourseTestData.mySpecificSet1.id},
                         function(err, course){
                             course.price.should.equal(25, 'price was not updated');
                             course.description.should.equal('some other description', 'description was not updated');
