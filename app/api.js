@@ -31,6 +31,18 @@ exports.search = function(req, res){
     });
 };
 
+exports.myClasses = function(req, res){
+    var data = req.query;
+    Course.queryInternal(data, function(err, courses){
+        if(err){
+            res.status(400).send(err);
+        }else{
+            res.status(200).send(courses);
+        }
+    });
+
+};
+
 var generateResultObjectTask = function(courseItem, result, callback){
     User.get({fbId: courseItem.teacherFbId}, function(err, userItem){
         if(!err){

@@ -2,8 +2,10 @@ var ApiTestData = function(){
 
 };
 
+
 var me = '123123';
 var myFbId = '234234';
+ApiTestData.fbId = myFbId;
 
 //Course 1
 

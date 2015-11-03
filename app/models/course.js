@@ -177,24 +177,31 @@ Course.search = function(data, callback){
 };
 
 var buildCourseQuery = function(data){
-    var maxDistance = data.maxDistance | 100;
 
-    maxDistance /= 6371;
+    if(data.maxDistance != undefined){
+        var maxDistance = data.maxDistance | 100;
+        maxDistance /= 6371;
+        //TODO add to query
+    }
 
-    var keywords = [];
-
-
-    var coordinates = [];
-    coordinates[0] = data.longitude;
-    coordinates[1] = data.latitude;
-
+    var query;
     //PROXIMITY
-    var query = CourseModel.find({location: {
-        $near: coordinates
-    }});
+    if(data.longitude != undefined && data.latitude != undefined){
+        var coordinates = [];
+        coordinates[0] = data.longitude;
+        coordinates[1] = data.latitude;
+
+        query = CourseModel.find({location: {
+            $near: coordinates
+        }});
+    }else{
+        query = CourseModel.find();
+    }
+
 
     //KEYWORDS
     if(data.keywords != undefined){
+        var keywords = [];
         if(!(data.keywords instanceof Array)){
             keywords[0] = data.keywords;
         }else{
@@ -225,7 +232,11 @@ var buildCourseQuery = function(data){
         }else{
             query.where('groupSize').ne(1);
         }
+    }
 
+    //TeacherFbId
+    if(data.fbId != undefined){
+        query.where('teacherFbId').equals(data.fbId);
     }
 
     return query;

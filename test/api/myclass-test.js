@@ -82,14 +82,15 @@ describe ('SEARCH', function () {
     it('should return the related information of the users classes',
         function(done){
             request(app)
-                .get('/myclasses')
+                .get('/myClasses')
                 .type('json')
                 .query({
-                    fbId: '123123'
+                    fbId: ApiTestData.fbId
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
+                    res.body.length.should.equal(2);
                     done();
                 });
         });
