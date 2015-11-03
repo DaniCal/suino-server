@@ -33,24 +33,33 @@ exports.search = function(req, res){
 
 exports.myClasses = function(req, res){
     var data = req.query;
+    if(data.fbId == undefined){
+        res.status(400).send('Data not valid');
+        return;
+    }
     Course.queryInternal(data, function(err, courses){
-        var result = [];
-        var asyncTasks = [];
-        courses.forEach(function(courseItem){
-            asyncTasks.push(
-                function(callback){
-                    generateMyClassesResultObjectTask(courseItem, result, callback);
-                });
-        });
-
-
-        async.parallel(asyncTasks, function(){
-            result.sort(function(a, b)
-            {
-                return a.events[0].start - b.events[0].start;
+        if(err){
+            res.status(500).send(err);
+        }else{
+            var result = [];
+            var asyncTasks = [];
+            courses.forEach(function(courseItem){
+                asyncTasks.push(
+                    function(callback){
+                        generateMyClassesResultObjectTask(courseItem, result, callback);
+                    });
             });
-            res.status(200).send(result);
-        });
+
+
+            async.parallel(asyncTasks, function(){
+                result.sort(function(a, b)
+                {
+                    return a.events[0].start - b.events[0].start;
+                });
+                res.status(200).send(result);
+            });
+        }
+
     });
 
 };

@@ -49,7 +49,7 @@ var clearTestDatabase = function(){
 };
 
 
-describe ('SEARCH', function () {
+describe ('MyClass', function () {
     before(function(done){
         createCourse(ApiTestData.courseSet1);
         createEvent(ApiTestData.eventSet1EmptyC1);
@@ -104,6 +104,21 @@ describe ('SEARCH', function () {
                     should.exist(res.body[0].events[0].start, "start is not part of the event object");
                     should.exist(res.body[0].events[0].end, "start is not part of the event object");
                     should.exist(res.body[0].events[0].participants, "start is not part of the event object");
+                    done();
+                });
+        });
+
+    it('should return that request could not be completed',
+        function(done){
+            request(app)
+                .get('/myClasses')
+                .type('json')
+                .query({
+                    facebookId: 'asdasdd'
+                })
+                .expect(400)
+                .end(function (err, res) {
+                    res.status.should.equal(400);
                     done();
                 });
         });
