@@ -123,6 +123,7 @@ describe ('Users POST REGISTER', function (){
                         should.exist(user.email);
                         should.exist(user.date);
                         should.exist(user.device);
+                        should.exist(user.fbPictureLink);
                         should.exist(user.device[0]);
                         should.exist(user.device[0].token);
                         should.exist(user.device[0].platform);

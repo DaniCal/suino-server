@@ -7,8 +7,6 @@ var CourseSchema = new Schema({
         date : {type: Number},
         description: {type: String},
         teacherFbId: {type: String},
-        teacherFirstName: {type: String},
-        teacherFbPictureLink: {type:String},
         level: {type: Number},
         location: {
                 type: [Number],
@@ -37,8 +35,6 @@ Course.createCourse = function(data, callback){
         date: getDate(),
         description: data.description,
         teacherFbId: data.teacherFbId,
-        teacherFirstName: data.teacherFirstName,
-        teacherFbPictureLink: data.teacherFbPictureLink,
         level: data.level,
         location: data.location,
         category: data.category,
@@ -59,7 +55,7 @@ Course.createCourse = function(data, callback){
 };
 
 Course.load = function(data, callback){
-    CourseModel.findOne({id: data.courseId}, function(err, course){
+    CourseModel.findOne({id: data.id}, function(err, course){
         if(err){
             callback(err, 500, false);
         }else if(!course){
@@ -265,8 +261,6 @@ var isDataComplete = function(data){
     return !(
         data.description == undefined ||
         data.teacherFbId == undefined ||
-        data.teacherFirstName == undefined ||
-        data.teacherFbPictureLink == undefined ||
         data.level == undefined ||
         data.location == undefined ||
         data.category == undefined ||

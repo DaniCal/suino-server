@@ -93,6 +93,11 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(10);
+
+                    should.exist(res.body[0].event, 'event is not part of the search object');
+                    should.exist(res.body[0].course, 'course is not part of the search object');
+                    should.exist(res.body[0].user, 'user is not part of the search object');
+
                     res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
                     res.body[1].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
                     res.body[2].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');

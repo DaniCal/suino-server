@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
     fbName: { type: String, default: '' },
     fbId: {type: String, default: ''},
+    fbPictureLink: {type: String},
     age: {type: Number},
     email: { type: String, default: '' },
     city: {type: String},
@@ -28,6 +29,7 @@ User.createUser = function(data, callback){
     var newUser = new UserModel({
         fbId: data.fbId,
         fbName: data.fbName,
+        fbPictureLink: data.fbPictureLink,
         age: data.age,
         email: data.email,
         city: data.city,
@@ -103,7 +105,8 @@ var isUserDataValid = function(data){
         return false;
     }else if(data.deviceToken == undefined || data.fbName == undefined
         || data.platform == undefined || data.fbId == undefined ||
-        data.age == undefined || data.city == undefined || data.email == undefined
+        data.age == undefined || data.city == undefined ||
+        data.email == undefined || data.fbPictureLink == undefined
     || data.gender == undefined){
         return false;
     }else{

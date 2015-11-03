@@ -26,6 +26,7 @@ UserTestData.incompleteUserData = [
     {
         fbId : '0909090',
         platform: 'android',
+        fbPictureLink:'facebook.com/somepicturelink',
         deviceToken: '123456',
         email: 'daniel.lohse@suinoapp.com'
 
@@ -43,6 +44,7 @@ UserTestData.incompleteUserData = [
 UserTestData.testUserNotInDb = {
     fbId : '654321',
     fbName: 'Daniel Lohse',
+    fbPictureLink:'facebook.com/somepicturelink',
     platform: 'android',
     deviceToken: '123456',
     age: 25,
@@ -54,6 +56,7 @@ UserTestData.testUserNotInDb = {
 UserTestData.testUserInDb = {
     fbId : '123456',
     fbName: 'Daniel Lohse',
+    fbPictureLink:'facebook.com/somepicturelink',
     platform: 'apple',
     deviceToken: '123455',
     age:25,
@@ -65,6 +68,7 @@ UserTestData.testUserInDb = {
 UserTestData.userInDb = {
     uuid: '1111222233334444',
     fbName: 'Dani Lo',
+    fbPictureLink:'facebook.com/somepicturelink',
     fbId: '123456',
     age: 25,
     city: 'Barcelona',
