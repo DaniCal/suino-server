@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
 var EventModel = mongoose.model('Event');
 var SearchTestData = require('./search-test-data.js');
+var UserModel = mongoose.model('User');
 
 
 //empty search
@@ -19,6 +20,14 @@ var SearchTestData = require('./search-test-data.js');
 
 //no full, no canceled
 
+
+var createUser = function(user){
+    UserModel.create(user, function (err, user) {
+        if (err){
+            throw 'Test user was not created';
+        }
+    });
+};
 
 
 var createCourse = function(course){
@@ -47,6 +56,9 @@ var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
         if(err) throw 'Database was not cleared';
     });
+    UserModel.remove({}, function(err){
+        if(err) throw 'Database was not cleared';
+    });
 };
 
 
@@ -70,6 +82,8 @@ describe ('SEARCH', function () {
         createEvent(SearchTestData.eventSet5PlacesLeftC2);
         createEvent(SearchTestData.eventSet6EmptyC2);
 
+
+        createUser(SearchTestData.testUserInDb);
 
         done();
     });
@@ -95,8 +109,24 @@ describe ('SEARCH', function () {
                     res.body.length.should.equal(10);
 
                     should.exist(res.body[0].event, 'event is not part of the search object');
+                    should.exist(res.body[0].event.participants, 'participants is not part of the event object');
+                    should.exist(res.body[0].event.start, 'start is not part of the event object');
+                    should.exist(res.body[0].event.end, 'end is not part of the event object');
+
                     should.exist(res.body[0].course, 'course is not part of the search object');
+                    should.exist(res.body[0].course.groupSize, 'groupSize is not part of the course object');
+                    should.exist(res.body[0].course.level, 'level is not part of the course object');
+                    should.exist(res.body[0].course.price, 'price is not part of the course object');
+                    should.exist(res.body[0].course.location, 'location is not part of the course object');
+                    should.exist(res.body[0].course.tags, 'tags is not part of the course object');
+                    should.exist(res.body[0].course.description, 'description is not part of the course object');
+
+
                     should.exist(res.body[0].user, 'user is not part of the search object');
+                    should.exist(res.body[0].user.fbName, 'fbFirstName is not part of the search object');
+                    should.exist(res.body[0].user.fbPictureLink, 'fbPictureLink is not part of the search object');
+
+
 
                     res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
                     res.body[1].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');

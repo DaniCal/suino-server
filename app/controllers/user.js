@@ -33,3 +33,12 @@ exports.login = function (req, res) {
     });
 };
 
+exports.get = function(data, callback){
+    User.load(data, function(err, statusCode, user){
+        if(err){
+            callback(err);
+        }else{
+            callback(err, user);
+        }
+    });
+};

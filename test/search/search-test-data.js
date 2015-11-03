@@ -148,4 +148,16 @@ SearchTestData.eventSet6EmptyC2 = {
     state: 1
 };
 
+
+SearchTestData.testUserInDb = {
+    fbId : myFbId,
+    fbName: 'Daniel Lohse',
+    fbPictureLink:'facebook.com/somepicturelink',
+    platform: 'apple',
+    deviceToken: '123455',
+    age:25,
+    city: 'Barcelona',
+    email: 'daniel.lohse@suinoapp.com'
+};
+
 module.exports = SearchTestData;
