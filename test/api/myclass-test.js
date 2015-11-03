@@ -90,7 +90,11 @@ describe ('SEARCH', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.equal(2);
+                    res.body.length.should.equal(2, 'course number does not match');
+                    should.exist(res.body[0].course, "course object is not part of the result object");
+                    should.exist(res.body[0].events, "course object is not part of the result object");
+                    res.body[0].events.length.should.equal(5);
+                    res.body[0].course.id.should.equal(ApiTestData.courseSet1.id);
                     done();
                 });
         });

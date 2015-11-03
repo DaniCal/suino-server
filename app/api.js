@@ -14,7 +14,7 @@ exports.search = function(req, res){
             courses.forEach(function(courseItem){
                 asyncTasks.push(
                     function(callback){
-                        generateResultObjectTask(courseItem, result, callback);
+                        generateSearchResultObjectTask(courseItem, result, callback);
                     });
             });
 
@@ -34,16 +34,44 @@ exports.search = function(req, res){
 exports.myClasses = function(req, res){
     var data = req.query;
     Course.queryInternal(data, function(err, courses){
-        if(err){
-            res.status(400).send(err);
-        }else{
-            res.status(200).send(courses);
-        }
+        var result = [];
+        var asyncTasks = [];
+        courses.forEach(function(courseItem){
+            asyncTasks.push(
+                function(callback){
+                    generateMyClassesResultObjectTask(courseItem, result, callback);
+                });
+        });
+
+
+        async.parallel(asyncTasks, function(){
+            result.sort(function(a, b)
+            {
+                return a.events[0].start - b.events[0].start;
+            });
+            res.status(200).send(result);
+        });
     });
 
 };
 
-var generateResultObjectTask = function(courseItem, result, callback){
+var generateMyClassesResultObjectTask = function(course, result, callback){
+    Event.queryInternal({courseId: course.id, state: 1}, function(err, events){
+       if(err) {
+           callback();
+       }else{
+           events.sort(function(a, b)
+           {
+               return a.start - b.start;
+           });
+           result.push({course: course, events: events});
+           callback();
+       }
+    });
+
+};
+
+var generateSearchResultObjectTask = function(courseItem, result, callback){
     User.get({fbId: courseItem.teacherFbId}, function(err, userItem){
         if(!err){
             Event.queryInternal({courseId: courseItem.id, state: 1}, function (err, events) {
