@@ -71,7 +71,7 @@ describe ('SEARCH', function () {
         createEvent(SearchTestData.eventSet3FullC1);
         createEvent(SearchTestData.eventSet4CanceledC1);
         createEvent(SearchTestData.eventSet5PlacesLeftC1);
-        createEvent(SearchTestData.eventSet6EmptyC1);
+        createEvent(SegarchTestData.eventSet6EmptyC1);
 
 
         createCourse(SearchTestData.courseSet2);

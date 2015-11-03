@@ -4,7 +4,7 @@ var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
 var EventModel = mongoose.model('Event');
-var APITestData = require('./api-test-data.js');
+var ApiTestData = require('./api-test-data.js');
 var UserModel = mongoose.model('User');
 
 
@@ -51,7 +51,25 @@ var clearTestDatabase = function(){
 
 describe ('SEARCH', function () {
     before(function(done){
+        createCourse(ApiTestData.courseSet1);
+        createEvent(ApiTestData.eventSet1EmptyC1);
+        createEvent(ApiTestData.eventSet2PlacesLeftC1);
+        createEvent(ApiTestData.eventSet3FullC1);
+        createEvent(ApiTestData.eventSet4CanceledC1);
+        createEvent(ApiTestData.eventSet5PlacesLeftC1);
+        createEvent(ApiTestData.eventSet6EmptyC1);
 
+
+        createCourse(ApiTestData.courseSet2);
+        createEvent(ApiTestData.eventSet1EmptyC2);
+        createEvent(ApiTestData.eventSet2PlacesLeftC2);
+        createEvent(ApiTestData.eventSet3FullC2);
+        createEvent(ApiTestData.eventSet4CanceledC2);
+        createEvent(ApiTestData.eventSet5PlacesLeftC2);
+        createEvent(ApiTestData.eventSet6EmptyC2);
+
+
+        createUser(ApiTestData.testUserInDb);
         done();
     });
 
