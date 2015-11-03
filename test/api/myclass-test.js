@@ -93,8 +93,17 @@ describe ('SEARCH', function () {
                     res.body.length.should.equal(2, 'course number does not match');
                     should.exist(res.body[0].course, "course object is not part of the result object");
                     should.exist(res.body[0].events, "course object is not part of the result object");
-                    res.body[0].events.length.should.equal(5);
                     res.body[0].course.id.should.equal(ApiTestData.courseSet1.id);
+                    should.exist(res.body[0].course.tags, 'tags is not part of the course object');
+                    should.exist(res.body[0].course.price, 'price is not part of the course object');
+                    should.exist(res.body[0].course.level, 'level is not part of the course object');
+                    should.exist(res.body[0].course.groupSize, 'groupSize is not part of the course object');
+                    should.exist(res.body[0].course.location, 'location is not part of the course object');
+                    should.exist(res.body[0].course.category, 'category is not part of the course object');
+                    res.body[0].events.length.should.equal(5, "number of associated events does not match");
+                    should.exist(res.body[0].events[0].start, "start is not part of the event object");
+                    should.exist(res.body[0].events[0].end, "start is not part of the event object");
+                    should.exist(res.body[0].events[0].participants, "start is not part of the event object");
                     done();
                 });
         });
