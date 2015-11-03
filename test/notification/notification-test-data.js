@@ -4,14 +4,34 @@ var NotificationTestData = function(){
 };
 
 NotificationTestData.myUserId = '123456';
+NotificationTestData.mySourceId = '654321';
+
 var myUserId = '123456';
+var mySourceId = '654321';
+
 var defaultMessage = 'This is a default notification message';
 var defaultToken = '234567';
+
+
+//POST DATA
+
+
+NotificationTestData.postData = {
+    userId: myUserId,
+    sourceId: mySourceId,
+    token: defaultToken
+};
+
+NotificationTestData.postDataIncomplete = {
+    userId: myUserId,
+    token: defaultToken
+};
 
 //MY
 
 NotificationTestData.myReservationNotification = {
     userId: myUserId,
+    sourceId: mySourceId,
     type: 1,
     message: defaultMessage,
     token: defaultToken,
@@ -21,6 +41,7 @@ NotificationTestData.myReservationNotification = {
 
 NotificationTestData.myCancelationNotification = {
     userId: myUserId,
+    sourceId: mySourceId,
     type: 2,
     message: defaultMessage,
     token: defaultToken,
@@ -30,6 +51,7 @@ NotificationTestData.myCancelationNotification = {
 
 NotificationTestData.myFeedbackRequestNotification = {
     userId: myUserId,
+    sourceId: mySourceId,
     type: 3,
     message: defaultMessage,
     token: defaultToken,
@@ -39,6 +61,7 @@ NotificationTestData.myFeedbackRequestNotification = {
 
 NotificationTestData.myFeedbackReceivedNotification = {
     userId: myUserId,
+    sourceId: mySourceId,
     type: 4,
     message: defaultMessage,
     token: defaultToken,
@@ -48,6 +71,7 @@ NotificationTestData.myFeedbackReceivedNotification = {
 
 NotificationTestData.myPublicMessageNotification = {
     userId: myUserId,
+    sourceId: mySourceId,
     type: 5,
     message: defaultMessage,
     token: defaultToken,
@@ -60,6 +84,7 @@ NotificationTestData.myPublicMessageNotification = {
 
 NotificationTestData.otherReservationNotification = {
     userId: '111111',
+    sourceId: mySourceId,
     type: 1,
     message: defaultMessage,
     token: defaultToken,
@@ -69,6 +94,7 @@ NotificationTestData.otherReservationNotification = {
 
 NotificationTestData.otherCancelationNotification = {
     userId: '111111',
+    sourceId: mySourceId,
     type: 2,
     message: defaultMessage,
     token: defaultToken,
@@ -78,6 +104,7 @@ NotificationTestData.otherCancelationNotification = {
 
 NotificationTestData.otherFeedbackRequestNotification = {
     userId: '111111',
+    sourceId: mySourceId,
     type: 3,
     message: defaultMessage,
     token: defaultToken,
@@ -87,6 +114,7 @@ NotificationTestData.otherFeedbackRequestNotification = {
 
 NotificationTestData.otherFeedbackReceivedNotification = {
     userId: '111111',
+    sourceId: mySourceId,
     type: 4,
     message: defaultMessage,
     token: defaultToken,
@@ -96,6 +124,7 @@ NotificationTestData.otherFeedbackReceivedNotification = {
 
 NotificationTestData.otherPublicMessageNotification = {
     userId: '111111',
+    sourceId: mySourceId,
     type: 5,
     message: defaultMessage,
     token: defaultToken,

@@ -66,9 +66,9 @@ describe ('Event GET EVENT', function () {
                 .query({
                     eventId: 'blabalsdasd'
                 })
-                .expect(404)
+                .expect(204)
                 .end(function (err, res) {
-                    res.status.should.equal(404);
+                    res.status.should.equal(204);
                     done();
 
                 });

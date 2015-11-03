@@ -114,7 +114,6 @@ describe ('Event ADD PARTICIPANT', function () {
                 .end(function (err, res) {
                     res.status.should.equal(400);
                     res.text.should.equal('No spots left');
-
                     done();
 
                 });

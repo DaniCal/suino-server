@@ -60,9 +60,8 @@ describe ('Notification POST', function () {
                         res.status.should.equal(200);
                         NotificationModel.findOne({_id: notification._id}, function(err, notification){
                             notification.read.should.equal(true);
+                            done();
                         });
-
-                        done();
                     });
             });
         });

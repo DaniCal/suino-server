@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var NotificationSchema = new Schema({
     userId: {type: String},
+    sourceId: {type: String},
     type: {type: Number},
     message: {type: String},
     token: {type: String},
@@ -30,6 +31,7 @@ var createNotification = function(data, type, callback){
 
     var newNotification = new NotificationModel({
         userId: data.userId,
+        sourceId: data.sourceId,
         type: type,
         message: generateNotificationMessage(type),
         token: data.token,
@@ -102,7 +104,7 @@ Notification.query = function(data, callback){
 var isNotificationDataValid = function(data){
     if(data == null || data == undefined){
         return false;
-    }else if(data.userId == undefined || data.token == undefined ){
+    }else if(data.userId == undefined || data.sourceId == undefined||data.token == undefined ){
         return false;
     }else{
         return true;
@@ -110,7 +112,7 @@ var isNotificationDataValid = function(data){
 };
 
 var generateNotificationMessage = function(type){
-    return 'This is my default notification message';
+    return 'This is my default notification message, type: ' + type;
 };
 
 var getDate = function(){
