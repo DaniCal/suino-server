@@ -1,5 +1,7 @@
 
+var mongoose = require('mongoose');
 
+var Schema = mongoose.Schema;
 
 var CourseTestData = function(){
 
@@ -13,7 +15,7 @@ var specificEventId = '567567';
 var myTags = ['yoga','meditation'];
 
 CourseTestData.mySpecificSet1 = {
-    id: null,
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -26,7 +28,7 @@ CourseTestData.mySpecificSet1 = {
 };
 
 CourseTestData.mySet2 = {
-    id: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000002'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -39,7 +41,7 @@ CourseTestData.mySet2 = {
 };
 
 CourseTestData.mySet3 = {
-    id: '3',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -52,7 +54,7 @@ CourseTestData.mySet3 = {
 };
 
 CourseTestData.mySet4 = {
-    id: '4',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000004'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -66,7 +68,7 @@ CourseTestData.mySet4 = {
 
 
 CourseTestData.notMySet1 = {
-    id: '11',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000011'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -79,7 +81,7 @@ CourseTestData.notMySet1 = {
 };
 
 CourseTestData.notMySet2 = {
-    id: '5',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000012'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -93,7 +95,6 @@ CourseTestData.notMySet2 = {
 
 
 CourseTestData.setIncomplete = {
-    id: '5',
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -105,7 +106,6 @@ CourseTestData.setIncomplete = {
 };
 
 CourseTestData.setInvalidDataType1 = {
-    id: '5',
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -118,7 +118,6 @@ CourseTestData.setInvalidDataType1 = {
 };
 
 CourseTestData.setInvalidDataType2 = {
-    id: '5',
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
