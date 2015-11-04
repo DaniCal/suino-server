@@ -44,13 +44,13 @@ describe ('Event CANCEL COURSE', function () {
                 .put('/event/cancel')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set1Empty.eventId
+                    _id: EventTestData.set1Empty._id
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     EventModel.findOne(
-                        {eventId: EventTestData.set1Empty.eventId},
+                        {_id: EventTestData.set1Empty._id},
                         function(err, event){
                             event.state.should.equal(3, 'state not changed to canceled');
                             res.text.should.equal('event canceled');
@@ -66,13 +66,13 @@ describe ('Event CANCEL COURSE', function () {
                 .put('/event/cancel')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set2PlacesLeft.eventId
+                    _id: EventTestData.set2PlacesLeft._id
                 })
                 .expect(400)
                 .end(function (err, res) {
                     res.status.should.equal(400);
                     EventModel.findOne(
-                        {eventId: EventTestData.set2PlacesLeft.eventId},
+                        {_id: EventTestData.set2PlacesLeft._id},
                         function(err, event){
                             event.state.should.equal(1, 'state should not change to canceled');
                             res.text.should.equal('event can not be canceled');
@@ -87,7 +87,7 @@ describe ('Event CANCEL COURSE', function () {
                 .put('/event/cancel')
                 .type('json')
                 .send({
-                    eventId: '123123123123123'
+                    _id: EventTestData.set5Canceled
                 })
                 .expect(404)
                 .end(function (err, res) {

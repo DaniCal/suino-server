@@ -27,7 +27,6 @@ describe ('Event GET EVENT', function () {
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
-        createEvent(EventTestData.set5Canceled);
 
         done();
     });
@@ -46,12 +45,12 @@ describe ('Event GET EVENT', function () {
                 .get('/event')
                 .type('json')
                 .query({
-                    eventId: EventTestData.set1Empty.eventId
+                    _id: EventTestData.set1Empty._id.toString()
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.eventId.should.be.equal(EventTestData.set1Empty.eventId);
+                    res.body._id.should.be.equal(EventTestData.set1Empty._id.toString());
                     done();
 
                 });
@@ -64,7 +63,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event')
                 .type('json')
                 .query({
-                    eventId: 'blabalsdasd'
+                    _id: EventTestData.set5Canceled._id.toString()
                 })
                 .expect(204)
                 .end(function (err, res) {
@@ -103,10 +102,9 @@ describe ('Event GET EVENT', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.be.equal(3);
-                    res.body[0].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
-                    res.body[2].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
+                    res.body.length.should.be.equal(2);
+                    res.body[0]._id.should.be.equal(EventTestData.set4Canceled._id.toString());
+                    res.body[1]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
 
                     done();
 
@@ -128,7 +126,7 @@ describe ('Event GET EVENT', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.be.equal(1);
-                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
+                    res.body[0]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
                     done();
 
                 });
@@ -140,15 +138,14 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    courseId: EventTestData.set1Empty.courseId
+                    courseId: EventTestData.mySpecificCourseSet1._id.toString()
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.be.equal(3);
-                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set1Empty.eventId);
-                    res.body[2].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
+                    res.body.length.should.be.equal(2);
+                    res.body[0]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
+                    res.body[1]._id.should.be.equal(EventTestData.set1Empty._id.toString());
 
                     done();
 
@@ -161,7 +158,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    courseId: EventTestData.set1Empty.courseId,
+                    courseId: EventTestData.mySpecificCourseSet1._id.toString(),
                     start: 150000,
                     state: 1
                 })
@@ -169,8 +166,8 @@ describe ('Event GET EVENT', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.be.equal(2);
-                    res.body[0].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set1Empty.eventId);
+                    res.body[0]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
+                    res.body[1]._id.should.be.equal(EventTestData.set1Empty._id.toString());
                     done();
 
                 });
@@ -187,12 +184,10 @@ describe ('Event GET EVENT', function () {
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
-                    res.body.length.should.be.equal(4);
-                    res.body[0].eventId.should.be.equal(EventTestData.set3Full.eventId);
-                    res.body[1].eventId.should.be.equal(EventTestData.set4Canceled.eventId);
-                    res.body[2].eventId.should.be.equal(EventTestData.set2PlacesLeft.eventId);
-                    res.body[3].eventId.should.be.equal(EventTestData.set5Canceled.eventId);
-
+                    res.body.length.should.be.equal(3);
+                    res.body[0]._id.should.be.equal(EventTestData.set3Full._id.toString());
+                    res.body[1]._id.should.be.equal(EventTestData.set4Canceled._id.toString());
+                    res.body[2]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
                     done();
 
                 });

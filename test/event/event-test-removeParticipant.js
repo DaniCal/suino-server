@@ -42,14 +42,14 @@ describe ('Event REMOVE PARTICIPANT', function () {
                 .put('/event/removeParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set2PlacesLeft.eventId,
+                    _id: EventTestData.set2PlacesLeft._id.toString(),
                     participantId: EventTestData.set2PlacesLeft.participants[0]
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     EventModel.findOne(
-                        {eventId: EventTestData.set2PlacesLeft.eventId},
+                        {_id: EventTestData.set2PlacesLeft._id},
                         function(err, event){
                             event.participants.length.should.equal(1, 'participant not removed from list');
                             done();
@@ -64,7 +64,7 @@ describe ('Event REMOVE PARTICIPANT', function () {
                 .put('/event/removeParticipant')
                 .type('json')
                 .send({
-                    eventId: '1233333',
+                    _id: EventTestData.set5Canceled._id.toString(),
                     participantId: EventTestData.set2PlacesLeft.participants[0]
                 })
                 .expect(404)
@@ -81,7 +81,7 @@ describe ('Event REMOVE PARTICIPANT', function () {
                 .put('/event/removeParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set2PlacesLeft.eventId,
+                    _id: EventTestData.set2PlacesLeft._id.toString(),
                     participantId: 'abcd'
                 })
                 .expect(400)

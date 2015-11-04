@@ -6,7 +6,6 @@ var CourseModel = mongoose.model('Course');
 var EventModel = mongoose.model('Event');
 var SearchTestData = require('./search-test-data.js');
 var UserModel = mongoose.model('User');
-var async = require('async');
 
 
 //empty search
@@ -18,9 +17,8 @@ var async = require('async');
 //2 tag size
 //1 tag, size, level
 //2 tag, size, level
-
 //no full, no canceled
-
+//user not in DB
 
 var createUser = function(user){
     UserModel.create(user, function (err, user) {
@@ -31,12 +29,11 @@ var createUser = function(user){
 };
 
 
-var createCourse = function(course, callback){
-    CourseModel.create(course, function (err, course) {
+var createCourse = function(course){
+    CourseModel.create(course, function (err, courseItem) {
         if (err){
             throw err;
         }
-        callback(course);
     });
 };
 
@@ -44,7 +41,7 @@ var createCourse = function(course, callback){
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
         }
     });
 };
@@ -66,66 +63,28 @@ var clearTestDatabase = function(){
 
 describe ('SEARCH', function () {
 
-    var asyncTasks = [];
 
+    before(function (done) {
+        createCourse(SearchTestData.courseSet1);
 
-    var createCourse1 = function(callback){
-        createCourse(SearchTestData.courseSet1, function(course){
-            SearchTestData.eventSet1EmptyC1.courseId = course._id.toString();
-            SearchTestData.eventSet2PlacesLeftC1.courseId = course._id.toString();
-            SearchTestData.eventSet3FullC1.courseId = course._id.toString();
-            SearchTestData.eventSet4CanceledC1.courseId = course._id.toString();
-            SearchTestData.eventSet5PlacesLeftC1.courseId = course._id.toString();
-            SearchTestData.eventSet6EmptyC1.courseId = course._id.toString();
+        createEvent(SearchTestData.eventSet1EmptyC1);
+        createEvent(SearchTestData.eventSet2PlacesLeftC1);
+        createEvent(SearchTestData.eventSet3FullC1);
+        createEvent(SearchTestData.eventSet4CanceledC1);
+        createEvent(SearchTestData.eventSet5PlacesLeftC1);
+        createEvent(SearchTestData.eventSet6EmptyC1);
 
-            createEvent(SearchTestData.eventSet1EmptyC1);
-            createEvent(SearchTestData.eventSet2PlacesLeftC1);
-            createEvent(SearchTestData.eventSet3FullC1);
-            createEvent(SearchTestData.eventSet4CanceledC1);
-            createEvent(SearchTestData.eventSet5PlacesLeftC1);
-            createEvent(SearchTestData.eventSet6EmptyC1);
+        createCourse(SearchTestData.courseSet2);
+        createEvent(SearchTestData.eventSet1EmptyC2);
+        createEvent(SearchTestData.eventSet2PlacesLeftC2);
+        createEvent(SearchTestData.eventSet3FullC2);
+        createEvent(SearchTestData.eventSet4CanceledC2);
+        createEvent(SearchTestData.eventSet5PlacesLeftC2);
+        createEvent(SearchTestData.eventSet6EmptyC2);
 
-            callback();
-        });
-    };
+        createUser(SearchTestData.testUserInDb);
 
-    var createCourse2 = function(callback){
-        createCourse(SearchTestData.courseSet2, function(course){
-            SearchTestData.eventSet1EmptyC2.courseId = course._id.toString();
-            SearchTestData.eventSet2PlacesLeftC2.courseId = course._id.toString();
-            SearchTestData.eventSet3FullC2.courseId = course._id.toString();
-            SearchTestData.eventSet4CanceledC2.courseId = course._id.toString();
-            SearchTestData.eventSet5PlacesLeftC2.courseId = course._id.toString();
-            SearchTestData.eventSet6EmptyC2.courseId = course._id.toString();
-
-            createEvent(SearchTestData.eventSet1EmptyC2);
-            createEvent(SearchTestData.eventSet2PlacesLeftC2);
-            createEvent(SearchTestData.eventSet3FullC2);
-            createEvent(SearchTestData.eventSet4CanceledC2);
-            createEvent(SearchTestData.eventSet5PlacesLeftC2);
-            createEvent(SearchTestData.eventSet6EmptyC2);
-
-            callback();
-        });
-    };
-
-    before(function(done){
-
-
-        asyncTasks.push(
-            function(callback){
-                createCourse1(callback);
-            });
-
-        asyncTasks.push(
-            function(callback){
-                createCourse2(callback);
-            });
-
-        async.parallel(asyncTasks, function(){
-            createUser(SearchTestData.testUserInDb);
-            done();
-        });
+        done();
 
     });
 
@@ -169,16 +128,16 @@ describe ('SEARCH', function () {
 
 
 
-                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
-                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
-                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[5].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[6].event.eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
-                    res.body[7].event.eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
-                    res.body[8].event.eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
-                    res.body[9].event.eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
+                    res.body[0].event._id.should.equal(SearchTestData.eventSet3FullC1._id.toString(), 'Not sorted by time');
+                    res.body[1].event._id.should.equal(SearchTestData.eventSet3FullC2._id.toString(), 'Not sorted by time');
+                    res.body[2].event._id.should.equal(SearchTestData.eventSet5PlacesLeftC1._id.toString(), 'Not sorted by time');
+                    res.body[3].event._id.should.equal(SearchTestData.eventSet5PlacesLeftC2._id.toString(), 'Not sorted by time');
+                    res.body[4].event._id.should.equal(SearchTestData.eventSet2PlacesLeftC1._id.toString(), 'Not sorted by time');
+                    res.body[5].event._id.should.equal(SearchTestData.eventSet2PlacesLeftC2._id.toString(), 'Not sorted by time');
+                    res.body[6].event._id.should.equal(SearchTestData.eventSet1EmptyC1._id.toString(), 'Not sorted by time');
+                    res.body[7].event._id.should.equal(SearchTestData.eventSet1EmptyC2._id.toString(), 'Not sorted by time');
+                    res.body[8].event._id.should.equal(SearchTestData.eventSet6EmptyC1._id.toString(), 'Not sorted by time');
+                    res.body[9].event._id.should.equal(SearchTestData.eventSet6EmptyC2._id.toString(), 'Not sorted by time');
                     done();
                 });
         });
@@ -199,11 +158,11 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(5);
-                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC1.eventId, 'Not sorted by time');
-                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC1.eventId, 'Not sorted by time');
-                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet1EmptyC1.eventId, 'Not sorted by time');
-                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet6EmptyC1.eventId, 'Not sorted by time');
+                    res.body[0].event._id.should.equal(SearchTestData.eventSet3FullC1._id.toString(), 'Not sorted by time');
+                    res.body[1].event._id.should.equal(SearchTestData.eventSet5PlacesLeftC1._id.toString(), 'Not sorted by time');
+                    res.body[2].event._id.should.equal(SearchTestData.eventSet2PlacesLeftC1._id.toString(), 'Not sorted by time');
+                    res.body[3].event._id.should.equal(SearchTestData.eventSet1EmptyC1._id.toString(), 'Not sorted by time');
+                    res.body[4].event._id.should.equal(SearchTestData.eventSet6EmptyC1._id.toString(), 'Not sorted by time');
                     done();
                 });
         });
@@ -223,11 +182,11 @@ describe ('SEARCH', function () {
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     res.body.length.should.equal(5);
-                    res.body[0].event.eventId.should.equal(SearchTestData.eventSet3FullC2.eventId, 'Not sorted by time');
-                    res.body[1].event.eventId.should.equal(SearchTestData.eventSet5PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[2].event.eventId.should.equal(SearchTestData.eventSet2PlacesLeftC2.eventId, 'Not sorted by time');
-                    res.body[3].event.eventId.should.equal(SearchTestData.eventSet1EmptyC2.eventId, 'Not sorted by time');
-                    res.body[4].event.eventId.should.equal(SearchTestData.eventSet6EmptyC2.eventId, 'Not sorted by time');
+                    res.body[0].event._id.should.equal(SearchTestData.eventSet3FullC2._id.toString(), 'Not sorted by time');
+                    res.body[1].event._id.should.equal(SearchTestData.eventSet5PlacesLeftC2._id.toString(), 'Not sorted by time');
+                    res.body[2].event._id.should.equal(SearchTestData.eventSet2PlacesLeftC2._id.toString(), 'Not sorted by time');
+                    res.body[3].event._id.should.equal(SearchTestData.eventSet1EmptyC2._id.toString(), 'Not sorted by time');
+                    res.body[4].event._id.should.equal(SearchTestData.eventSet6EmptyC2._id.toString(), 'Not sorted by time');
                     done();
                 });
         });

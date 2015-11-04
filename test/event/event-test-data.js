@@ -1,3 +1,8 @@
+var mongoose = require('mongoose');
+
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
+
 var EventTestData = function(){
 
 };
@@ -5,9 +10,23 @@ var EventTestData = function(){
 
 var me = '123123';
 
+
+EventTestData.mySpecificCourseSet1 = {
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000011'),
+    date: 12,
+    description: 'some description',
+    teacherFbId: '123123',
+    level: 1,
+    location:  [20,20],
+    groupSize: 4,
+    category: 'fitness',
+    tags: ['yoga'],
+    price: 5
+};
+
 EventTestData.set1Empty = {
-    eventId: '1',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
+    courseId: EventTestData.mySpecificCourseSet1._id,
     participants: [],
     start: 220000,
     end: 220000,
@@ -15,8 +34,8 @@ EventTestData.set1Empty = {
 };
 
 EventTestData.set2PlacesLeft = {
-    eventId: '2',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000002'),
+    courseId: EventTestData.mySpecificCourseSet1._id,
     participants: [me, '3345345'],
     start: 210000,
     end: 210010,
@@ -24,7 +43,7 @@ EventTestData.set2PlacesLeft = {
 };
 
 EventTestData.set3Full = {
-    eventId: '3',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
     courseId: '3',
     participants: [me, '3345345'],
     start: 100000,
@@ -33,7 +52,7 @@ EventTestData.set3Full = {
 };
 
 EventTestData.set4Canceled = {
-    eventId: '4',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000004'),
     courseId: '4',
     participants: ['234234', me],
     start: 200000,
@@ -42,7 +61,7 @@ EventTestData.set4Canceled = {
 };
 
 EventTestData.set5Canceled = {
-    eventId: '4',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000005'),
     courseId: '1',
     participants: ['234234', me],
     start: 300000,

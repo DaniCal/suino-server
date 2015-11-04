@@ -5,7 +5,7 @@ var Course = require('./course.js');
 
 
 var EventSchema = new Schema({
-    eventId: {type: String},
+    //eventId: {type: String},
     courseId: {type: String},
     participants: {type: [String]},
     start: {type: Number},
@@ -15,14 +15,14 @@ var EventSchema = new Schema({
 
 var EventModel = mongoose.model('Event', EventSchema);
 
-var Event = function(data){
-    if(data.eventId == undefined){
-        this._courseId = data.courseId;
-        this._start = data.start;
-        this._end = data.end;
-    }else{
-        this._eventId = data.eventId;
-    }
+var Event = function(){
+    //if(data.eventId == undefined){
+    //    this._courseId = data.courseId;
+    //    this._start = data.start;
+    //    this._end = data.end;
+    //}else{
+    //    this._eventId = data.eventId;
+    //}
 };
 
 var EventStates = {
@@ -39,7 +39,7 @@ Event.createEvent = function(data, callback){
     }
 
     var newEvent = new EventModel({
-        eventId: uuid.v4(),
+        //eventId: uuid.v4(),
         courseId: this._courseId,
         participants: [],
         start: this._start,
@@ -57,11 +57,11 @@ Event.createEvent = function(data, callback){
 };
 
 Event.load = function(data, callback){
-    if(data == null || data == undefined || data.eventId == undefined){
+    if(data == null || data == undefined || data._id == undefined){
         callback('data invalid', 400);
     }
 
-    EventModel.findOne({eventId: data.eventId}, function(err, event){
+    EventModel.findOne({_id: data._id}, function(err, event){
         if(err){
             callback(err, 500);
         }else if(!event){
@@ -92,7 +92,7 @@ var isAddParticipantDataValid = function(data){
     if(data == null || data == undefined){
         return false;
     }else if(
-        data.eventId == undefined ||
+        data._id == undefined ||
         data.participantId == undefined
     ){
         return false;
@@ -109,7 +109,7 @@ Event.addParticipant = function(data, callback){
     }
 
     EventModel.findOne(
-        {eventId: data.eventId},
+        {_id: data._id},
         function(err, event){
             if(err){
                 callback(err, 500);
@@ -156,7 +156,7 @@ Event.removeParticipant = function(data, callback){
     }
 
     EventModel.findOne(
-        {eventId: data.eventId},
+        {_id: data._id},
         function(err, event){
             if(err){
                 callback(err, 500);
@@ -187,13 +187,13 @@ Event.removeParticipant = function(data, callback){
 };
 
 Event.cancel = function(data, callback){
-    if(data == null || data == undefined || data.eventId == undefined){
+    if(data == null || data == undefined || data._id == undefined){
         callback(400, 'data not valid');
         return;
     }
 
     EventModel.findOne(
-        {eventId: data.eventId},
+        {_id: data._id},
         function(err, event){
             if(err){
                 callback(err, 500);

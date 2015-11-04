@@ -12,7 +12,7 @@ var CourseTestData = require('../course/course-test-data.js');
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
         }
     });
 };
@@ -42,12 +42,12 @@ describe ('Event ADD PARTICIPANT', function () {
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
-
         createCourse(CourseTestData.mySpecificSet1);
-        createCourse(CourseTestData.mySet2);
-        createCourse(CourseTestData.mySet3);
-        createCourse(CourseTestData.notMySet1);
-        createCourse(CourseTestData.notMySet2);
+
+        //createCourse(CourseTestData.mySet2);
+        //createCourse(CourseTestData.mySet3);
+        //createCourse(CourseTestData.notMySet1);
+        //createCourse(CourseTestData.notMySet2);
 
         done();
     });
@@ -63,14 +63,14 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set2PlacesLeft.eventId,
+                    _id: EventTestData.set2PlacesLeft._id,
                     participantId: '567567'
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     EventModel.findOne(
-                        {eventId: EventTestData.set2PlacesLeft.eventId},
+                        {_id: EventTestData.set2PlacesLeft._id},
                         function(err, event){
                             event.participants.length.should.equal(3, 'participant not added to list');
                             done();
@@ -85,14 +85,14 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set1Empty.eventId,
+                    _id: EventTestData.set1Empty._id,
                     participantId: '567567'
                 })
                 .expect(200)
                 .end(function (err, res) {
                     res.status.should.equal(200);
                     EventModel.findOne(
-                        {eventId: EventTestData.set1Empty.eventId},
+                        {_id: EventTestData.set1Empty._id},
                         function(err, event){
                             event.participants.length.should.equal(1, 'participant not added to list');
                             done();
@@ -107,13 +107,14 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set3Full.eventId,
+                    _id: EventTestData.set3Full._id,
                     participantId: '567567'
                 })
                 .expect(400)
                 .end(function (err, res) {
                     res.status.should.equal(400);
                     res.text.should.equal('No spots left');
+
                     done();
 
                 });
@@ -125,7 +126,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set2PlacesLeft.eventId,
+                    _id: EventTestData.set2PlacesLeft._id,
                     participantId: EventTestData.set2PlacesLeft.participants[0]
                 })
                 .expect(400)
@@ -143,7 +144,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: EventTestData.set4Canceled.eventId,
+                    _id: EventTestData.set4Canceled._id,
                     participantId: 'sgfsdf'
                 })
                 .expect(400)
@@ -162,7 +163,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .put('/event/addParticipant')
                 .type('json')
                 .send({
-                    eventId: '999999',
+                    _id: EventTestData.set5Canceled._id,
                     participantId: 'sgfsdf'
                 })
                 .expect(404)
