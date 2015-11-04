@@ -65,7 +65,7 @@ exports.myClasses = function(req, res){
 };
 
 var generateMyClassesResultObjectTask = function(course, result, callback){
-    Event.queryInternal({courseId: course.id, state: 1}, function(err, events){
+    Event.queryInternal({courseId: course._id, state: 1}, function(err, events){
        if(err) {
            callback();
        }else{

@@ -1,3 +1,7 @@
+var mongoose = require('mongoose');
+
+var Schema = mongoose.Schema;
+
 var ApiTestData = function(){
 
 };
@@ -10,7 +14,7 @@ ApiTestData.fbId = myFbId;
 //Course 1
 
 ApiTestData.courseSet1 = {
-    id: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000101'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -25,8 +29,8 @@ ApiTestData.courseSet1 = {
 };
 
 ApiTestData.eventSet1EmptyC1 = {
-    eventId: '1',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: [],
     start: 220000,
     end: 220000,
@@ -34,8 +38,8 @@ ApiTestData.eventSet1EmptyC1 = {
 };
 
 ApiTestData.eventSet2PlacesLeftC1 = {
-    eventId: '2',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000002'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: [me, '3345345'],
     start: 210000,
     end: 210010,
@@ -43,8 +47,8 @@ ApiTestData.eventSet2PlacesLeftC1 = {
 };
 
 ApiTestData.eventSet3FullC1 = {
-    eventId: '3',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: [me, '3345345', '23423234', '234333'],
     start: 100000,
     end: 100010,
@@ -52,8 +56,8 @@ ApiTestData.eventSet3FullC1 = {
 };
 
 ApiTestData.eventSet4CanceledC1 = {
-    eventId: '4',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000004'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: ['234234', me],
     start: 200000,
     end: 200010,
@@ -61,8 +65,8 @@ ApiTestData.eventSet4CanceledC1 = {
 };
 
 ApiTestData.eventSet5PlacesLeftC1 = {
-    eventId: '5',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000005'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: ['234234', me, '4353455'],
     start: 200000,
     end: 200010,
@@ -70,8 +74,8 @@ ApiTestData.eventSet5PlacesLeftC1 = {
 };
 
 ApiTestData.eventSet6EmptyC1 = {
-    eventId: '6',
-    courseId: '1',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000006'),
+    courseId: ApiTestData.courseSet1._id.toString(),
     participants: [],
     start: 250000,
     end: 250010,
@@ -81,7 +85,7 @@ ApiTestData.eventSet6EmptyC1 = {
 //Course 2
 
 ApiTestData.courseSet2 = {
-    id: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000102'),
     date: 12,
     description: 'some description',
     teacherFbId: myFbId,
@@ -96,8 +100,8 @@ ApiTestData.courseSet2 = {
 };
 
 ApiTestData.eventSet1EmptyC2 = {
-    eventId: '7',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000007'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: [],
     start: 220001,
     end: 220011,
@@ -105,8 +109,8 @@ ApiTestData.eventSet1EmptyC2 = {
 };
 
 ApiTestData.eventSet2PlacesLeftC2 = {
-    eventId: '8',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000008'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: [me, '3345345'],
     start: 210001,
     end: 210011,
@@ -114,8 +118,8 @@ ApiTestData.eventSet2PlacesLeftC2 = {
 };
 
 ApiTestData.eventSet3FullC2 = {
-    eventId: '9',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000009'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: [me, '3345345', '23423234', '234333'],
     start: 100001,
     end: 100011,
@@ -123,8 +127,8 @@ ApiTestData.eventSet3FullC2 = {
 };
 
 ApiTestData.eventSet4CanceledC2 = {
-    eventId: '10',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000010'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: ['234234', me],
     start: 200001,
     end: 200011,
@@ -132,8 +136,8 @@ ApiTestData.eventSet4CanceledC2 = {
 };
 
 ApiTestData.eventSet5PlacesLeftC2 = {
-    eventId: '11',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000011'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: ['234234', me, '4353455'],
     start: 200001,
     end: 200011,
@@ -141,8 +145,8 @@ ApiTestData.eventSet5PlacesLeftC2 = {
 };
 
 ApiTestData.eventSet6EmptyC2 = {
-    eventId: '12',
-    courseId: '2',
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000012'),
+    courseId: ApiTestData.courseSet2._id.toString(),
     participants: [],
     start: 250001,
     end: 250011,

@@ -108,7 +108,9 @@ describe ('MyClass', function () {
                     res.body.length.should.equal(2, 'course number does not match');
                     should.exist(res.body[0].course, "course object is not part of the result object");
                     should.exist(res.body[0].events, "course object is not part of the result object");
-                    res.body[0].course.id.should.equal(ApiTestData.courseSet1.id);
+                    res.body[0].course._id.should.equal(ApiTestData.courseSet1._id.toString());
+                    res.body[1].course._id.should.equal(ApiTestData.courseSet2._id.toString());
+
                     should.exist(res.body[0].course.tags, 'tags is not part of the course object');
                     should.exist(res.body[0].course.price, 'price is not part of the course object');
                     should.exist(res.body[0].course.level, 'level is not part of the course object');
