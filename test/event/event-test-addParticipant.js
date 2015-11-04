@@ -42,7 +42,8 @@ describe ('Event ADD PARTICIPANT', function () {
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
-        createCourse(CourseTestData.mySpecificSet1);
+        createCourse(EventTestData.mySpecificCourseSet1);
+        createCourse(EventTestData.mySpecificCourseSet2);
 
         //createCourse(CourseTestData.mySet2);
         //createCourse(CourseTestData.mySet3);

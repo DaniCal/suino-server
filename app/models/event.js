@@ -117,7 +117,7 @@ Event.addParticipant = function(data, callback){
                 callback('Not found', 404);
             }else{
 
-                Course.load(event, function(err, course){
+                Course.load({_id: event.courseId}, function(err, code, course){
                     if(course.groupSize <= event.participants.length){
                         callback('No spots left', 400);
                     } else if(event.participants.indexOf(data.participantId) > -1){

@@ -24,6 +24,19 @@ EventTestData.mySpecificCourseSet1 = {
     price: 5
 };
 
+EventTestData.mySpecificCourseSet2 = {
+    _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000012'),
+    date: 12,
+    description: 'some description',
+    teacherFbId: '123123',
+    level: 1,
+    location:  [20,20],
+    groupSize: 2,
+    category: 'fitness',
+    tags: ['yoga'],
+    price: 5
+};
+
 EventTestData.set1Empty = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
     courseId: EventTestData.mySpecificCourseSet1._id,
@@ -44,7 +57,7 @@ EventTestData.set2PlacesLeft = {
 
 EventTestData.set3Full = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
-    courseId: '3',
+    courseId: EventTestData.mySpecificCourseSet2._id.toString(),
     participants: [me, '3345345'],
     start: 100000,
     end: 100010,
