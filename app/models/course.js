@@ -1,36 +1,35 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../controllers/user.js');
+var val = {
+    categories : [
+        'sport',
+        'language',
+        'music',
+        'cuisine'
+    ],
+    minLevel : 1,
+    maxLevel : 3,
+    maxPrice : 50,
+    minPrice : 0,
+    minGroupSize : 1
 
-var categories = [
-    'sport',
-    'language',
-    'music',
-    'cuisine'
-];
-
-
-var minLevel = 1;
-var maxLevel = 3;
-
-var maxPrice = 50;
-var minPrice = 0;
-var minGroupSize = 1;
+};
 
 var CourseSchema = new Schema({
         date : {type: Number},
         description: {type: String, required: true},
         _teacher: { type: Schema.Types.ObjectId, ref: 'User', required: true},
-        level: {type: Number, required: true, min: minLevel, max: maxLevel},
+        level: {type: Number, required: true, min: val.minLevel, max: val.maxLevel},
         location: {
                 type: [Number],
                 index: '2d',
                 required: true
         },
-        category: {type: String, required: true, enum: categories},
+        category: {type: String, required: true, enum: val.categories},
         tags: {type: [String], required: true},
-        price: {type: Number, required: true, min: minPrice, max: maxPrice},
-        groupSize: {type: Number, required: true, min: minGroupSize},
+        price: {type: Number, required: true, min: val.minPrice, max: val.maxPrice},
+        groupSize: {type: Number, required: true, min: val.minGroupSize},
         events: [{ type: Schema.Types.ObjectId, ref: 'Event' }]
     }
 );
@@ -68,18 +67,6 @@ Course.createCourse = function(data, callback){
     });
 };
 
-Course.load = function(data, callback){
-    CourseModel.findById(data._id, function(err, course){
-        if(err){
-            callback(err, 500, false);
-        }else if(!course){
-            callback('Not found', 204, false);
-        }else{
-            callback(false, 200, course)
-        }
-    });
-};
-
 Course.loadById = function(data, callback){
     if(data == null || data == undefined || data._id == undefined){
         callback('data not valid', 400);
@@ -100,10 +87,10 @@ Course.loadById = function(data, callback){
 };
 
 Course.update = function(data, callback){
-    //if(data == null || data == undefined || data._id == undefined){
-    //    callback('data incomplete', 400);
-    //    return;
-    //}
+    if(data == null || data._id == undefined){
+        callback('data not valid', 400);
+        return;
+    }
     CourseModel.findOne({_id: data._id}, function(err, course){
         if(err){
             callback(err, 400);
@@ -138,8 +125,6 @@ Course.update = function(data, callback){
                 course.price = data.price;
             }
 
-
-
             if(course.validateSync() == undefined){
                 course.save(function(err){
                     if(err){
@@ -157,7 +142,6 @@ Course.update = function(data, callback){
 };
 
 Course.search = function(data, callback){
-
     var query = buildCourseQuery(data);
     query.exec(callback);
 

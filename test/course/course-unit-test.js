@@ -100,6 +100,19 @@ describe ('Course UNIT Model', function () {
         done();
     });
 
+
+    it('should return the update information is not valid (level negative)',
+        function(done){
+            CourseM.update(
+                null,
+                function(err, statusCode){
+                    err.should.exist;
+                    statusCode.should.be.equal(400);
+                    err.should.be.equal('data not valid');
+                    done();
+                });
+        });
+
     it('should return the update information is not valid (level negative)',
         function(done){
             CourseM.update(
@@ -200,7 +213,7 @@ describe ('Course UNIT Model', function () {
 
                 });
         });
-    
+
     it('should return the course was updated (all)',
         function(done){
             CourseM.update(

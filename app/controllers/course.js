@@ -4,7 +4,7 @@ var Course = require('../models/course.js');
 
 exports.load = function(req, res){
     var data = req.query;
-    Course.load(data, function(err, statusCode, course){
+    Course.loadById(data, function(err, statusCode, course){
         if (err){
             res.status(statusCode).send(err);
         }else{
@@ -13,7 +13,7 @@ exports.load = function(req, res){
     });
 };
 
-exports.create = function(req, res){
+exports.create = function(req, res)gi{
     var data = req.body;
     Course.createCourse(data, function(msg, statusCode){
         res.status(statusCode).send(msg);
