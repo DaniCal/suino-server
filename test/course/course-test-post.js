@@ -4,28 +4,45 @@ var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
 var CourseTestData = require('./course-test-data.js');
+var UserModel = mongoose.model('User');
 
 
-var createCourse = function(course, callback){
+var createUser = function(user){
+    UserModel.create(user, function (err, user) {
+        if (err){
+            throw err;
+        }
+    });
+};
+
+var createCourse = function(course){
     CourseModel.create(course, function (err, course) {
         if (err){
-            throw 'Test course was not created';
-        }else{
-            callback();
+            throw err;
         }
     });
 };
 
 var clearTestDatabase = function(){
     CourseModel.remove({}, function(err){
-        if(err) throw 'Database was not cleared';
+        if(err) {
+            throw err;
+        }
+    });
+
+    UserModel.remove({}, function (err) {
+        if (err){
+            throw err;
+        }
     });
 };
 
 describe ('Course POST', function (){
 
     before(function(done){
-        createCourse(CourseTestData.mySpecificSet1, done);
+        createUser(CourseTestData.testUser);
+        createCourse(CourseTestData.mySpecificSet1);
+        done();
     });
 
     after(function(done){

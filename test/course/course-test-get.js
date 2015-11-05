@@ -4,7 +4,7 @@ var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var CourseModel = mongoose.model('Course');
 var CourseTestData = require('./course-test-data.js');
-var async = require('async');
+var UserModel = mongoose.model('User');
 
 var createCourse = function(course){
     CourseModel.create(course, function (err, courseItem) {
@@ -14,8 +14,21 @@ var createCourse = function(course){
     });
 };
 
+var createUser = function(user){
+    UserModel.create(user, function (err, user) {
+        if (err){
+            throw err;
+        }
+    });
+};
+
+
 var clearTestDatabase = function(){
     CourseModel.remove({}, function(err){
+        if(err) throw 'Database was not cleared';
+    });
+
+    UserModel.remove({}, function(err){
         if(err) throw 'Database was not cleared';
     });
 };
@@ -23,6 +36,7 @@ var clearTestDatabase = function(){
 describe ('Course GET', function () {
 
     before(function(done){
+        createUser(CourseTestData.testUser);
         createCourse(CourseTestData.mySpecificSet1);
         createCourse(CourseTestData.mySet2);
         createCourse(CourseTestData.mySet3);
@@ -47,20 +61,20 @@ describe ('Course GET', function () {
                 .expect(200)
                 .end(function(err, res){
                     res.status.should.equal(200);
-                    CourseModel.findOne({_id: CourseTestData.mySpecificSet1._id},function(err, course) {
-                        should.not.exist(err);
-                        course.should.be.an.instanceOf(CourseModel);
-                        course._id.toString().should.be.equal(CourseTestData.mySpecificSet1._id.toString());
-                        course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
-                        course.teacherFbId.should.be.equal(CourseTestData.mySpecificSet1.teacherFbId);
-
-                        done();
+                    CourseModel.findOne({_id: CourseTestData.mySpecificSet1._id})
+                        .populate('teacherFbId')
+                        .exec(function(err, course) {
+                            should.not.exist(err);
+                            course.should.be.an.instanceOf(CourseModel);
+                            course._id.toString().should.be.equal(CourseTestData.mySpecificSet1._id.toString());
+                            course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
+                            course.teacherFbId._id.toString().should.be.equal(CourseTestData.mySpecificSet1.teacherFbId.toString());
+                            course.teacherFbId.fbName.should.be.equal(CourseTestData.testUser.fbName);
+                            done();
                     });
-
                 });
         });
-
-
+    
     it('should return list of courseIds sorted by proximity',
         function(done){
 

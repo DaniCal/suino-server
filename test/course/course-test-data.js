@@ -8,11 +8,22 @@ var CourseTestData = function(){
 };
 
 
-var myFbId = '234234';
-var notMyParticipantId = '567567567';
-var specificCourseId = '123123';
-var specificEventId = '567567';
+var myFbId = mongoose.Types.ObjectId('4edd40c86762e0fb12100001').toString();
 var myTags = ['yoga','meditation'];
+
+CourseTestData.testUser = {
+    _id: myFbId,
+    fbName: 'Dani Lo',
+    fbId: '123123123',
+    fbPictureLink: 'somelink.com/pic',
+    age: 25,
+    email: 'daniel.lohse@trash.com',
+    city: 'Barcelona',
+    date: 123123123,
+    device: [{token: 'somerandomtoken', platform: 'android'}],
+    gender: 'male'
+
+};
 
 CourseTestData.mySpecificSet1 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),

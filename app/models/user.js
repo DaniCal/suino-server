@@ -99,6 +99,23 @@ User.load = function(data, callback){
     });
 };
 
+User.loadById = function(data, callback){
+    if(data == null || data == undefined || data._id == undefined){
+        callback('data not valid', 400);
+        return;
+    }
+
+    UserModel.findById(data._id, function(err, user){
+        if(err){
+            callback('server error', 500);
+        }else if(!user){
+            callback('user not found', 204);
+        }else{
+            callback(false, 200, user);
+        }
+    });
+};
+
 
 var isUserDataValid = function(data){
     if(data == null || data == undefined){

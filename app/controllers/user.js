@@ -13,6 +13,7 @@ exports.load = function(req, res){
     });
 };
 
+
 exports.create = function(req, res) {
     var data = req.body;
     User.load(data, function(err){
@@ -30,6 +31,18 @@ exports.login = function (req, res) {
     var data = req.body;
     User.login(data, function(msg, statusCode){
             res.status(statusCode).send(msg);
+    });
+};
+
+//______________________________INTERNAL CALLS
+
+exports.loadById = function(data, callback){
+    User.loadById(data, function(err, statusCode, user){
+        if(err){
+            callback(err);
+        }else{
+            callback(false, user);
+        }
     });
 };
 

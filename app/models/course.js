@@ -1,12 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var uuid = require('node-uuid');
+var User = require('../controllers/user.js');
+
 
 var CourseSchema = new Schema({
         id: {type: String},
         date : {type: Number},
         description: {type: String},
-        teacherFbId: {type: String},
+        teacherFbId: { type: Schema.Types.ObjectId, ref: 'User' },
         level: {type: Number},
         location: {
                 type: [Number],
@@ -15,7 +16,8 @@ var CourseSchema = new Schema({
         category: {type: String},
         tags: {type: [String]},
         price: {type: Number},
-        groupSize: {type: Number}
+        groupSize: {type: Number},
+        events: [{ type: Schema.Types.ObjectId, ref: 'Event' }]
     }
 );
 
@@ -30,28 +32,32 @@ Course.createCourse = function(data, callback){
         return;
     }
 
-    var newCourse = new CourseModel({
-        //id: uuid.v4(),
-        date: getDate(),
-        description: data.description,
-        teacherFbId: data.teacherFbId,
-        level: data.level,
-        location: data.location,
-        category: data.category,
-        tags: data.tags,
-        price: data.price,
-        groupSize: data.groupSize
-    });
-
-    newCourse.save(function(err){
+    User.loadById({_id: data.teacherFbId}, function(err, user){
         if(err){
-            callback('internal error', 500)
+            callback(400);
         }else{
-            callback('course created', 201);
+            var newCourse = new CourseModel({
+                //id: uuid.v4(),
+                date: getDate(),
+                description: data.description,
+                teacherFbId: user._id,
+                level: data.level,
+                location: data.location,
+                category: data.category,
+                tags: data.tags,
+                price: data.price,
+                groupSize: data.groupSize
+            });
+
+            newCourse.save(function(err){
+                if(err){
+                    callback('internal error', 500)
+                }else{
+                    callback('course created', 201);
+                }
+            });
         }
     });
-
-
 };
 
 Course.load = function(data, callback){
