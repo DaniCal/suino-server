@@ -62,19 +62,19 @@ describe ('Course GET', function () {
                 .end(function(err, res){
                     res.status.should.equal(200);
                     CourseModel.findOne({_id: CourseTestData.mySpecificSet1._id})
-                        .populate('teacherFbId')
+                        .populate('_teacher')
                         .exec(function(err, course) {
                             should.not.exist(err);
                             course.should.be.an.instanceOf(CourseModel);
                             course._id.toString().should.be.equal(CourseTestData.mySpecificSet1._id.toString());
                             course.description.should.be.equal(CourseTestData.mySpecificSet1.description);
-                            course.teacherFbId._id.toString().should.be.equal(CourseTestData.mySpecificSet1.teacherFbId.toString());
-                            course.teacherFbId.fbName.should.be.equal(CourseTestData.testUser.fbName);
+                            course._teacher._id.toString().should.be.equal(CourseTestData.mySpecificSet1._teacher.toString());
+                            course._teacher.fbName.should.be.equal(CourseTestData.testUser.fbName);
                             done();
                     });
                 });
         });
-    
+
     it('should return list of courseIds sorted by proximity',
         function(done){
 

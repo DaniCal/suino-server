@@ -52,11 +52,11 @@ describe ('Course PUT', function (){
                 .put('/course')
                 .type('json')
                 .send({
-                    _id: '999999'
+                    _id: CourseTestData.mySet2._id
                 })
-                .expect(404)
+                .expect(400)
                 .end(function (err, res) {
-                    res.status.should.equal(404);
+                    res.status.should.equal(400);
                     res.text.should.equal('Not found');
                     done();
 
@@ -170,7 +170,7 @@ describe ('Course PUT', function (){
                 .type('json')
                 .send({
                     _id: CourseTestData.mySpecificSet1._id.toString(),
-                    category: 'sports'
+                    category: 'cuisine'
                 })
                 .expect(200)
                 .end(function (err, res) {
@@ -180,7 +180,7 @@ describe ('Course PUT', function (){
                     CourseModel.findOne(
                         {_id: CourseTestData.mySpecificSet1._id},
                         function(err, course){
-                            course.category.should.equal('sports', 'category was not updated');
+                            course.category.should.equal('cuisine', 'category was not updated');
                             done();
                         });
 
@@ -238,7 +238,7 @@ describe ('Course PUT', function (){
                 });
         });
 
-    it('should return that course was updated (case price, description, tags & wrong location)',
+    it('should return that course was updated (case price, description, tags & location)',
         function (done) {
             request(app)
                 .put('/course')
@@ -248,10 +248,8 @@ describe ('Course PUT', function (){
                     price: 25,
                     tags: ['beach', 'volleyball'],
                     description: 'some other description',
-                    location: {
-                        longitude: 4,
-                        latitude: 3
-                    }
+                    location: [3,4]
+
 
 
                 })
@@ -267,8 +265,8 @@ describe ('Course PUT', function (){
                             course.description.should.equal('some other description', 'description was not updated');
                             course.tags[0].should.equal('beach', 'tags was not updated');
                             course.tags[1].should.equal('volleyball', 'tags was not updated');
-                            course.location[0].should.equal(13, 'longitude was not updated');
-                            course.location[1].should.equal(13, 'latitude was not updated');
+                            course.location[0].should.equal(3, 'longitude was not updated');
+                            course.location[1].should.equal(4, 'latitude was not updated');
 
                             done();
                         });

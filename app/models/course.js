@@ -2,21 +2,35 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../controllers/user.js');
 
+var categories = [
+    'sport',
+    'language',
+    'music',
+    'cuisine'
+];
+
+
+var minLevel = 1;
+var maxLevel = 3;
+
+var maxPrice = 50;
+var minPrice = 0;
+var minGroupSize = 1;
 
 var CourseSchema = new Schema({
-        id: {type: String},
         date : {type: Number},
-        description: {type: String},
-        teacherFbId: { type: Schema.Types.ObjectId, ref: 'User' },
-        level: {type: Number},
+        description: {type: String, required: true},
+        _teacher: { type: Schema.Types.ObjectId, ref: 'User', required: true},
+        level: {type: Number, required: true, min: minLevel, max: maxLevel},
         location: {
                 type: [Number],
-                index: '2d'
+                index: '2d',
+                required: true
         },
-        category: {type: String},
-        tags: {type: [String]},
-        price: {type: Number},
-        groupSize: {type: Number},
+        category: {type: String, required: true, enum: categories},
+        tags: {type: [String], required: true},
+        price: {type: Number, required: true, min: minPrice, max: maxPrice},
+        groupSize: {type: Number, required: true, min: minGroupSize},
         events: [{ type: Schema.Types.ObjectId, ref: 'Event' }]
     }
 );
@@ -27,20 +41,14 @@ var Course = function(){
 };
 
 Course.createCourse = function(data, callback){
-    if(!isCourseDataValid(data)){
-        callback('data not valid', 400);
-        return;
-    }
-
-    User.loadById({_id: data.teacherFbId}, function(err, user){
+    User.loadById({_id: data.teacherId}, function(err, user){
         if(err){
             callback(400);
         }else{
             var newCourse = new CourseModel({
-                //id: uuid.v4(),
                 date: getDate(),
                 description: data.description,
-                teacherFbId: user._id,
+                _teacher: user._id,
                 level: data.level,
                 location: data.location,
                 category: data.category,
@@ -51,7 +59,7 @@ Course.createCourse = function(data, callback){
 
             newCourse.save(function(err){
                 if(err){
-                    callback('internal error', 500)
+                    callback(err, 400)
                 }else{
                     callback('course created', 201);
                 }
@@ -72,26 +80,49 @@ Course.load = function(data, callback){
     });
 };
 
-Course.update = function(data, callback){
+Course.loadById = function(data, callback){
     if(data == null || data == undefined || data._id == undefined){
-        callback('data incomplete', 400);
+        callback('data not valid', 400);
         return;
     }
+    CourseModel
+        .findById(data._id)
+        .populate('_teacher')
+        .exec(function(err, course){
+            if(err){
+                callback('server error', 500);
+            }else if(!course){
+                callback('course not found', 204);
+            }else{
+                callback(false, 200, course);
+            }
+        });
+};
+
+Course.update = function(data, callback){
+    //if(data == null || data == undefined || data._id == undefined){
+    //    callback('data incomplete', 400);
+    //    return;
+    //}
     CourseModel.findOne({_id: data._id}, function(err, course){
-        if(err || !course){
-            callback('Not found', 404);
-        }else{
+        if(err){
+            callback(err, 400);
+        }else if(!course) {
+            callback('Not found', 400);
+        }
+        else{
             if(data.description != undefined){
                 course.description = data.description;
             }
-            if(isLevelValid(data)){
+
+            if(data.level != undefined){
                 course.level = data.level;
             }
-            if(isLocationValid(data)){
+            if(data.location != undefined){
                 course.location = data.location;
             }
 
-            if(isGroupSizeValid(data)){
+            if(data.groupSize != undefined){
                 course.groupSize = data.groupSize;
             }
 
@@ -99,80 +130,30 @@ Course.update = function(data, callback){
                 course.category = data.category;
             }
 
-            if(isTagsValid(data)){
+            if(data.tags != undefined){
                 course.tags = data.tags;
             }
 
-            if(isPriceValid(data)){
+            if(data.price != undefined){
                 course.price = data.price;
             }
 
-            course.save(function(err){
-                if(err){
-                    callback('Internal Error', 500);
-                }else{
-                    callback('Course updated', 200);
-                }
-            });
 
+
+            if(course.validateSync() == undefined){
+                course.save(function(err){
+                    if(err){
+                        callback(err, 400);
+                    }else{
+                        callback('Course updated', 200);
+                    }
+                });
+            }else{
+                callback('data not valid', 400);
+            }
         }
 
     });
-};
-
-var isLevelValid = function(data){
-    if(data.level == undefined){
-        return false;
-    }else if(isNaN(data.level)){
-        return false;
-    }else if(data.level < 0 || data.level > 3){
-        return false;
-    }else{
-        return true;
-    }
-};
-
-var isLocationValid = function(data){
-  if(data.location == undefined){
-      return false;
-  }else if(!(data.location instanceof Array)){
-      return false;
-  }else if(isNaN(data.location[0]) || isNaN(data.location[1])){
-      return false;
-  }else{
-        return true;
-    }
-
-};
-
-var isGroupSizeValid = function(data){
-    if(data.groupSize == undefined){
-        return false;
-    }else if(isNaN(data.groupSize)){
-        return false;
-    }else{
-        return true;
-    }
-};
-
-var isTagsValid = function(data){
-  if(data.tags == undefined){
-      return false;
-  }else if(!(data.tags instanceof Array)){
-      return false;
-  }else{
-      return true;
-  }
-};
-
-var isPriceValid = function(data){
-  if(data.price == undefined){
-      return false;
-  }else if(isNaN(data.price)){
-      return false;
-  }else{
-      return true;
-  }
 };
 
 Course.search = function(data, callback){
@@ -241,63 +222,14 @@ var buildCourseQuery = function(data){
     }
 
     //TeacherFbId
-    if(data.fbId != undefined){
-        query.where('teacherFbId').equals(data.fbId);
+    if(data.teacherId != undefined){
+        query.where('_teacher').equals(data.teacherId);
     }
 
     return query;
 
 };
 
-Course.isCourseDataValid = function(data, callback){
-    if(data == null || data == undefined){
-        callback('data null or undefined');
-    }else if(!isDataComplete(data)){
-        callback('data is incomplete');
-    }else if(!isDataTypeValid(data)){
-        callback('data type is not valid');
-    }else{
-        callback();
-    }
-};
-
-var isCourseDataValid = function(data, callback){
-    if(data == null || data == undefined){
-        return false;
-    }else if(!isDataComplete(data)){
-        return false;
-    }else if(!isDataTypeValid(data)){
-        return false;
-    }else{
-        return true;
-    }
-};
-
-var isDataComplete = function(data){
-
-    return !(
-        data.description == undefined ||
-        data.teacherFbId == undefined ||
-        data.level == undefined ||
-        data.location == undefined ||
-        data.category == undefined ||
-        data.tags == undefined ||
-        data.tags == undefined ||
-        data.price == undefined ||
-        data.groupSize == undefined);
-};
-
-var isDataTypeValid = function(data){
-    if(isNaN(data.price)){
-        return false;
-    }else if(isNaN(data.level) || isNaN(data.groupSize)){
-        return false;
-    }else if(!(data.location instanceof Array)){
-        return false;
-    }
-    return true;
-
-};
 
 var getDate = function(){
     return Math.floor((new Date().getTime()/1000));

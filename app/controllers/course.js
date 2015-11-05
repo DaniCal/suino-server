@@ -49,3 +49,13 @@ exports.queryInternal = function (data, callback){
         }
     });
 };
+
+exports.loadById = function(data, callback){
+    Course.loadById(data, function(err, statusCode, course){
+       if(err){
+           callback(err);
+       }else{
+           callback(false, course);
+       }
+    });
+};

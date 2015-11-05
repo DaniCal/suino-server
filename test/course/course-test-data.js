@@ -1,8 +1,6 @@
 
 var mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
-
 var CourseTestData = function(){
 
 };
@@ -22,18 +20,19 @@ CourseTestData.testUser = {
     date: 123123123,
     device: [{token: 'somerandomtoken', platform: 'android'}],
     gender: 'male'
-
 };
+
+
 
 CourseTestData.mySpecificSet1 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
     date: 12,
-    description: 'some description',
-    teacherFbId: myFbId,
+    description: 'some description 1',
+    _teacher: myFbId,
     level: 1,
     location:  [20,20],
     groupSize: 4,
-    category: 'fitness',
+    category: 'sport',
     tags: myTags,
     price: 5
 };
@@ -41,12 +40,13 @@ CourseTestData.mySpecificSet1 = {
 CourseTestData.mySet2 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000002'),
     date: 12,
-    description: 'some description',
-    teacherFbId: myFbId,
+    description: 'some description 2',
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 1,
     location:  [23,23],
     groupSize: 1,
-    category: 'fitness',
+    category: 'sport',
     tags: myTags,
     price: 5
 };
@@ -55,11 +55,12 @@ CourseTestData.mySet3 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 2,
     location:  [22,22],
     groupSize: 2,
-    category: 'fitness',
+    category: 'sport',
     tags: myTags,
     price: 5
 };
@@ -68,11 +69,12 @@ CourseTestData.mySet4 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000004'),
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 1,
     location:  [30,30],
     groupSize: 6,
-    category: 'fitness',
+    category: 'sport',
     tags: myTags,
     price: 5
 };
@@ -82,11 +84,12 @@ CourseTestData.notMySet1 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000011'),
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 3,
     location:  [25,25],
     groupSize: 4,
-    category: 'fitness',
+    category: 'sport',
     tags: ['futbol'],
     price: 5
 };
@@ -95,11 +98,12 @@ CourseTestData.notMySet2 = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000012'),
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 2,
     location:  [25,25],
     groupSize: 4,
-    category: 'fitness',
+    category: 'sport',
     tags: ['tennis'],
     price: 5
 };
@@ -108,7 +112,8 @@ CourseTestData.notMySet2 = {
 CourseTestData.setIncomplete = {
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 3,
     location:  [25,25],
     groupSize: 4,
@@ -119,11 +124,12 @@ CourseTestData.setIncomplete = {
 CourseTestData.setInvalidDataType1 = {
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
+    _teacher: myFbId,
     level: 1,
     location:  [25,25],
     groupSize: 4,
-    category: 'fitness',
+    category: 'sport',
     tags: ['tennis'],
     price: '4s'
 };
@@ -131,11 +137,11 @@ CourseTestData.setInvalidDataType1 = {
 CourseTestData.setInvalidDataType2 = {
     date: 12,
     description: 'some description',
-    teacherFbId: myFbId,
+    teacherId: myFbId,
     level: 2,
     location:  25,
     groupSize: 4,
-    category: 'fitness',
+    category: 'sport',
     tags: ['tennis'],
     price: 5
 };

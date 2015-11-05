@@ -6,6 +6,7 @@ var CourseModel = mongoose.model('Course');
 var CourseTestData = require('./course-test-data.js');
 var UserModel = mongoose.model('User');
 
+//create course with user not in db
 
 var createUser = function(user){
     UserModel.create(user, function (err, user) {
@@ -105,22 +106,29 @@ describe ('Course POST', function (){
 
     it('should return that the course was created and data in the database',
         function(done){
-            var course = CourseTestData.mySpecificSet1;
             request(app)
                 .post('/course')
                 .type('json')
-                .send(course)
+                .send(CourseTestData.mySet2)
                 .expect(201)
                 .end(function(err, res){
                     res.status.should.equal(201);
-                    CourseModel.find({description: course.description}, function(err, courses){
-                        should.not.exist(err);
-                        should.exist(courses);
-                        courses.length.should.be.equal(1);
-                        should.exist(courses[0].id);
-                        should.exist(courses[0].date);
+                    CourseModel
+                        .find({description: CourseTestData.mySet2.description})
+                        .populate('_teacher')
+                        .exec(function(err, courses){
+                            should.not.exist(err);
+                            should.exist(courses);
+                            courses.length.should.be.equal(1);
+                            should.exist(courses[0]._id);
+                            should.exist(courses[0]._teacher);
+                            should.exist(courses[0]._teacher.fbName);
+                            courses[0]._teacher.fbName.should.be.equal(CourseTestData.testUser.fbName);
+                            courses[0].tags[0].should.be.equal(CourseTestData.mySet2.tags[0]);
+                            courses[0].tags[1].should.be.equal(CourseTestData.mySet2.tags[1]);
+                            done();
                     });
-                    done();
                 });
         });
+
 });
