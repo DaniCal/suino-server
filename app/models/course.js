@@ -36,6 +36,8 @@ var CourseSchema = new Schema({
     }
 );
 
+
+
 var CourseModel = mongoose.model('Course', CourseSchema);
 
 var Course = function(){

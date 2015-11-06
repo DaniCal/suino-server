@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
 var EventTestData = require('./event-test-data.js');
 var CourseModel = mongoose.model('Course');
+var UserModel = mongoose.model('User');
 
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
@@ -13,6 +14,15 @@ var createEvent = function(event){
         }
     });
 };
+
+var createUser = function(user){
+    UserModel.create(user, function (err, user) {
+        if (err){
+            throw err;
+        }
+    });
+};
+
 
 var createCourse = function(course){
     CourseModel.create(course, function (err, courseItem) {
@@ -29,6 +39,9 @@ var clearTestDatabase = function(){
     CourseModel.remove({}, function(err){
         if(err) throw err;
     });
+    UserModel.remove({}, function(err){
+        if(err) throw err;
+    });
 };
 
 
@@ -36,6 +49,7 @@ var clearTestDatabase = function(){
 describe ('Event GET EVENT', function () {
 
     before(function (done) {
+        createUser(EventTestData.testUser);
         createEvent(EventTestData.set1Empty);
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
@@ -127,6 +141,10 @@ describe ('Event GET EVENT', function () {
                     res.body[1]._course.description.should.exist;
                     res.body[1]._course.price.should.exist;
                     res.body[1]._course.groupSize.should.exist;
+                    res.body[0]._course._teacher.should.exist;
+                    res.body[0]._course._teacher.fbName.should.exist;
+                    res.body[0]._course._teacher.age.should.exist;
+
                     done();
 
                 });

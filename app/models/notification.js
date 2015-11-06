@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
+
 var NotificationSchema = new Schema({
     userId: {type: String},
     sourceId: {type: String},

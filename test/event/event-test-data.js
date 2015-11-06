@@ -5,7 +5,7 @@ var EventTestData = function(){
 
 };
 
-var myFbId = mongoose.Types.ObjectId('4edd40c86762e0fb12100001').toString();
+var myFbId = mongoose.Types.ObjectId('4edd40c86762e0fb12100000').toString();
 var participantId_1 = mongoose.Types.ObjectId('4edd40c86762e0fb12110001').toString();
 var participantId_2 = mongoose.Types.ObjectId('4edd40c86762e0fb12110003').toString();
 

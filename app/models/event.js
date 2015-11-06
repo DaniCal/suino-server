@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Course = require('../controllers/course.js');
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 var val = {
     states: [
@@ -16,7 +17,10 @@ var EventSchema = new Schema({
     state: {type: Number, enum: val.states, required: true}
 });
 
+EventSchema.plugin(deepPopulate);
+
 var EventModel = mongoose.model('Event', EventSchema);
+var CourseModel = mongoose.model('Course');
 
 var Event = function(){
 };
@@ -210,7 +214,9 @@ Event.query = function(data, callback){
         query.where('_course').equals(data._course);
     }
 
-    query.populate('_course');
+    query.deepPopulate(['_course','_course._teacher']);
+    //query.deepPopulate('_course._teacher');
+
 
     query.sort({start: 1}).exec(callback);
 };
