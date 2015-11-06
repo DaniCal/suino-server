@@ -13,7 +13,7 @@ exports.load = function(req, res){
     });
 };
 
-exports.create = function(req, res)gi{
+exports.create = function(req, res){
     var data = req.body;
     Course.createCourse(data, function(msg, statusCode){
         res.status(statusCode).send(msg);
@@ -59,3 +59,12 @@ exports.loadById = function(data, callback){
        }
     });
 };
+
+exports.addEvent = function(data, callback){
+    Course.addEvent(data, callback);
+};
+
+exports.removeEvent = function(data, callback){
+
+};
+

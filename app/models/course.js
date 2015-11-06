@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../controllers/user.js');
+var _ = require('underscore');
+
 var val = {
     categories : [
         'sport',
@@ -45,7 +47,7 @@ Course.createCourse = function(data, callback){
             callback(400);
         }else{
             var newCourse = new CourseModel({
-                date: getDate(),
+                date: _.now(),
                 description: data.description,
                 _teacher: user._id,
                 level: data.level,
@@ -144,8 +146,32 @@ Course.update = function(data, callback){
 Course.search = function(data, callback){
     var query = buildCourseQuery(data);
     query.exec(callback);
+};
+
+Course.addEvent = function(data, callback){
+    CourseModel.findById(data._course, function(err, course){
+        if(err){
+            callback(err, 400);
+        }else if(!course) {
+            callback('Not found', 400);
+        }else{
+
+            course.events.push(data._id);
+            course.save(function(err){
+                if(err){
+                    callback(err, 400);
+                }else{
+                    callback('Course updated', 200);
+                }
+            });
+        }
+    })
+};
+
+Course.removeEvent = function(data, callback){
 
 };
+
 
 var buildCourseQuery = function(data){
 
@@ -214,9 +240,5 @@ var buildCourseQuery = function(data){
 
 };
 
-
-var getDate = function(){
-    return Math.floor((new Date().getTime()/1000));
-};
 
 module.exports = Course;

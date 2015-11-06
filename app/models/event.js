@@ -1,28 +1,24 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var uuid = require('node-uuid');
-var Course = require('./course.js');
+var Course = require('../controllers/course.js');
 
+var val = {
+    states: [
+        1,2,3
+    ]
+};
 
 var EventSchema = new Schema({
-    //eventId: {type: String},
-    courseId: {type: String},
-    participants: {type: [String]},
-    start: {type: Number},
-    end: {type: Number},
-    state: {type: Number}
+    _course: {type: Schema.Types.ObjectId, ref: 'Course', required: true},
+    _participants: {type: [ {type: Schema.Types.ObjectId, ref: 'User'}]},
+    start: {type: Number, required: true},
+    end: {type: Number, required: true},
+    state: {type: Number, enum: val.states, required: true}
 });
 
 var EventModel = mongoose.model('Event', EventSchema);
 
 var Event = function(){
-    //if(data.eventId == undefined){
-    //    this._courseId = data.courseId;
-    //    this._start = data.start;
-    //    this._end = data.end;
-    //}else{
-    //    this._eventId = data.eventId;
-    //}
 };
 
 var EventStates = {
@@ -32,26 +28,26 @@ var EventStates = {
 };
 
 Event.createEvent = function(data, callback){
-
-    if(!isCreateDataValid(data)){
-        callback('data not valid', 400);
-        return;
-    }
-
-    var newEvent = new EventModel({
-        //eventId: uuid.v4(),
-        courseId: this._courseId,
-        participants: [],
-        start: this._start,
-        end: this._end,
-        state: EventStates.active
-    });
-
-    newEvent.save(function(err){
+    Course.loadById({_id: data._course}, function(err, course){
         if(err){
-            callback('server error', 500);
+            callback(400);
         }else{
-            callback('event created', 200);
+            var newEvent = new EventModel({
+                _course: data._course,
+                participants: [],
+                start: data.start,
+                end: data.end,
+                state: EventStates.active
+            });
+            newEvent.save(function(err,event){
+                if(err){
+                    callback(err, 400);
+                }else{
+                    Course.addEvent(event, function(){
+                        callback('event created', 200);
+                    });
+                }
+            });
         }
     });
 };
@@ -72,35 +68,6 @@ Event.load = function(data, callback){
     });
 };
 
-var isCreateDataValid = function(data){
-    if(data == null || data == undefined){
-        return false;
-    }else if(
-        data.courseId == undefined ||
-        data.start == undefined ||
-        data.end == undefined
-    ){
-        return false;
-    }else if(isNaN(data.start) || isNaN(data.end)){
-        return false;
-    }else{
-        return true;
-    }
-};
-
-var isAddParticipantDataValid = function(data){
-    if(data == null || data == undefined){
-        return false;
-    }else if(
-        data._id == undefined ||
-        data.participantId == undefined
-    ){
-        return false;
-    }else{
-        return true;
-    }
-};
-
 Event.addParticipant = function(data, callback){
 
     if(!isAddParticipantDataValid(data)){
@@ -112,15 +79,18 @@ Event.addParticipant = function(data, callback){
         {_id: data._id},
         function(err, event){
             if(err){
-                callback(err, 500);
-            }else if(!event || event == undefined){
+                callback(err, 400);
+            }else if(!event){
                 callback('Not found', 404);
             }else{
 
-                Course.load({_id: event.courseId}, function(err, code, course){
-                    if(course.groupSize <= event.participants.length){
+                Course.loadById({_id: event._course.toString()}, function(err, course){
+                    if(err){
+                        callback('Course not found', 400);
+                    }
+                    else if(course.groupSize <= event._participants.length){
                         callback('No spots left', 400);
-                    } else if(event.participants.indexOf(data.participantId) > -1){
+                    } else if(event._participants.indexOf(data.participantId) > -1){
                         callback('Already participating', 400);
                     }else if(event.state == EventStates.canceled){
                         callback('Event canceled', 400);
@@ -130,11 +100,11 @@ Event.addParticipant = function(data, callback){
                         EventModel.findByIdAndUpdate(
                             event._id,
                             {
-                                $push: {participants: data.participantId}
+                                $push: {_participants: data.participantId}
                             },
                             function(err, event){
                                 if(err){
-                                    callback(err, 500);
+                                    callback(err, 400);
                                 }else{
                                     callback(false, 200);
                                 }
@@ -142,8 +112,6 @@ Event.addParticipant = function(data, callback){
                         );
                     }
                 });
-
-
             }
         }
     );
@@ -163,14 +131,14 @@ Event.removeParticipant = function(data, callback){
             }else if(!event || event == undefined){
                 callback('Not found', 404);
             }else{
-                if(!(event.participants.indexOf(data.participantId) > -1)){
+                if(!(event._participants.indexOf(data.participantId) > -1)){
                     callback('User not participating', 400);
                 }else{
 
                     EventModel.findByIdAndUpdate(
                         event._id,
                         {
-                            $pull: {participants: data.participantId}
+                            $pull: {_participants: data.participantId}
                         },
                         function(err, event){
                             if(err){
@@ -200,7 +168,7 @@ Event.cancel = function(data, callback){
             }else if(!event || event == undefined){
                 callback('Not found', 404);
             }else{
-                if(event.participants.length > 0){
+                if(event._participants.length > 0){
                     callback('event can not be canceled', 400);
                 }else{
 
@@ -221,16 +189,13 @@ Event.cancel = function(data, callback){
             }
         }
     );
-
-
-
 };
 
 Event.query = function(data, callback){
     var query = EventModel.find();
 
     if(data.participantId != undefined){
-        query.where('participants').equals(data.participantId);
+        query.where('_participants').equals(data.participantId);
     }
 
     if(data.start != undefined){
@@ -241,16 +206,27 @@ Event.query = function(data, callback){
         query.where('state').equals(data.state);
     }
 
-    if(data.courseId != undefined){
-        query.where('courseId').equals(data.courseId);
+    if(data._course != undefined){
+        query.where('_course').equals(data._course);
     }
 
-    if(data.id != undefined){
-        var id = data.id;
-        query.where('courseId').equals('1');
-    }
+    query.populate('_course');
 
     query.sort({start: 1}).exec(callback);
 };
+
+var isAddParticipantDataValid = function(data){
+    if(data == null || data == undefined){
+        return false;
+    }else if(
+        data._id == undefined ||
+        data.participantId == undefined
+    ){
+        return false;
+    }else{
+        return true;
+    }
+};
+
 
 module.exports = Event;

@@ -5,8 +5,6 @@ var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
 var CourseModel = mongoose.model('Course');
 var EventTestData = require('./event-test-data.js');
-var CourseTestData = require('../course/course-test-data.js');
-
 
 
 var createEvent = function(event){
@@ -27,11 +25,11 @@ var createCourse = function(course){
 
 var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
-        if(err) throw 'Database (Events) was not cleared';
+        if(err) throw err;
     });
 
     CourseModel.remove({}, function(err){
-        if(err) throw 'Database (Course) was not cleared';
+        if(err) throw err;
     });
 };
 
@@ -44,12 +42,7 @@ describe ('Event ADD PARTICIPANT', function () {
         createEvent(EventTestData.set4Canceled);
         createCourse(EventTestData.mySpecificCourseSet1);
         createCourse(EventTestData.mySpecificCourseSet2);
-
-        //createCourse(CourseTestData.mySet2);
-        //createCourse(CourseTestData.mySet3);
-        //createCourse(CourseTestData.notMySet1);
-        //createCourse(CourseTestData.notMySet2);
-
+        createCourse(EventTestData.mySpecificCourseSet3);
         done();
     });
 
@@ -65,7 +58,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .type('json')
                 .send({
                     _id: EventTestData.set2PlacesLeft._id,
-                    participantId: '567567'
+                    participantId: EventTestData.newParticipantId_1
                 })
                 .expect(200)
                 .end(function (err, res) {
@@ -73,7 +66,7 @@ describe ('Event ADD PARTICIPANT', function () {
                     EventModel.findOne(
                         {_id: EventTestData.set2PlacesLeft._id},
                         function(err, event){
-                            event.participants.length.should.equal(3, 'participant not added to list');
+                            event._participants.length.should.equal(3, 'participant not added to list');
                             done();
                         });
 
@@ -87,7 +80,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .type('json')
                 .send({
                     _id: EventTestData.set1Empty._id,
-                    participantId: '567567'
+                    participantId: EventTestData.newParticipantId_2
                 })
                 .expect(200)
                 .end(function (err, res) {
@@ -95,7 +88,7 @@ describe ('Event ADD PARTICIPANT', function () {
                     EventModel.findOne(
                         {_id: EventTestData.set1Empty._id},
                         function(err, event){
-                            event.participants.length.should.equal(1, 'participant not added to list');
+                            event._participants.length.should.equal(1, 'participant not added to list');
                             done();
                         });
 
@@ -128,7 +121,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .type('json')
                 .send({
                     _id: EventTestData.set2PlacesLeft._id,
-                    participantId: EventTestData.set2PlacesLeft.participants[0]
+                    participantId: EventTestData.set2PlacesLeft._participants[0]
                 })
                 .expect(400)
                 .end(function (err, res) {
@@ -146,7 +139,7 @@ describe ('Event ADD PARTICIPANT', function () {
                 .type('json')
                 .send({
                     _id: EventTestData.set4Canceled._id,
-                    participantId: 'sgfsdf'
+                    participantId: EventTestData.newParticipantId_1
                 })
                 .expect(400)
                 .end(function (err, res) {

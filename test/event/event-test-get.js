@@ -4,29 +4,45 @@ var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
 var EventTestData = require('./event-test-data.js');
+var CourseModel = mongoose.model('Course');
 
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
+        }
+    });
+};
+
+var createCourse = function(course){
+    CourseModel.create(course, function (err, courseItem) {
+        if (err){
+            throw err;
         }
     });
 };
 
 var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
-        if(err) throw 'Database was not cleared';
+        if(err) throw err;
+    });
+    CourseModel.remove({}, function(err){
+        if(err) throw err;
     });
 };
 
 
 
 describe ('Event GET EVENT', function () {
+
     before(function (done) {
         createEvent(EventTestData.set1Empty);
         createEvent(EventTestData.set2PlacesLeft);
         createEvent(EventTestData.set3Full);
         createEvent(EventTestData.set4Canceled);
+        createCourse(EventTestData.mySpecificCourseSet1);
+        createCourse(EventTestData.mySpecificCourseSet2);
+        createCourse(EventTestData.mySpecificCourseSet3);
 
         done();
     });
@@ -35,8 +51,6 @@ describe ('Event GET EVENT', function () {
         clearTestDatabase();
         done();
     });
-
-
 
 
     it('should return a specific event with a specific ID',
@@ -95,7 +109,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    participantId: EventTestData.set2PlacesLeft.participants[0],
+                    participantId: EventTestData.set2PlacesLeft._participants[0],
                     start: 150000
 
                 })
@@ -105,7 +119,14 @@ describe ('Event GET EVENT', function () {
                     res.body.length.should.be.equal(2);
                     res.body[0]._id.should.be.equal(EventTestData.set4Canceled._id.toString());
                     res.body[1]._id.should.be.equal(EventTestData.set2PlacesLeft._id.toString());
-
+                    res.body[0]._course.should.exist;
+                    res.body[0]._course.description.should.exist;
+                    res.body[0]._course.price.should.exist;
+                    res.body[0]._course.groupSize.should.exist;
+                    res.body[1]._course.should.exist;
+                    res.body[1]._course.description.should.exist;
+                    res.body[1]._course.price.should.exist;
+                    res.body[1]._course.groupSize.should.exist;
                     done();
 
                 });
@@ -117,7 +138,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    participantId: EventTestData.set2PlacesLeft.participants[0],
+                    participantId: EventTestData.set2PlacesLeft._participants[0],
                     start: 150000,
                     state: 1
 
@@ -138,7 +159,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    courseId: EventTestData.mySpecificCourseSet1._id.toString()
+                    _course: EventTestData.mySpecificCourseSet1._id.toString()
                 })
                 .expect(200)
                 .end(function (err, res) {
@@ -179,7 +200,7 @@ describe ('Event GET EVENT', function () {
                 .get('/event/query')
                 .type('json')
                 .query({
-                    participantId: EventTestData.set2PlacesLeft.participants[0]
+                    participantId: EventTestData.set2PlacesLeft._participants[0]
                 })
                 .expect(200)
                 .end(function (err, res) {
@@ -192,6 +213,4 @@ describe ('Event GET EVENT', function () {
 
                 });
         });
-
-
 });

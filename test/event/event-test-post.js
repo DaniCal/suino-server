@@ -4,12 +4,12 @@ var app = require('./../helpers/app.js');
 var mongoose = require("mongoose");
 var EventModel = mongoose.model('Event');
 var EventTestData = require('./event-test-data.js');
+var CourseModel = mongoose.model('Course');
 
-
-var createEvent = function(event){
-    EventModel.create(event, function (err, event) {
+var createCourse = function(course){
+    CourseModel.create(course, function (err, courseItem) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
         }
     });
 };
@@ -18,11 +18,15 @@ var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
         if(err) throw 'Database was not cleared';
     });
+    CourseModel.remove({}, function(err){
+        if(err) throw 'Database was not cleared';
+    });
 };
 
 describe ('Event POST', function () {
 
     before(function (done) {
+        createCourse(EventTestData.mySpecificCourseSet1);
         done();
     });
 

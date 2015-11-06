@@ -10,14 +10,14 @@ var EventTestData = require('./event-test-data.js');
 var createEvent = function(event){
     EventModel.create(event, function (err, event) {
         if (err){
-            throw 'Test course was not created';
+            throw err;
         }
     });
 };
 
 var clearTestDatabase = function(){
     EventModel.remove({}, function(err){
-        if(err) throw 'Database was not cleared';
+        if(err) throw err;
     });
 };
 
