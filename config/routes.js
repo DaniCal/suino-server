@@ -44,6 +44,6 @@ module.exports = function (app) {
     //______________________________API CALLS
 
     app.get('/search', api.search);
-    app.get('/myClasses', api.myClasses);
+    //app.get('/myClasses', api.myClasses);
 
 };

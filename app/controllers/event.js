@@ -58,3 +58,7 @@ exports.cancel = function(req, res){
 exports.queryInternal = function(data, callback){
     Event.query(data, callback);
 };
+
+exports.search = function(data, callback){
+    Event.search(data, callback);
+};

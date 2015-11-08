@@ -14,6 +14,12 @@ var connect = function () {
     mongoose.connect(connectUri);
 };
 
+//exports.connectToTestDb = function(){
+//    mongoose.disconnect();
+//    dbConfig = config.get('Server.dbConfigTestData');
+//    connect();
+//};
+
 connect();
 
 mongoose.connection.on('error', console.log);

@@ -2,15 +2,47 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var Course = require('../controllers/course.js');
 var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var _ = require('underscore');
+
+var EventStates = {
+    active: 1,
+    inactive: 2,
+    canceled: 3
+};
 
 var val = {
     states: [
-        1,2,3
-    ]
+        EventStates.active,
+        EventStates.inactive,
+        EventStates.canceled
+    ],
+    categories : [
+        'sport',
+        'language',
+        'music',
+        'cuisine'
+    ],
+    minLevel : 1,
+    maxLevel : 3,
+    maxPrice : 50,
+    minPrice : 0,
+    minGroupSize : 1
 };
 
 var EventSchema = new Schema({
-    _course: {type: Schema.Types.ObjectId, ref: 'Course', required: true},
+    _course:{type: Schema.Types.ObjectId, ref: 'Course', required: true},
+    courseInfo: {
+        level: {type: Number, required: true, min: val.minLevel, max: val.maxLevel},
+        location: {
+            type: [Number],
+            index: '2d',
+            required: true
+        },
+        category: {type: String, required: true, enum: val.categories},
+        tags: {type: [String], required: true},
+        price: {type: Number, required: true, min: val.minPrice, max: val.maxPrice},
+        groupSize: {type: Number, required: true, min: val.minGroupSize}
+    },
     _participants: {type: [ {type: Schema.Types.ObjectId, ref: 'User'}]},
     start: {type: Number, required: true},
     end: {type: Number, required: true},
@@ -25,11 +57,7 @@ var CourseModel = mongoose.model('Course');
 var Event = function(){
 };
 
-var EventStates = {
-    active: 1,
-    inactive: 2,
-    canceled: 3
-};
+
 
 Event.createEvent = function(data, callback){
     Course.loadById({_id: data._course}, function(err, course){
@@ -37,7 +65,15 @@ Event.createEvent = function(data, callback){
             callback(400);
         }else{
             var newEvent = new EventModel({
-                _course: data._course,
+                _course: course._id,
+                courseInfo: {
+                    level: course.level,
+                    location: course.location,
+                    category: course.category,
+                    tags: course.tags,
+                    price: course.price,
+                    groupSize: course.groupSize
+                },
                 participants: [],
                 start: data.start,
                 end: data.end,
@@ -220,6 +256,33 @@ Event.query = function(data, callback){
 
     query.sort({start: 1}).exec(callback);
 };
+
+Event.search = function(data, callback){
+  var query = buildSearchQuery(data);
+
+    query.exec(callback);
+};
+
+var buildSearchQuery = function(data){
+    var query = EventModel.find();
+    query.populate('_course');
+    query.where('state').equals(EventStates.active);
+    query.where('start').gt(_.now()/1000);
+
+    if(data.keywords != undefined){
+        query.where('_course.tags').in(data.keywords);
+    }
+
+    //if(data.longitude != undefined && data.latitude != undefined){
+    //    var coordinates = [];
+    //    coordinates[0] = data.longitude;
+    //    coordinates[1] = data.latitude;
+    //    query.where('_course.location').near(coordinates);
+    //}
+    return query;
+
+};
+
 
 var isAddParticipantDataValid = function(data){
     if(data == null || data == undefined){

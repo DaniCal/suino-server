@@ -145,8 +145,14 @@ Course.update = function(data, callback){
     });
 };
 
-Course.search = function(data, callback){
+Course.query = function(data, callback, options){
+
     var query = buildCourseQuery(data);
+        query.populate('_teacher');
+
+        query.populate('_events');
+
+
     query.exec(callback);
 };
 
@@ -184,6 +190,8 @@ var buildCourseQuery = function(data){
     }
 
     var query;
+    //query.where('');
+
     //PROXIMITY
     if(data.longitude != undefined && data.latitude != undefined){
         var coordinates = [];

@@ -22,7 +22,7 @@ exports.create = function(req, res){
 
 exports.query = function(req, res){
     var data = req.query;
-    Course.search(data, function(err, courseIds){
+    Course.query(data, function(err, courseIds){
         if(err){
             res.status(400).send(err);
         }else{
@@ -41,7 +41,7 @@ exports.update = function(req, res){
 //______________________________INTERNAL FUNCTIONS
 
 exports.queryInternal = function (data, callback){
-    Course.search(data, function(err, courses){
+    Course.query(data, function(err, courses){
         if(err){
             callback(err)
         }else{

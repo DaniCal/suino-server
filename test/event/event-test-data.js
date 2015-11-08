@@ -69,6 +69,14 @@ EventTestData.mySpecificCourseSet3 = {
 EventTestData.set1Empty = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000001'),
     _course: EventTestData.mySpecificCourseSet1._id,
+    courseInfo: {
+        level: EventTestData.mySpecificCourseSet1.level,
+        location: EventTestData.mySpecificCourseSet1.location,
+        category: EventTestData.mySpecificCourseSet1.category,
+        tags: EventTestData.mySpecificCourseSet1.tags,
+        price: EventTestData.mySpecificCourseSet1.price,
+        groupSize: EventTestData.mySpecificCourseSet1.groupSize
+    },
     _participants: [],
     start: 220000,
     end: 220000,
@@ -78,6 +86,14 @@ EventTestData.set1Empty = {
 EventTestData.set2PlacesLeft = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000002'),
     _course: EventTestData.mySpecificCourseSet1._id,
+    courseInfo: {
+        level: EventTestData.mySpecificCourseSet1.level,
+        location: EventTestData.mySpecificCourseSet1.location,
+        category: EventTestData.mySpecificCourseSet1.category,
+        tags: EventTestData.mySpecificCourseSet1.tags,
+        price: EventTestData.mySpecificCourseSet1.price,
+        groupSize: EventTestData.mySpecificCourseSet1.groupSize
+    },
     _participants: [participantId_1, participantId_2],
     start: 210000,
     end: 210010,
@@ -86,7 +102,15 @@ EventTestData.set2PlacesLeft = {
 
 EventTestData.set3Full = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000003'),
-    _course: EventTestData.mySpecificCourseSet2._id.toString(),
+    _course: EventTestData.mySpecificCourseSet2._id,
+    courseInfo: {
+        level: EventTestData.mySpecificCourseSet2.level,
+        location: EventTestData.mySpecificCourseSet2.location,
+        category: EventTestData.mySpecificCourseSet2.category,
+        tags: EventTestData.mySpecificCourseSet2.tags,
+        price: EventTestData.mySpecificCourseSet2.price,
+        groupSize: EventTestData.mySpecificCourseSet2.groupSize
+    },
     _participants: [participantId_1, participantId_2],
     start: 100000,
     end: 100010,
@@ -95,7 +119,15 @@ EventTestData.set3Full = {
 
 EventTestData.set4Canceled = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000004'),
-    _course:EventTestData.mySpecificCourseSet3._id.toString(),
+    _course: EventTestData.mySpecificCourseSet3._id,
+    courseInfo: {
+        level: EventTestData.mySpecificCourseSet3.level,
+        location: EventTestData.mySpecificCourseSet3.location,
+        category: EventTestData.mySpecificCourseSet3.category,
+        tags: EventTestData.mySpecificCourseSet3.tags,
+        price: EventTestData.mySpecificCourseSet3.price,
+        groupSize: EventTestData.mySpecificCourseSet3.groupSize
+    },
     _participants: [participantId_2, participantId_1],
     start: 200000,
     end: 200010,
@@ -104,8 +136,15 @@ EventTestData.set4Canceled = {
 
 EventTestData.set5Canceled = {
     _id:  mongoose.Types.ObjectId('4edd40c86762e0fb12000005'),
-    _course: mongoose.Types.ObjectId('4edd40c86762e0fb12000105'),
-    _participants: [participantId_2, participantId_1],
+    _course: EventTestData.mySpecificCourseSet3._id,
+    courseInfo: {
+        level: EventTestData.mySpecificCourseSet3.level,
+        location: EventTestData.mySpecificCourseSet3.location,
+        category: EventTestData.mySpecificCourseSet3.category,
+        tags: EventTestData.mySpecificCourseSet3.tags,
+        price: EventTestData.mySpecificCourseSet3.price,
+        groupSize: EventTestData.mySpecificCourseSet3.groupSize
+    },    _participants: [participantId_2, participantId_1],
     start: 300000,
     end: 300010,
     state: 3

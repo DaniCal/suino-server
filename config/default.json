@@ -9,6 +9,11 @@
             "host": "localhost",
             "port": 27017,
             "dbName": "suinodb_test"
+        },
+        "dbConfigTestData": {
+            "host": "localhost",
+            "port": 27017,
+            "dbName": "suinodb_test_data"
         }
     }
 }
